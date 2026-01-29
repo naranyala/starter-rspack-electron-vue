@@ -33,17 +33,17 @@
 </template>
 
 <script>
-import './App.css';
+import './styles/App.css';
 import 'winbox/dist/css/winbox.min.css';
 import WinBox from 'winbox/src/js/winbox';
-import { menuData } from './renderer/menu-data';
-import { generateWindowContent, generateTheme } from './renderer/window-generator';
+import { menuData } from './utils/menu-data';
+import { generateTheme, generateWindowContent } from './utils/window-generator';
 
 export default {
   name: 'App',
   data() {
     return {
-      searchTerm: ''
+      searchTerm: '',
     };
   },
   computed: {
@@ -52,7 +52,7 @@ export default {
         const titleMatch = this.fuzzySearch(card.title, this.searchTerm).matches;
         return titleMatch;
       });
-    }
+    },
   },
   methods: {
     fuzzySearch(text, query) {
@@ -82,7 +82,7 @@ export default {
 
       return { matches: matchFound, highlightedText };
     },
-    
+
     processTitle(title, searchTerm) {
       const processedTitle = this.fuzzySearch(title, searchTerm);
       return processedTitle.matches ? processedTitle.highlightedText : title;
@@ -133,8 +133,8 @@ export default {
           }
         }
       }, 10);
-    }
-  }
+    },
+  },
 };
 </script>
 

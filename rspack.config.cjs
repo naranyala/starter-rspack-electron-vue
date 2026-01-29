@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
-  entry: './src/main.js',
+  entry: './src/renderer/main.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].[contenthash].js',
@@ -13,8 +13,9 @@ module.exports = {
     alias: {
       '@': path.resolve(__dirname, 'src'),
       '@/renderer': path.resolve(__dirname, 'src/renderer'),
-      '@/main-process': path.resolve(__dirname, 'src/main-process'),
-      'vue$': 'vue/dist/vue.esm-bundler.js'
+      '@/main': path.resolve(__dirname, 'src/main'),
+      '@/assets': path.resolve(__dirname, 'src/assets'),
+      vue$: 'vue/dist/vue.esm-bundler.js',
     },
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue', '.json'],
   },
@@ -22,7 +23,7 @@ module.exports = {
     rules: [
       {
         test: /\.vue$/,
-        use: 'vue-loader'
+        use: 'vue-loader',
       },
       {
         test: /\.jsx?$/,
@@ -37,7 +38,7 @@ module.exports = {
               },
               transform: {
                 react: {
-                  runtime: 'classic' // Use classic runtime or remove react transform entirely for Vue
+                  runtime: 'classic', // Use classic runtime or remove react transform entirely for Vue
                 },
               },
             },
@@ -56,7 +57,7 @@ module.exports = {
               },
               transform: {
                 react: {
-                  runtime: 'classic' // Use classic runtime or remove react transform entirely for Vue
+                  runtime: 'classic', // Use classic runtime or remove react transform entirely for Vue
                 },
               },
             },
@@ -88,8 +89,8 @@ module.exports = {
           const { VueLoaderPlugin } = require('vue-loader');
           new VueLoaderPlugin().apply(compiler);
         });
-      }
-    }
+      },
+    },
   ],
 
   devServer: {
