@@ -20,7 +20,7 @@ async function startDevServer() {
     // Spawn rsbuild dev server with the random port
     const rsbuildProcess = spawn('./node_modules/.bin/rsbuild', ['dev', '--port', port], {
       stdio: 'inherit',
-      env: { ...process.env }
+      env: { ...process.env },
     });
 
     // Wait for the Rsbuild server to be ready
@@ -35,7 +35,7 @@ async function startDevServer() {
 
         const electronProcess = spawn('./node_modules/.bin/electron', ['main.cjs', '--start-dev'], {
           stdio: 'inherit',
-          env: { ...process.env, ELECTRON_START_URL: `http://localhost:${port}` }
+          env: { ...process.env, ELECTRON_START_URL: `http://localhost:${port}` },
         });
 
         electronProcess.on('close', (code) => {
@@ -51,7 +51,6 @@ async function startDevServer() {
     rsbuildProcess.on('close', (code) => {
       console.log(`Rsbuild process exited with code ${code}`);
     });
-
   } catch (error) {
     console.error('Error starting dev server:', error);
   }
