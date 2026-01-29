@@ -36,8 +36,8 @@
 import './styles/App.css';
 import 'winbox/dist/css/winbox.min.css';
 import WinBox from 'winbox/src/js/winbox';
-import { menuData } from './utils/menu-data';
-import { generateTheme, generateWindowContent } from './utils/window-generator';
+import { menuData } from './lib/menu-data';
+import { generateTheme, generateWindowContent } from './lib/window-generator';
 
 export default {
   name: 'App',

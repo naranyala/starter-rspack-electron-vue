@@ -15,6 +15,8 @@ module.exports = {
       '@/renderer': path.resolve(__dirname, 'src/renderer'),
       '@/main': path.resolve(__dirname, 'src/main'),
       '@/assets': path.resolve(__dirname, 'src/assets'),
+      '@/renderer-lib': path.resolve(__dirname, 'src/renderer/lib'),
+      '@/main-lib': path.resolve(__dirname, 'src/main/lib'),
       vue$: 'vue/dist/vue.esm-bundler.js',
     },
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue', '.json'],

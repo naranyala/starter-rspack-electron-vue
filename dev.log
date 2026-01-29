@@ -14,3 +14,306 @@ $ node scripts/start-dev-robust.js
 <i> [webpack-dev-server] 404s will fallback to '/index.html'
 Rspack compiled successfully in 781 ms
 error: script "dev" was terminated by signal SIGTERM (Polite quit request)
+ERROR in × Error: Child compilation failed:
+  │   × Unable to resolve loader /run/media/naranyala/Data/projects-remote/starter-rspack-electron-vue/node_modules/html-webpack-plugin/lib/loader.js
+  │
+
+ERROR in ./src/renderer/App.vue?vue&type=script&lang=js (builtin:swc-loader??clonedRuleSet-1.use!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./src/renderer/App.vue?vue&type=script&lang=js) 4:1-45
+  × Module not found: Can't resolve './utils/menu-data' in '/run/media/naranyala/Data/projects-remote/starter-rspack-electron-vue/src/renderer'
+   ╭─[4:0]
+ 2 │ import 'winbox/dist/css/winbox.min.css';
+ 3 │ import WinBox from 'winbox/src/js/winbox';
+ 4 │ import { menuData } from './utils/menu-data';
+   · ─────────────────────────────────────────────
+ 5 │ import { generateTheme, generateWindowContent } from './utils/window-generator';
+ 6 │ export default {
+   ╰────
+
+2 ERRORS in child compilations (Use 'stats.children: true' resp. '--stats-children' for more details)
+Rspack compiled with 4 errors in 81 ms
+ERROR in × Error: Child compilation failed:
+  │   × Unable to resolve loader /run/media/naranyala/Data/projects-remote/starter-rspack-electron-vue/node_modules/html-webpack-plugin/lib/loader.js
+  │
+
+ERROR in ./src/renderer/App.vue?vue&type=script&lang=js (builtin:swc-loader??clonedRuleSet-1.use!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./src/renderer/App.vue?vue&type=script&lang=js) 4:1-45
+  × Module not found: Can't resolve './utils/menu-data' in '/run/media/naranyala/Data/projects-remote/starter-rspack-electron-vue/src/renderer'
+   ╭─[4:0]
+ 2 │ import 'winbox/dist/css/winbox.min.css';
+ 3 │ import WinBox from 'winbox/src/js/winbox';
+ 4 │ import { menuData } from './utils/menu-data';
+   · ─────────────────────────────────────────────
+ 5 │ import { generateTheme, generateWindowContent } from './utils/window-generator';
+ 6 │ export default {
+   ╰────
+
+ERROR in ./src/renderer/App.vue?vue&type=script&lang=js (builtin:swc-loader??clonedRuleSet-1.use!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./src/renderer/App.vue?vue&type=script&lang=js) 92:34-54
+  × Module not found: Can't resolve './utils/window-generator' in '/run/media/naranyala/Data/projects-remote/starter-rspack-electron-vue/src/renderer'
+    ╭─[92:33]
+ 90 │             var theme = themes[index % themes.length];
+ 91 │             // Generate dynamic content and theme based on the title
+ 92 │             var dynamicContent = generateWindowContent(title);
+    ·                                  ─────────────────────
+ 93 │             var windowTheme = generateTheme(title);
+ 94 │             // Create a WinBox window with the generated content
+    ╰────
+
+3 ERRORS in child compilations (Use 'stats.children: true' resp. '--stats-children' for more details)
+Rspack compiled with 6 errors in 67 ms
+ERROR in × Error: Child compilation failed:
+  │   × Unable to resolve loader /run/media/naranyala/Data/projects-remote/starter-rspack-electron-vue/node_modules/html-webpack-plugin/lib/loader.js
+  │
+
+ERROR in ./src/renderer/App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css (./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./src/renderer/App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css) 2:1-109
+  × Module not found: Can't resolve '../../node_modules/css-loader/dist/runtime/sourceMaps.js' in '/run/media/naranyala/Data/projects-remote/starter-rspack-electron-vue/src/renderer'
+   ╭─[2:0]
+ 1 │ // Imports
+ 2 │ import ___CSS_LOADER_API_SOURCEMAP_IMPORT___ from "../../node_modules/css-loader/dist/runtime/sourceMaps.js";
+   · ─────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ 3 │ import ___CSS_LOADER_API_IMPORT___ from "../../node_modules/css-loader/dist/runtime/api.js";
+ 4 │ var ___CSS_LOADER_EXPORT___ = ___CSS_LOADER_API_IMPORT___(___CSS_LOADER_API_SOURCEMAP_IMPORT___);
+   ╰────
+
+ERROR in ./src/renderer/App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css (./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./src/renderer/App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css) 3:1-92
+  × Module not found: Can't resolve '../../node_modules/css-loader/dist/runtime/api.js' in '/run/media/naranyala/Data/projects-remote/starter-rspack-electron-vue/src/renderer'
+   ╭─[3:0]
+ 1 │ // Imports
+ 2 │ import ___CSS_LOADER_API_SOURCEMAP_IMPORT___ from "../../node_modules/css-loader/dist/runtime/sourceMaps.js";
+ 3 │ import ___CSS_LOADER_API_IMPORT___ from "../../node_modules/css-loader/dist/runtime/api.js";
+   · ────────────────────────────────────────────────────────────────────────────────────────────
+ 4 │ var ___CSS_LOADER_EXPORT___ = ___CSS_LOADER_API_IMPORT___(___CSS_LOADER_API_SOURCEMAP_IMPORT___);
+ 5 │ // Module
+   ╰────
+
+ERROR in ./src/renderer/App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css (./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./src/renderer/App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css) 2:7-98
+  × Module not found: Can't resolve '../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js' in '/run/media/naranyala/Data/projects-remote/starter-rspack-electron-vue/src/renderer'
+   ╭─[2:6]
+ 1 │ 
+ 2 │       import API from "!../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js";
+   ·       ────────────────────────────────────────────────────────────────────────────────────────────
+ 3 │       import domAPI from "!../../node_modules/style-loader/dist/runtime/styleDomAPI.js";
+ 4 │       import insertFn from "!../../node_modules/style-loader/dist/runtime/insertBySelector.js";
+   ╰────
+
+ERROR in ./src/renderer/App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css (./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./src/renderer/App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css) 3:7-88
+  × Module not found: Can't resolve '../../node_modules/style-loader/dist/runtime/styleDomAPI.js' in '/run/media/naranyala/Data/projects-remote/starter-rspack-electron-vue/src/renderer'
+   ╭─[3:6]
+ 1 │ 
+ 2 │       import API from "!../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js";
+ 3 │       import domAPI from "!../../node_modules/style-loader/dist/runtime/styleDomAPI.js";
+   ·       ──────────────────────────────────────────────────────────────────────────────────
+ 4 │       import insertFn from "!../../node_modules/style-loader/dist/runtime/insertBySelector.js";
+ 5 │       import setAttributes from "!../../node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js";
+   ╰────
+
+ERROR in ./src/renderer/App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css (./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./src/renderer/App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css) 4:7-95
+  × Module not found: Can't resolve '../../node_modules/style-loader/dist/runtime/insertBySelector.js' in '/run/media/naranyala/Data/projects-remote/starter-rspack-electron-vue/src/renderer'
+   ╭─[4:6]
+ 2 │       import API from "!../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js";
+ 3 │       import domAPI from "!../../node_modules/style-loader/dist/runtime/styleDomAPI.js";
+ 4 │       import insertFn from "!../../node_modules/style-loader/dist/runtime/insertBySelector.js";
+   ·       ─────────────────────────────────────────────────────────────────────────────────────────
+ 5 │       import setAttributes from "!../../node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js";
+ 6 │       import insertStyleElement from "!../../node_modules/style-loader/dist/runtime/insertStyleElement.js";
+   ╰────
+
+ERROR in ./src/renderer/App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css (./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./src/renderer/App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css) 5:7-114
+  × Module not found: Can't resolve '../../node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js' in '/run/media/naranyala/Data/projects-remote/starter-rspack-electron-vue/src/renderer'
+   ╭─[5:6]
+ 3 │       import domAPI from "!../../node_modules/style-loader/dist/runtime/styleDomAPI.js";
+ 4 │       import insertFn from "!../../node_modules/style-loader/dist/runtime/insertBySelector.js";
+ 5 │       import setAttributes from "!../../node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js";
+   ·       ────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ 6 │       import insertStyleElement from "!../../node_modules/style-loader/dist/runtime/insertStyleElement.js";
+ 7 │       import styleTagTransformFn from "!../../node_modules/style-loader/dist/runtime/styleTagTransform.js";
+   ╰────
+
+ERROR in ./src/renderer/App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css (./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./src/renderer/App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css) 6:7-107
+  × Module not found: Can't resolve '../../node_modules/style-loader/dist/runtime/insertStyleElement.js' in '/run/media/naranyala/Data/projects-remote/starter-rspack-electron-vue/src/renderer'
+   ╭─[6:6]
+ 4 │       import insertFn from "!../../node_modules/style-loader/dist/runtime/insertBySelector.js";
+ 5 │       import setAttributes from "!../../node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js";
+ 6 │       import insertStyleElement from "!../../node_modules/style-loader/dist/runtime/insertStyleElement.js";
+   ·       ─────────────────────────────────────────────────────────────────────────────────────────────────────
+ 7 │       import styleTagTransformFn from "!../../node_modules/style-loader/dist/runtime/styleTagTransform.js";
+ 8 │       import content, * as namedExport from "!!../../node_modules/css-loader/dist/cjs.js!../../node_modules/vue-loader/dist/stylePostLoader.js!../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css";
+   ╰────
+
+ERROR in ./src/renderer/App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css (./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./src/renderer/App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css) 7:7-107
+  × Module not found: Can't resolve '../../node_modules/style-loader/dist/runtime/styleTagTransform.js' in '/run/media/naranyala/Data/projects-remote/starter-rspack-electron-vue/src/renderer'
+   ╭─[7:6]
+ 5 │       import setAttributes from "!../../node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js";
+ 6 │       import insertStyleElement from "!../../node_modules/style-loader/dist/runtime/insertStyleElement.js";
+ 7 │       import styleTagTransformFn from "!../../node_modules/style-loader/dist/runtime/styleTagTransform.js";
+   ·       ─────────────────────────────────────────────────────────────────────────────────────────────────────
+ 8 │       import content, * as namedExport from "!!../../node_modules/css-loader/dist/cjs.js!../../node_modules/vue-loader/dist/stylePostLoader.js!../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css";
+ 9 │       
+   ╰────
+
+ERROR in ./src/renderer/App.vue 7:1-80
+  × Module not found: Can't resolve '../../node_modules/vue-loader/dist/exportHelper.js' in '/run/media/naranyala/Data/projects-remote/starter-rspack-electron-vue/src/renderer'
+   ╭─[7:0]
+ 5 │ import "./App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css"
+ 6 │ 
+ 7 │ import exportComponent from "../../node_modules/vue-loader/dist/exportHelper.js"
+   · ────────────────────────────────────────────────────────────────────────────────
+ 8 │ const __exports__ = /*#__PURE__*/exportComponent(script, [['render',render],['__scopeId',"data-v-2fa9d48e"],['__file',"src/renderer/App.vue"]])
+ 9 │ /* hot reload */
+   ╰────
+
+ERROR in ./src/renderer/App.vue?vue&type=script&lang=js (builtin:swc-loader??clonedRuleSet-1.use!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./src/renderer/App.vue?vue&type=script&lang=js) 2:1-40
+  × Module not found: Can't resolve 'winbox/dist/css/winbox.min.css' in '/run/media/naranyala/Data/projects-remote/starter-rspack-electron-vue/src/renderer'
+   ╭─[2:0]
+ 1 │ import './styles/App.css';
+ 2 │ import 'winbox/dist/css/winbox.min.css';
+   · ────────────────────────────────────────
+ 3 │ import WinBox from 'winbox/src/js/winbox';
+ 4 │ import { menuData } from './lib/menu-data';
+   ╰────
+
+ERROR in ./src/renderer/App.vue?vue&type=script&lang=js (builtin:swc-loader??clonedRuleSet-1.use!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./src/renderer/App.vue?vue&type=script&lang=js) 3:1-42
+  × Module not found: Can't resolve 'winbox/src/js/winbox' in '/run/media/naranyala/Data/projects-remote/starter-rspack-electron-vue/src/renderer'
+   ╭─[3:0]
+ 1 │ import './styles/App.css';
+ 2 │ import 'winbox/dist/css/winbox.min.css';
+ 3 │ import WinBox from 'winbox/src/js/winbox';
+   · ──────────────────────────────────────────
+ 4 │ import { menuData } from './lib/menu-data';
+ 5 │ import { generateTheme, generateWindowContent } from './lib/window-generator';
+   ╰────
+
+ERROR in ./src/renderer/App.vue?vue&type=template&id=2fa9d48e&scoped=true (builtin:swc-loader??clonedRuleSet-1.use!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[3].use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./src/renderer/App.vue?vue&type=template&id=2fa9d48e&scoped=true) 1:1-324
+  × Cannot find module 'vue' for matched aliased key 'vue'
+
+13 ERRORS in child compilations (Use 'stats.children: true' resp. '--stats-children' for more details)
+Rspack compiled with 26 errors in 178 ms
+ERROR in × Error: Child compilation failed:
+  │   × Unable to resolve loader /run/media/naranyala/Data/projects-remote/starter-rspack-electron-vue/node_modules/html-webpack-plugin/lib/loader.js
+  │
+
+ERROR in ./src/renderer/App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css (./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./src/renderer/App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css) 4:31-57
+  × Module not found: Can't resolve '../../node_modules/css-loader/dist/runtime/api.js' in '/run/media/naranyala/Data/projects-remote/starter-rspack-electron-vue/src/renderer'
+   ╭─[4:30]
+ 2 │ import ___CSS_LOADER_API_SOURCEMAP_IMPORT___ from "../../node_modules/css-loader/dist/runtime/sourceMaps.js";
+ 3 │ import ___CSS_LOADER_API_IMPORT___ from "../../node_modules/css-loader/dist/runtime/api.js";
+ 4 │ var ___CSS_LOADER_EXPORT___ = ___CSS_LOADER_API_IMPORT___(___CSS_LOADER_API_SOURCEMAP_IMPORT___);
+   ·                               ───────────────────────────
+ 5 │ // Module
+ 6 │ ___CSS_LOADER_EXPORT___.push([module.id, `
+   ╰────
+
+ERROR in ./src/renderer/App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css (./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./src/renderer/App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css) 4:59-95
+  × Module not found: Can't resolve '../../node_modules/css-loader/dist/runtime/sourceMaps.js' in '/run/media/naranyala/Data/projects-remote/starter-rspack-electron-vue/src/renderer'
+   ╭─[4:58]
+ 2 │ import ___CSS_LOADER_API_SOURCEMAP_IMPORT___ from "../../node_modules/css-loader/dist/runtime/sourceMaps.js";
+ 3 │ import ___CSS_LOADER_API_IMPORT___ from "../../node_modules/css-loader/dist/runtime/api.js";
+ 4 │ var ___CSS_LOADER_EXPORT___ = ___CSS_LOADER_API_IMPORT___(___CSS_LOADER_API_SOURCEMAP_IMPORT___);
+   ·                                                           ─────────────────────────────────────
+ 5 │ // Module
+ 6 │ ___CSS_LOADER_EXPORT___.push([module.id, `
+   ╰────
+
+ERROR in ./src/renderer/App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css (./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./src/renderer/App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css) 2:7-98
+  × Module not found: Can't resolve '../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js' in '/run/media/naranyala/Data/projects-remote/starter-rspack-electron-vue/src/renderer'
+   ╭─[2:6]
+ 1 │ 
+ 2 │       import API from "!../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js";
+   ·       ────────────────────────────────────────────────────────────────────────────────────────────
+ 3 │       import domAPI from "!../../node_modules/style-loader/dist/runtime/styleDomAPI.js";
+ 4 │       import insertFn from "!../../node_modules/style-loader/dist/runtime/insertBySelector.js";
+   ╰────
+
+ERROR in ./src/renderer/App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css (./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./src/renderer/App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css) 14:29-47
+  × Module not found: Can't resolve '../../node_modules/style-loader/dist/runtime/styleTagTransform.js' in '/run/media/naranyala/Data/projects-remote/starter-rspack-electron-vue/src/renderer'
+    ╭─[14:28]
+ 12 │ var options = {};
+ 13 │ 
+ 14 │ options.styleTagTransform = styleTagTransformFn;
+    ·                             ───────────────────
+ 15 │ options.setAttributes = setAttributes;
+ 16 │ options.insert = insertFn.bind(null, "head");
+    ╰────
+
+ERROR in ./src/renderer/App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css (./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./src/renderer/App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css) 15:25-37
+  × Module not found: Can't resolve '../../node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js' in '/run/media/naranyala/Data/projects-remote/starter-rspack-electron-vue/src/renderer'
+    ╭─[15:24]
+ 13 │ 
+ 14 │ options.styleTagTransform = styleTagTransformFn;
+ 15 │ options.setAttributes = setAttributes;
+    ·                         ─────────────
+ 16 │ options.insert = insertFn.bind(null, "head");
+ 17 │ options.domAPI = domAPI;
+    ╰────
+
+ERROR in ./src/renderer/App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css (./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./src/renderer/App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css) 16:18-30
+  × Module not found: Can't resolve '../../node_modules/style-loader/dist/runtime/insertBySelector.js' in '/run/media/naranyala/Data/projects-remote/starter-rspack-electron-vue/src/renderer'
+    ╭─[16:17]
+ 14 │ options.styleTagTransform = styleTagTransformFn;
+ 15 │ options.setAttributes = setAttributes;
+ 16 │ options.insert = insertFn.bind(null, "head");
+    ·                  ─────────────
+ 17 │ options.domAPI = domAPI;
+ 18 │ options.insertStyleElement = insertStyleElement;
+    ╰────
+
+ERROR in ./src/renderer/App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css (./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./src/renderer/App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css) 17:18-23
+  × Module not found: Can't resolve '../../node_modules/style-loader/dist/runtime/styleDomAPI.js' in '/run/media/naranyala/Data/projects-remote/starter-rspack-electron-vue/src/renderer'
+    ╭─[17:17]
+ 15 │ options.setAttributes = setAttributes;
+ 16 │ options.insert = insertFn.bind(null, "head");
+ 17 │ options.domAPI = domAPI;
+    ·                  ──────
+ 18 │ options.insertStyleElement = insertStyleElement;
+ 19 │ 
+    ╰────
+
+ERROR in ./src/renderer/App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css (./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js!./node_modules/vue-loader/dist/stylePostLoader.js!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./src/renderer/App.vue?vue&type=style&index=0&id=2fa9d48e&scoped=true&lang=css) 18:30-47
+  × Module not found: Can't resolve '../../node_modules/style-loader/dist/runtime/insertStyleElement.js' in '/run/media/naranyala/Data/projects-remote/starter-rspack-electron-vue/src/renderer'
+    ╭─[18:29]
+ 16 │ options.insert = insertFn.bind(null, "head");
+ 17 │ options.domAPI = domAPI;
+ 18 │ options.insertStyleElement = insertStyleElement;
+    ·                              ──────────────────
+ 19 │ 
+ 20 │ var update = API(content, options);
+    ╰────
+
+ERROR in ./src/renderer/App.vue 8:34-48
+  × Module not found: Can't resolve '../../node_modules/vue-loader/dist/exportHelper.js' in '/run/media/naranyala/Data/projects-remote/starter-rspack-electron-vue/src/renderer'
+    ╭─[8:33]
+  6 │ 
+  7 │ import exportComponent from "../../node_modules/vue-loader/dist/exportHelper.js"
+  8 │ const __exports__ = /*#__PURE__*/exportComponent(script, [['render',render],['__scopeId',"data-v-2fa9d48e"],['__file',"src/renderer/App.vue"]])
+    ·                                  ───────────────
+  9 │ /* hot reload */
+ 10 │ if (module.hot) {
+    ╰────
+
+ERROR in ./src/renderer/App.vue?vue&type=script&lang=js (builtin:swc-loader??clonedRuleSet-1.use!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./src/renderer/App.vue?vue&type=script&lang=js) 2:1-40
+  × Module not found: Can't resolve 'winbox/dist/css/winbox.min.css' in '/run/media/naranyala/Data/projects-remote/starter-rspack-electron-vue/src/renderer'
+   ╭─[2:0]
+ 1 │ import './styles/App.css';
+ 2 │ import 'winbox/dist/css/winbox.min.css';
+   · ────────────────────────────────────────
+ 3 │ import WinBox from 'winbox/src/js/winbox';
+ 4 │ import { menuData } from './lib/menu-data';
+   ╰────
+
+ERROR in ./src/renderer/App.vue?vue&type=script&lang=js (builtin:swc-loader??clonedRuleSet-1.use!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./src/renderer/App.vue?vue&type=script&lang=js) 3:1-42
+  × Module not found: Can't resolve 'winbox/src/js/winbox' in '/run/media/naranyala/Data/projects-remote/starter-rspack-electron-vue/src/renderer'
+   ╭─[3:0]
+ 1 │ import './styles/App.css';
+ 2 │ import 'winbox/dist/css/winbox.min.css';
+ 3 │ import WinBox from 'winbox/src/js/winbox';
+   · ──────────────────────────────────────────
+ 4 │ import { menuData } from './lib/menu-data';
+ 5 │ import { generateTheme, generateWindowContent } from './lib/window-generator';
+   ╰────
+
+ERROR in ./src/renderer/App.vue?vue&type=template&id=2fa9d48e&scoped=true (builtin:swc-loader??clonedRuleSet-1.use!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[3].use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./src/renderer/App.vue?vue&type=template&id=2fa9d48e&scoped=true) 1:1-324
+  × Cannot find module 'vue' for matched aliased key 'vue'
+
+13 ERRORS in child compilations (Use 'stats.children: true' resp. '--stats-children' for more details)
+Rspack compiled with 26 errors in 103 ms
+Rspack compiled successfully in 200 ms
+Rspack compiled successfully in 178 ms
+Rspack compiled successfully in 136 ms

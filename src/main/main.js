@@ -1,14 +1,22 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { appConfig } from './lib/config.js';
+// Import main process utilities
+import { AppLifecycleUtils, IPCUtils, SettingsManager, WindowManager } from './lib/utils.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-let mainWindow;
+let windowManager;
+let settingsManager;
 
 const createWindow = () => {
-  mainWindow = new BrowserWindow({
+  windowManager = new WindowManager();
+  settingsManager = new SettingsManager();
+
+  const mainWindow = windowManager.createWindow({
+    ...appConfig.mainWindow,
     width: 1200,
     height: 800,
     webPreferences: {
@@ -21,7 +29,7 @@ const createWindow = () => {
     show: false,
   });
 
-  // Load the app
+  // Load app
   if (process.env.NODE_ENV === 'development') {
     mainWindow.loadURL('http://localhost:1234');
   } else {
@@ -34,19 +42,91 @@ const createWindow = () => {
   });
 
   mainWindow.on('closed', () => {
-    mainWindow = null;
+    windowManager = null;
+  });
+
+  // Register IPC handlers
+  registerIPCHandlers(mainWindow);
+
+  return mainWindow;
+};
+
+const registerIPCHandlers = (mainWindow) => {
+  // Get app version
+  IPCUtils.registerHandler('app:getVersion', () => {
+    return app.getVersion();
+  });
+
+  // Get app name
+  IPCUtils.registerHandler('app:getName', () => {
+    return app.getName();
+  });
+
+  // Get settings
+  IPCUtils.registerHandler('settings:get', (event, key) => {
+    return settingsManager.get(key);
+  });
+
+  // Set settings
+  IPCUtils.registerHandler('settings:set', (event, key, value) => {
+    settingsManager.set(key, value);
+    return true;
+  });
+
+  // Get all settings
+  IPCUtils.registerHandler('settings:getAll', () => {
+    return settingsManager.getAll();
+  });
+
+  // Show message box
+  IPCUtils.registerHandler('dialog:showMessageBox', async (event, options) => {
+    return await windowManager.showDialog(options);
+  });
+
+  // Minimize window
+  IPCUtils.registerHandler('window:minimize', (event) => {
+    const window = BrowserWindow.fromWebContents(event.sender);
+    if (window) {
+      window.minimize();
+    }
+    return true;
+  });
+
+  // Maximize window
+  IPCUtils.registerHandler('window:maximize', (event) => {
+    const window = BrowserWindow.fromWebContents(event.sender);
+    if (window) {
+      if (window.isMaximized()) {
+        window.unmaximize();
+      } else {
+        window.maximize();
+      }
+    }
+    return true;
+  });
+
+  // Close window
+  IPCUtils.registerHandler('window:close', (event) => {
+    const window = BrowserWindow.fromWebContents(event.sender);
+    if (window) {
+      window.close();
+    }
+    return true;
   });
 };
 
-app.whenReady().then(createWindow);
+// App lifecycle
+AppLifecycleUtils.onReady(() => {
+  createWindow();
+});
 
-app.on('window-all-closed', () => {
+AppLifecycleUtils.onWindowAllClosed(() => {
   if (process.platform !== 'darwin') {
-    app.quit();
+    AppLifecycleUtils.quit();
   }
 });
 
-app.on('activate', () => {
+AppLifecycleUtils.onActivate(() => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
