@@ -7,19 +7,24 @@ const args = process.argv.slice(1)
 const serve = args.some(val => val === '--start-dev')
 
 // Let electron reloads by itself when rsbuild watches changes in ./app/
-if (serve) {
-  require('electron-reload')(__dirname, {
-    electron: require(`${__dirname}/node_modules/.bin/electron`),
-    hardResetMethod: 'exit'
-  })
-}
+// if (serve) {
+//   require('electron-reload')(path.join(__dirname, 'dist'));
+// }
 
-// To avoid being garbage collected
+// To avoid being garbage generated
 let mainWindow
 
+console.log('App starting, serve mode:', serve);
+
 app.on('ready', () => {
+    console.log('App ready event fired');
     createWindow()
 })
+
+// Log when the app is quitting
+app.on('quit', () => {
+    console.log('App quit event fired');
+});
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
@@ -42,6 +47,8 @@ app.on('activate', function () {
  * Creates the main browser window
  */
 function createWindow() {
+    console.log('Creating window...');
+
     mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
@@ -52,22 +59,37 @@ function createWindow() {
         }
     })
 
+    console.log('BrowserWindow created');
+
     // Use dynamic port from environment variable if available, otherwise default
     const devUrl = process.env.ELECTRON_START_URL || "http://localhost:1234";
+    console.log('Loading URL:', devUrl);
+
     const startUrl = serve ? devUrl : url.format({
           pathname: path.join(__dirname, 'dist/index.html'),
           protocol: 'file:',
           slashes: true
         });
 
-    mainWindow.loadURL(startUrl)
+    console.log('Final start URL:', startUrl);
+
+    try {
+        mainWindow.loadURL(startUrl)
+        console.log('URL loaded successfully');
+    } catch (error) {
+        console.error('Error loading URL:', error);
+    }
 
     // Open DevTools in development
     if (serve) {
+        console.log('Opening DevTools...');
         mainWindow.webContents.openDevTools({ mode: 'detach' })
     }
 
     mainWindow.on('closed', function () {
+        console.log('Window closed');
         mainWindow = null
     })
+
+    console.log('Window creation completed');
 }

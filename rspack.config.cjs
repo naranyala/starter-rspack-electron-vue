@@ -36,7 +36,9 @@ module.exports = {
                 jsx: false, // Disable JSX for Vue
               },
               transform: {
-                react: false, // Disable React transform for Vue
+                react: {
+                  runtime: 'classic' // Use classic runtime or remove react transform entirely for Vue
+                },
               },
             },
           },
@@ -53,7 +55,9 @@ module.exports = {
                 tsx: false, // Disable TSX for Vue
               },
               transform: {
-                react: false, // Disable React transform for Vue
+                react: {
+                  runtime: 'classic' // Use classic runtime or remove react transform entirely for Vue
+                },
               },
             },
           },
