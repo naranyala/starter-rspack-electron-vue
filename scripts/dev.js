@@ -1,6 +1,8 @@
-const { spawn, execSync } = require('child_process');
-const fs = require('fs');
-const path = require('path');
+#!/usr/bin/env node
+
+const { spawn, execSync } = require('node:child_process');
+const fs = require('node:fs');
+const path = require('node:path');
 const getPortModule = require('get-port');
 const waitOn = require('wait-on');
 
@@ -44,7 +46,7 @@ function commandExists(command) {
   try {
     execSync(`which ${command}`, { stdio: 'ignore' });
     return true;
-  } catch (error) {
+  } catch (_error) {
     return false;
   }
 }
@@ -54,7 +56,7 @@ function packageExists(packageName) {
   try {
     const packagePath = path.join(process.cwd(), 'node_modules', packageName);
     return fs.existsSync(packagePath);
-  } catch (error) {
+  } catch (_error) {
     return false;
   }
 }
@@ -108,7 +110,7 @@ async function ensureElectronInstalled() {
   // Verify electron binary exists
   try {
     const electronPath = path.join(process.cwd(), 'node_modules', '.bin', 'electron');
-    if (!fs.existsSync(electronPath) && !fs.existsSync(electronPath + '.cmd')) {
+    if (!fs.existsSync(electronPath) && !fs.existsSync(`${electronPath}.cmd`)) {
       logWarning('Electron binary not found, reinstalling...');
       await executeCommand('npm', ['rebuild', electronPkg]);
     }
@@ -262,26 +264,26 @@ async function killPortProcesses(port) {
       try {
         await executeCommand('fuser', ['-k', `${port}/tcp`]);
         logInfo(`Killed processes on port ${port} using fuser`);
-      } catch (fuserError) {
+      } catch (_fuserError) {
         // Fallback to lsof with proper shell escaping
-        const { execSync } = require('child_process');
+        const { execSync } = require('node:child_process');
         try {
           const pids = execSync(`lsof -ti :${port}`, { encoding: 'utf8' }).trim();
           if (pids) {
             execSync(`kill -9 ${pids}`);
             logInfo(`Killed processes on port ${port} using lsof`);
           }
-        } catch (lsofError) {
+        } catch (_lsofError) {
           logWarning('Could not kill processes on port (no processes found or tools unavailable)');
         }
       }
     }
-  } catch (error) {
+  } catch (_error) {
     logWarning('Could not kill processes on port');
   }
 }
 
-// Main development server function
+// Start development server with rspack
 async function startDevServer() {
   let rspackProcess = null;
   let electronProcess = null;
@@ -395,6 +397,120 @@ async function startDevServer() {
   }
 }
 
+// Build the application
+async function buildApp() {
+  try {
+    log('📦 Building application...', 'cyan');
+
+    // Validate dependencies
+    await validateDependencies();
+
+    // Run rspack build
+    logInfo('Running rspack build...');
+    await executeCommand('./node_modules/.bin/rspack', ['build']);
+
+    logSuccess('Build completed successfully!');
+  } catch (error) {
+    logError(`Build failed: ${error.message}`);
+    process.exit(1);
+  }
+}
+
+// Package the application
+async function packageApp() {
+  try {
+    log('📦 Packaging Electron Application', 'cyan');
+
+    // Ensure Electron is properly installed first
+    const electronOk = await ensureElectronInstalled();
+    if (!electronOk) {
+      throw new Error('Failed to install Electron');
+    }
+
+    // Verify electron binary exists
+    try {
+      const electronPath = path.join(process.cwd(), 'node_modules', '.bin', 'electron');
+      if (!fs.existsSync(electronPath) && !fs.existsSync(`${electronPath}.cmd`)) {
+        logWarning('Electron binary not found, reinstalling...');
+        await executeCommand('npm', ['rebuild', 'electron']);
+      }
+    } catch (_error) {
+      logWarning('Electron binary verification failed, continuing...');
+    }
+
+    // Install electron-builder if not present
+    if (!packageExists('electron-builder')) {
+      logInfo('Installing electron-builder...');
+      await installPackage('electron-builder', { dev: true });
+    }
+
+    // Run electron builder
+    logInfo('Building Electron application...');
+    await executeCommand('bunx', ['electron-builder', '--dir']);
+
+    logSuccess('Packaging completed successfully!');
+  } catch (error) {
+    logError(`Packaging failed: ${error.message}`);
+    process.exit(1);
+  }
+}
+
+// Copy icon files to dist directory
+function copyIcons() {
+  const assetsDir = path.join(__dirname, '..', 'src', 'assets');
+  const distDir = path.join(__dirname, '..', 'dist');
+
+  // Create dist directory if it doesn't exist
+  if (!fs.existsSync(distDir)) {
+    fs.mkdirSync(distDir, { recursive: true });
+  }
+
+  // Copy icon files
+  const iconFiles = ['icon.png', 'icon.ico', 'icon.icns', 'icon.svg'];
+  for (const iconFile of iconFiles) {
+    const srcPath = path.join(assetsDir, 'icons', iconFile);
+    const destPath = path.join(distDir, iconFile);
+
+    if (fs.existsSync(srcPath)) {
+      fs.copyFileSync(srcPath, destPath);
+      logSuccess(`Copied ${iconFile} to dist directory`);
+    } else {
+      logWarning(`Icon file ${iconFile} not found at ${srcPath}`);
+    }
+  }
+}
+
+// Main function to handle command line arguments
+async function main() {
+  const args = process.argv.slice(2);
+  const command = args[0] || 'dev';
+
+  switch (command) {
+    case 'dev':
+    case 'develop':
+    case 'start':
+      await startDevServer();
+      break;
+    case 'build':
+      await buildApp();
+      break;
+    case 'package':
+    case 'dist':
+      await packageApp();
+      break;
+    case 'icons':
+      copyIcons();
+      break;
+    default:
+      log(`Usage: node ${__filename} [dev|build|package|icons]`, 'yellow');
+      log('  dev      - Start development server', 'yellow');
+      log('  build    - Build the application', 'yellow');
+      log('  package  - Package the application for distribution', 'yellow');
+      log('  icons    - Copy icon files to dist directory', 'yellow');
+      process.exit(1);
+  }
+}
+
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (reason, promise) => {
   logError(`Unhandled Rejection at: ${promise}, reason: ${reason}`);
@@ -407,9 +523,9 @@ process.on('uncaughtException', (error) => {
   process.exit(1);
 });
 
-// Start the development server
+// Run the main function
 if (require.main === module) {
-  startDevServer();
+  main();
 }
 
-module.exports = { startDevServer, validateDependencies, installPackage };
+module.exports = { startDevServer, buildApp, packageApp, validateDependencies, installPackage };

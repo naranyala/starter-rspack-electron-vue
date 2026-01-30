@@ -47,7 +47,7 @@ export class HttpClient {
       }
 
       const contentType = response.headers.get('content-type');
-      if (contentType && contentType.includes('application/json')) {
+      if (contentType?.includes('application/json')) {
         return await response.json();
       } else {
         return await response.text();
@@ -236,7 +236,7 @@ export class ElectronAPI {
    * @param {string} channel - IPC channel
    * @param {Function} callback - Message callback
    */
-  static onFromMain(channel, callback) {
+  static onFromMain(channel, _callback) {
     if (ElectronAPI.isElectron()) {
       // This would need to be implemented in preload.js
       console.log('Listening for main process messages:', channel);

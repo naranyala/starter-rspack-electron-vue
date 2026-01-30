@@ -125,6 +125,8 @@ export class SettingsManager {
     this.store
       .keys()
       .filter((key) => key.startsWith('setting.'))
-      .forEach((key) => this.store.delete(key));
+      .forEach((key) => {
+        this.store.delete(key);
+      });
   }
 }

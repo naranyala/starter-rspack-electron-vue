@@ -1,8 +1,8 @@
 // Basic init
 const electron = require('electron');
 const { app, BrowserWindow } = electron;
-const path = require('path');
-const url = require('url');
+const path = require('node:path');
+const url = require('node:url');
 const args = process.argv.slice(1);
 const serve = args.some((val) => val === '--start-dev');
 
@@ -97,7 +97,7 @@ function createWindow() {
     console.log('Window became unresponsive');
   });
 
-  mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription) => {
+  mainWindow.webContents.on('did-fail-load', (_event, errorCode, errorDescription) => {
     console.error('Failed to load:', errorCode, errorDescription);
   });
 

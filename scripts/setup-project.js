@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-const { spawn, execSync } = require('child_process');
-const fs = require('fs');
-const path = require('path');
+const { spawn } = require('node:child_process');
+const fs = require('node:fs');
+const path = require('node:path');
 
 // Color codes for console output
 const colors = {
@@ -41,7 +41,7 @@ function commandExists(command) {
   try {
     execSync(`which ${command}`, { stdio: 'ignore' });
     return true;
-  } catch (error) {
+  } catch (_error) {
     return false;
   }
 }
@@ -51,7 +51,7 @@ function packageExists(packageName) {
   try {
     const packagePath = path.join(process.cwd(), 'node_modules', packageName);
     return fs.existsSync(packagePath);
-  } catch (error) {
+  } catch (_error) {
     return false;
   }
 }
@@ -147,7 +147,7 @@ async function ensurePackageManager() {
 
 // Validate project structure
 function validateProjectStructure() {
-  const requiredFiles = ['package.json', 'main.cjs', 'src/App.vue'];
+  const requiredFiles = ['package.json', 'main.cjs', 'src/renderer/App.vue'];
   const requiredDirs = ['src', 'src/main', 'src/renderer'];
 
   for (const file of requiredFiles) {
@@ -202,7 +202,7 @@ async function setupProject() {
       logInfo('Running electron-builder post-install...');
       try {
         await executeCommand('./node_modules/.bin/electron-builder', ['install-app-deps']);
-      } catch (error) {
+      } catch (_error) {
         logWarning('electron-builder post-install failed, but continuing...');
       }
     }

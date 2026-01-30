@@ -1,6 +1,6 @@
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { app, BrowserWindow, dialog, ipcMain } from 'electron';
-import path from 'path';
-import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -98,7 +98,7 @@ export class FileSystemUtils {
    */
   static async readFile(filePath) {
     try {
-      const fs = await import('fs/promises');
+      const fs = await import('node:fs/promises');
       return await fs.readFile(filePath, 'utf8');
     } catch (error) {
       console.error('Failed to read file:', error);
@@ -114,7 +114,7 @@ export class FileSystemUtils {
    */
   static async writeFile(filePath, content) {
     try {
-      const fs = await import('fs/promises');
+      const fs = await import('node:fs/promises');
       await fs.writeFile(filePath, content, 'utf8');
       return true;
     } catch (error) {
@@ -130,7 +130,7 @@ export class FileSystemUtils {
    */
   static async exists(filePath) {
     try {
-      const fs = await import('fs/promises');
+      const fs = await import('node:fs/promises');
       await fs.access(filePath);
       return true;
     } catch {

@@ -1,9 +1,20 @@
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { app, BrowserWindow, ipcMain } from 'electron';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import { appConfig } from './lib/config.js';
 // Import main process utilities
 import { AppLifecycleUtils, IPCUtils, SettingsManager, WindowManager } from './lib/utils.js';
+// Import use case handlers
+import {
+  ElectronArchitectureUseCase,
+  ElectronDevelopmentUseCase,
+  ElectronIntroUseCase,
+  ElectronNativeAPIsUseCase,
+  ElectronPackagingUseCase,
+  ElectronPerformanceUseCase,
+  ElectronSecurityUseCase,
+  ElectronVersionsUseCase,
+} from './use-cases/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -51,7 +62,7 @@ const createWindow = () => {
   return mainWindow;
 };
 
-const registerIPCHandlers = (mainWindow) => {
+const registerIPCHandlers = (_mainWindow) => {
   // Get app version
   IPCUtils.registerHandler('app:getVersion', () => {
     return app.getVersion();
@@ -63,12 +74,12 @@ const registerIPCHandlers = (mainWindow) => {
   });
 
   // Get settings
-  IPCUtils.registerHandler('settings:get', (event, key) => {
+  IPCUtils.registerHandler('settings:get', (_event, key) => {
     return settingsManager.get(key);
   });
 
   // Set settings
-  IPCUtils.registerHandler('settings:set', (event, key, value) => {
+  IPCUtils.registerHandler('settings:set', (_event, key, value) => {
     settingsManager.set(key, value);
     return true;
   });
@@ -79,7 +90,7 @@ const registerIPCHandlers = (mainWindow) => {
   });
 
   // Show message box
-  IPCUtils.registerHandler('dialog:showMessageBox', async (event, options) => {
+  IPCUtils.registerHandler('dialog:showMessageBox', async (_event, options) => {
     return await windowManager.showDialog(options);
   });
 
@@ -112,6 +123,28 @@ const registerIPCHandlers = (mainWindow) => {
       window.close();
     }
     return true;
+  });
+
+  // Register use case handlers
+  registerUseCaseHandlers();
+};
+
+const registerUseCaseHandlers = () => {
+  // Create instances of use case handlers and register their IPC handlers
+  const useCases = [
+    new ElectronIntroUseCase(ipcMain),
+    new ElectronArchitectureUseCase(ipcMain),
+    new ElectronSecurityUseCase(ipcMain),
+    new ElectronPackagingUseCase(ipcMain),
+    new ElectronNativeAPIsUseCase(ipcMain),
+    new ElectronPerformanceUseCase(ipcMain),
+    new ElectronDevelopmentUseCase(ipcMain),
+    new ElectronVersionsUseCase(ipcMain),
+  ];
+
+  // Register handlers for each use case
+  useCases.forEach((useCase) => {
+    useCase.registerHandlers();
   });
 };
 

@@ -34,10 +34,17 @@
 
 <script>
 import './styles/App.css';
-import 'winbox/dist/css/winbox.min.css';
-import WinBox from 'winbox/src/js/winbox';
 import { menuData } from './lib/menu-data';
-import { generateTheme, generateWindowContent } from './lib/window-generator';
+import {
+  ElectronArchitectureWindow,
+  ElectronDevelopmentWindow,
+  ElectronIntroWindow,
+  ElectronNativeAPIsWindow,
+  ElectronPackagingWindow,
+  ElectronPerformanceWindow,
+  ElectronSecurityWindow,
+  ElectronVersionsWindow,
+} from './use-cases';
 
 export default {
   name: 'App',
@@ -48,7 +55,7 @@ export default {
   },
   computed: {
     filteredCards() {
-      return menuData.filter((card, index) => {
+      return menuData.filter((card, _index) => {
         const titleMatch = this.fuzzySearch(card.title, this.searchTerm).matches;
         return titleMatch;
       });
@@ -58,7 +65,7 @@ export default {
     fuzzySearch(text, query) {
       if (!query) return { matches: true, highlightedText: text };
 
-      const lowerText = text.toLowerCase();
+      const _lowerText = text.toLowerCase();
       const lowerQuery = query.toLowerCase();
 
       let matchFound = true;
@@ -88,51 +95,42 @@ export default {
       return processedTitle.matches ? processedTitle.highlightedText : title;
     },
 
-    handleCardClick(card, index) {
-      const { title, content } = card;
+    handleCardClick(card, _index) {
+      const { id, title } = card;
 
-      // Define different themes for variety
-      const themes = [
-        { name: 'blue', bg: '#4a6cf7', color: 'white' },
-        { name: 'green', bg: '#4ade80', color: 'black' },
-        { name: 'purple', bg: '#a78bfa', color: 'white' },
-        { name: 'red', bg: '#f87171', color: 'white' },
-        { name: 'yellow', bg: '#fbbf24', color: 'black' },
-        { name: 'indigo', bg: '#6366f1', color: 'white' },
-      ];
-
-      // Select a theme based on the index to have consistent colors
-      const theme = themes[index % themes.length];
-
-      // Generate dynamic content and theme based on the title
-      const dynamicContent = generateWindowContent(title);
-      const windowTheme = generateTheme(title);
-
-      // Create a WinBox window with the generated content
-      const winbox = new WinBox({
-        title: title,
-        html: `<div class="winbox-content"><h3 style="color: ${windowTheme.color};">${title}</h3><div style="color: ${windowTheme.color};" class="winbox-dynamic-content">Loading content...</div></div>`,
-        width: '500px',
-        height: '400px',
-        x: 'center',
-        y: 'center',
-        class: 'modern',
-        background: windowTheme.bg,
-        border: 4,
-      });
-
-      // Set the content after the window is created using WinBox's body property
-      setTimeout(() => {
-        if (winbox && winbox.body) {
-          const contentDiv = winbox.body.querySelector('.winbox-dynamic-content');
-          if (contentDiv) {
-            contentDiv.innerHTML = dynamicContent;
-          } else {
-            // If we can't find the specific div, replace all content in the body
-            winbox.body.innerHTML = `<div class="winbox-content"><h3 style="color: ${windowTheme.color};">${title}</h3><div style="color: ${windowTheme.color};">${dynamicContent}</div></div>`;
-          }
-        }
-      }, 10);
+      // Create window based on the card ID
+      switch (id) {
+        case 'electron-intro':
+          ElectronIntroWindow.create();
+          break;
+        case 'electron-architecture':
+          ElectronArchitectureWindow.create();
+          break;
+        case 'electron-security':
+          ElectronSecurityWindow.create();
+          break;
+        case 'electron-packaging':
+          ElectronPackagingWindow.create();
+          break;
+        case 'electron-native-apis':
+          ElectronNativeAPIsWindow.create();
+          break;
+        case 'electron-performance':
+          ElectronPerformanceWindow.create();
+          break;
+        case 'electron-development':
+          ElectronDevelopmentWindow.create();
+          break;
+        case 'electron-versions':
+          ElectronVersionsWindow.create();
+          break;
+        default:
+          // Fallback to generic window creation if no specific window is defined
+          import('./use-cases/window-factory').then(({ WindowFactory }) => {
+            WindowFactory.createWindow(title);
+          });
+          break;
+      }
     },
   },
 };
