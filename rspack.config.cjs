@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
-  entry: './src/renderer/main.js',
+  entry: './src/renderer/main.ts',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].[contenthash].js',
@@ -19,7 +19,7 @@ module.exports = {
       '@/main-lib': path.resolve(__dirname, 'src/main/lib'),
       vue$: 'vue/dist/vue.esm-bundler.js',
     },
-    extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue', '.json'],
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.vue', '.json'],
   },
   module: {
     rules: [
@@ -28,15 +28,14 @@ module.exports = {
         use: 'vue-loader',
       },
       {
-        test: /\.jsx?$/,
-        exclude: /node_modules/,
+        test: /\.tsx?$/,
         use: {
           loader: 'builtin:swc-loader',
           options: {
             jsc: {
               parser: {
-                syntax: 'ecmascript',
-                jsx: false, // Disable JSX for Vue
+                syntax: 'typescript',
+                tsx: false, // Disable TSX for Vue
               },
               transform: {
                 react: {
@@ -48,14 +47,15 @@ module.exports = {
         },
       },
       {
-        test: /\.tsx?$/,
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
         use: {
           loader: 'builtin:swc-loader',
           options: {
             jsc: {
               parser: {
-                syntax: 'typescript',
-                tsx: false, // Disable TSX for Vue
+                syntax: 'ecmascript',
+                jsx: false, // Disable JSX for Vue
               },
               transform: {
                 react: {

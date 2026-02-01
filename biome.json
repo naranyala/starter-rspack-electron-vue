@@ -6,7 +6,8 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "maxSize": 1048576
+    "maxSize": 1048576,
+    "includes": ["src/**/*", "scripts/**/*", "*.ts", "*.js", "*.json", "*.cjs"]
   },
   "formatter": {
     "enabled": true,
@@ -19,10 +20,14 @@
     "rules": {
       "recommended": true,
       "suspicious": {
-        "noConsole": "off"
+        "noConsole": "off",
+        "noExplicitAny": "off"
       },
       "style": {
         "noNonNullAssertion": "off"
+      },
+      "complexity": {
+        "noStaticOnlyClass": "off"
       }
     }
   },

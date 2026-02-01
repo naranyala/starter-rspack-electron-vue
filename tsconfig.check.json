@@ -17,6 +17,7 @@
     "noEmit": true,
     "jsx": "preserve",
     "types": ["node"],
+    "typeRoots": ["./node_modules/@types", "./types"],
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
@@ -28,7 +29,8 @@
     "src/renderer/**/*.tsx",
     "src/renderer/**/*.vue",
     "src/main/**/*.ts",
-    "src/main/**/*.tsx"
+    "src/main/**/*.tsx",
+    "types/**/*"
   ],
   "exclude": [
     "node_modules",
