@@ -5,9 +5,21 @@
         <input
           type="text"
           class="search-input"
-          placeholder="Search topics..."
+          placeholder="Search integration demos..."
           v-model="searchTerm"
         />
+        <div class="filter-tabs">
+          <button
+            v-for="category in filterCategories"
+            :key="category.id"
+            class="filter-tab"
+            :class="{ active: selectedCategory === category.id }"
+            @click="selectedCategory = category.id"
+          >
+            <span class="filter-tab-label">{{ category.label }}</span>
+            <span class="filter-tab-count">{{ getCategoryCount(category.id) }}</span>
+          </button>
+        </div>
         <div class="cards-list">
           <div
             v-for="(card, index) in filteredCards"
@@ -15,26 +27,27 @@
             class="simple-card"
             @click="handleCardClick(card, index)"
           >
-            <h3
-              class="simple-card-title"
-              v-html="processTitle(card.title, searchTerm)"
-            />
+            <h3 class="simple-card-title">
+              {{ card.title }}
+            </h3>
           </div>
           <div v-if="filteredCards.length === 0" class="no-results">
-            No matching topics found
+            <p v-if="searchTerm">No matching demos found for "{{ searchTerm }}"</p>
+            <p v-else-if="selectedCategory !== 'all'">No demos in {{ getCategoryLabel(selectedCategory) }}</p>
+            <p v-else>No demos available</p>
           </div>
         </div>
       </div>
     </main>
     <footer class="App-footer">
-      <p>Get started by editing <code>src/App.vue</code> and save to reload.</p>
+      <p>Electron.js Integration Demos - Click on any card to explore</p>
     </footer>
   </div>
 </template>
 
 <script>
 import '../styles/App.css';
-import { menuData } from '../../shared/constants';
+import { filterCategories, menuData } from '../../shared/constants';
 import {
   ElectronArchitectureWindow,
   ElectronDevelopmentWindow,
@@ -51,86 +64,67 @@ export default {
   data() {
     return {
       searchTerm: '',
+      selectedCategory: 'all',
+      filterCategories,
     };
   },
   computed: {
     filteredCards() {
-      return menuData.filter((card, _index) => {
-        const titleMatch = this.fuzzySearch(card.title, this.searchTerm).matches;
-        return titleMatch;
-      });
+      let filtered = menuData;
+
+      if (this.selectedCategory !== 'all') {
+        filtered = filtered.filter((card) => card.category === this.selectedCategory);
+      }
+
+      if (this.searchTerm.trim()) {
+        filtered = filtered.filter((card, _index) => {
+          const titleMatch = this.fuzzySearch(card.title, this.searchTerm);
+          const contentMatch = this.fuzzySearch(card.content, this.searchTerm);
+          const tagsMatch = card.tags.some((tag) => this.fuzzySearch(tag, this.searchTerm));
+          return titleMatch || contentMatch || tagsMatch;
+        });
+      }
+
+      return filtered;
     },
   },
   methods: {
     fuzzySearch(text, query) {
-      if (!query) return { matches: true, highlightedText: text };
+      if (!query) return true;
 
-      const _lowerText = text.toLowerCase();
+      const lowerText = text.toLowerCase();
       const lowerQuery = query.toLowerCase();
 
-      let matchFound = true;
-      let highlightedText = '';
       let queryIndex = 0;
 
-      for (let i = 0; i < text.length; i++) {
-        const char = text[i];
-        const lowerChar = char.toLowerCase();
-
-        if (queryIndex < lowerQuery.length && lowerChar === lowerQuery[queryIndex]) {
-          highlightedText += `<mark>${char}</mark>`;
+      for (let i = 0; i < lowerText.length; i++) {
+        if (queryIndex < lowerQuery.length && lowerText[i] === lowerQuery[queryIndex]) {
           queryIndex++;
-        } else {
-          highlightedText += char;
         }
       }
 
-      // Check if all query characters were found in sequence
-      matchFound = queryIndex === lowerQuery.length;
-
-      return { matches: matchFound, highlightedText };
+      return queryIndex === lowerQuery.length;
     },
 
-    processTitle(title, searchTerm) {
-      const processedTitle = this.fuzzySearch(title, searchTerm);
-      return processedTitle.matches ? processedTitle.highlightedText : title;
+    getCategoryLabel(categoryId) {
+      const category = this.filterCategories.find((cat) => cat.id === categoryId);
+      return category ? category.label : categoryId;
+    },
+
+    getCategoryCount(categoryId) {
+      if (categoryId === 'all') {
+        return menuData.length;
+      }
+      return menuData.filter((card) => card.category === categoryId).length;
     },
 
     handleCardClick(card, _index) {
       const { id, title } = card;
 
-      // Create window based on the card ID
-      switch (id) {
-        case 'electron-intro':
-          ElectronIntroWindow.create();
-          break;
-        case 'electron-architecture':
-          ElectronArchitectureWindow.create();
-          break;
-        case 'electron-security':
-          ElectronSecurityWindow.create();
-          break;
-        case 'electron-packaging':
-          ElectronPackagingWindow.create();
-          break;
-        case 'electron-native-apis':
-          ElectronNativeAPIsWindow.create();
-          break;
-        case 'electron-performance':
-          ElectronPerformanceWindow.create();
-          break;
-        case 'electron-development':
-          ElectronDevelopmentWindow.create();
-          break;
-        case 'electron-versions':
-          ElectronVersionsWindow.create();
-          break;
-        default:
-          // Fallback to generic window creation if no specific window is defined
-          import('../services/window-factory').then(({ WindowFactory }) => {
-            WindowFactory.createWindow(title);
-          });
-          break;
-      }
+      // Use generic window creation for all cards
+      import('../services/window-factory').then(({ WindowFactory }) => {
+        WindowFactory.createWindow(title);
+      });
     },
   },
 };

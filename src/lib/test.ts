@@ -2,45 +2,43 @@
 
 // Import all utilities
 import {
+  AnimationUtils,
+  AppLifecycle,
+  ArrayUtils,
+  ColorUtils,
+  CryptoUtils,
+  DataStore,
+  DateUtils,
+  DOMUtils,
+  ElectronAPI,
   // Shared utilities
   EnvUtils,
-  TypeUtils,
-  ValidationUtils,
-  JsonUtils,
-  LogUtils,
-  PathUtils,
-
-  // Backend utilities
-  WindowManager,
-  IPCChannel,
-  IPCRouter,
-  AppLifecycle,
-  SettingsManager,
-  DataStore,
-  MenuBuilder,
-  ProtocolHandler,
-  PowerMonitor,
-  TrayManager,
-  NotificationManager,
-  CryptoUtils,
-  BackendObjectUtils as ObjectUtils,
-  ArrayUtils,
-  StringUtils,
-
+  EventBus,
+  EventEmitter,
   // Frontend utilities
   HttpClient,
-  StorageUtils,
-  SessionStorageUtils,
-  ElectronAPI,
-  DOMUtils,
-  AnimationUtils,
-  EventEmitter,
-  EventBus,
+  IPCChannel,
+  IPCRouter,
+  JsonUtils,
   KeyboardUtils,
+  LogUtils,
   MathUtils,
-  ColorUtils,
-  DateUtils,
-  NumberUtils
+  MenuBuilder,
+  NotificationManager,
+  NumberUtils,
+  BackendObjectUtils as ObjectUtils,
+  PathUtils,
+  PowerMonitor,
+  ProtocolHandler,
+  SessionStorageUtils,
+  SettingsManager,
+  StorageUtils,
+  StringUtils,
+  TrayManager,
+  TypeUtils,
+  ValidationUtils,
+  // Backend utilities
+  WindowManager,
 } from './index';
 
 console.log('All utilities imported successfully!');
@@ -50,7 +48,10 @@ console.log('\n=== Testing Shared Utilities ===');
 
 // Test TypeUtils
 console.log('Type of "hello":', TypeUtils.getType('hello'));
-console.log('Is function:', TypeUtils.isFunction(() => {}));
+console.log(
+  'Is function:',
+  TypeUtils.isFunction(() => {})
+);
 console.log('Coalescing:', TypeUtils.coalesce(null, undefined, 'found'));
 
 // Test ValidationUtils

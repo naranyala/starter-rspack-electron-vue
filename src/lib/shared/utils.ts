@@ -17,14 +17,16 @@ export class EnvUtils {
   }
 
   static isDevelopment(): boolean {
-    return (
-      EnvUtils.getBoolean('NODE_ENV', typeof process !== 'undefined' && process.env?.NODE_ENV === 'development')
+    return EnvUtils.getBoolean(
+      'NODE_ENV',
+      typeof process !== 'undefined' && process.env?.NODE_ENV === 'development'
     );
   }
 
   static isProduction(): boolean {
-    return (
-      EnvUtils.getBoolean('NODE_ENV', typeof process !== 'undefined' && process.env?.NODE_ENV === 'production')
+    return EnvUtils.getBoolean(
+      'NODE_ENV',
+      typeof process !== 'undefined' && process.env?.NODE_ENV === 'production'
     );
   }
 
@@ -272,19 +274,26 @@ export class PathUtils {
 
   static basename(filePath: string, ext?: string): string {
     const normalizedPath = PathUtils.normalize(filePath);
-    const lastSlashIndex = Math.max(normalizedPath.lastIndexOf('/'), normalizedPath.lastIndexOf('\\'));
-    const baseName = lastSlashIndex >= 0 ? normalizedPath.substring(lastSlashIndex + 1) : normalizedPath;
-    
+    const lastSlashIndex = Math.max(
+      normalizedPath.lastIndexOf('/'),
+      normalizedPath.lastIndexOf('\\')
+    );
+    const baseName =
+      lastSlashIndex >= 0 ? normalizedPath.substring(lastSlashIndex + 1) : normalizedPath;
+
     if (ext && baseName.endsWith(ext)) {
       return baseName.substring(0, baseName.length - ext.length);
     }
-    
+
     return baseName;
   }
 
   static dirname(filePath: string): string {
     const normalizedPath = PathUtils.normalize(filePath);
-    const lastSlashIndex = Math.max(normalizedPath.lastIndexOf('/'), normalizedPath.lastIndexOf('\\'));
+    const lastSlashIndex = Math.max(
+      normalizedPath.lastIndexOf('/'),
+      normalizedPath.lastIndexOf('\\')
+    );
     return lastSlashIndex >= 0 ? normalizedPath.substring(0, lastSlashIndex) : '';
   }
 

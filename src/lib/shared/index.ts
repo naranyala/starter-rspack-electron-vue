@@ -1,8 +1,8 @@
 export {
   EnvUtils,
-  TypeUtils,
-  ValidationUtils,
   JsonUtils,
   LogUtils,
   PathUtils,
+  TypeUtils,
+  ValidationUtils,
 } from './utils';

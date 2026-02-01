@@ -612,7 +612,7 @@ export class TrayManager {
 
     const newMenuItem: Electron.MenuItemConstructorOptions = {
       label,
-      click: clickHandler
+      click: clickHandler,
     };
 
     // Build the template from scratch
@@ -623,7 +623,7 @@ export class TrayManager {
           label: item.label || '',
           type: item.type as any,
           click: item.click as any,
-          submenu: item.submenu ? item.submenu.items as any : undefined,
+          submenu: item.submenu ? (item.submenu.items as any) : undefined,
           enabled: item.enabled,
           visible: item.visible,
           checked: item.checked,
@@ -646,7 +646,7 @@ export class TrayManager {
           label: item.label || '',
           type: item.type as any,
           click: item.click as any,
-          submenu: item.submenu ? item.submenu.items as any : undefined,
+          submenu: item.submenu ? (item.submenu.items as any) : undefined,
           enabled: item.enabled,
           visible: item.visible,
           checked: item.checked,

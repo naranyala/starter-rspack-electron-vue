@@ -26,7 +26,7 @@ export class MathUtils {
   }
 
   static round(num: number, decimals: number = 2): number {
-    const factor = Math.pow(10, decimals);
+    const factor = 10 ** decimals;
     return Math.round(num * factor) / factor;
   }
 
@@ -168,12 +168,12 @@ export class ColorUtils {
 export class DateUtils {
   static format(date: Date, format: string): string {
     const tokens: { [key: string]: string } = {
-      'YYYY': date.getFullYear().toString(),
-      'MM': String(date.getMonth() + 1).padStart(2, '0'),
-      'DD': String(date.getDate()).padStart(2, '0'),
-      'HH': String(date.getHours()).padStart(2, '0'),
-      'mm': String(date.getMinutes()).padStart(2, '0'),
-      'ss': String(date.getSeconds()).padStart(2, '0'),
+      YYYY: date.getFullYear().toString(),
+      MM: String(date.getMonth() + 1).padStart(2, '0'),
+      DD: String(date.getDate()).padStart(2, '0'),
+      HH: String(date.getHours()).padStart(2, '0'),
+      mm: String(date.getMinutes()).padStart(2, '0'),
+      ss: String(date.getSeconds()).padStart(2, '0'),
     };
 
     let result = format;
@@ -257,7 +257,7 @@ export class NumberUtils {
   }
 
   static toFixed(num: number, decimals: number): number {
-    const factor = Math.pow(10, decimals);
+    const factor = 10 ** decimals;
     return Math.round(num * factor) / factor;
   }
 
@@ -299,7 +299,7 @@ export class ObjectUtils {
     if (typeof obj === 'object') {
       const cloned: any = {};
       for (const key in obj) {
-        if (obj.hasOwnProperty(key)) {
+        if (Object.hasOwn(obj, key)) {
           cloned[key] = ObjectUtils.deepClone(obj[key]);
         }
       }
@@ -314,7 +314,7 @@ export class ObjectUtils {
   ): T & U {
     const result = { ...target } as T & U;
     for (const key in source) {
-      if (Object.prototype.hasOwnProperty.call(source, key)) {
+      if (Object.hasOwn(source, key)) {
         const sourceVal = (source as any)[key];
         const targetVal = (target as any)[key];
 

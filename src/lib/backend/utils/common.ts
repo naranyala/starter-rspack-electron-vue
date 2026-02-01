@@ -1,5 +1,4 @@
-import crypto from 'node:crypto';
-import { createHash } from 'node:crypto';
+import crypto, { createHash } from 'node:crypto';
 
 export class CryptoUtils {
   static hash(data: string, algorithm: string = 'sha256'): string {
@@ -16,7 +15,11 @@ export class CryptoUtils {
 
   static encrypt(text: string, secret: string): string {
     const iv = crypto.randomBytes(16);
-    const cipher = crypto.createCipheriv('aes-256-cbc', crypto.createHash('md5').update(secret).digest().slice(0, 32), iv);
+    const cipher = crypto.createCipheriv(
+      'aes-256-cbc',
+      crypto.createHash('md5').update(secret).digest().slice(0, 32),
+      iv
+    );
     let encrypted = cipher.update(text, 'utf8', 'hex');
     encrypted += cipher.final('hex');
     return iv.toString('hex') + ':' + encrypted;
@@ -25,7 +28,11 @@ export class CryptoUtils {
   static decrypt(encrypted: string, secret: string): string {
     const [ivHex, encryptedText] = encrypted.split(':');
     const iv = Buffer.from(ivHex, 'hex');
-    const decipher = crypto.createDecipheriv('aes-256-cbc', crypto.createHash('md5').update(secret).digest().slice(0, 32), iv);
+    const decipher = crypto.createDecipheriv(
+      'aes-256-cbc',
+      crypto.createHash('md5').update(secret).digest().slice(0, 32),
+      iv
+    );
     let decrypted = decipher.update(encryptedText, 'hex', 'utf8');
     decrypted += decipher.final('utf8');
     return decrypted;
@@ -52,7 +59,7 @@ export class ObjectUtils {
     if (typeof obj === 'object') {
       const cloned: any = {};
       for (const key in obj) {
-        if (obj.hasOwnProperty(key)) {
+        if (Object.hasOwn(obj, key)) {
           cloned[key] = ObjectUtils.deepClone(obj[key]);
         }
       }
@@ -67,7 +74,7 @@ export class ObjectUtils {
   ): T & U {
     const result = { ...target } as T & U;
     for (const key in source) {
-      if (Object.prototype.hasOwnProperty.call(source, key)) {
+      if (Object.hasOwn(source, key)) {
         const sourceVal = (source as any)[key];
         const targetVal = (target as any)[key];
 
@@ -92,7 +99,7 @@ export class ObjectUtils {
     const flattened: Record<string, any> = {};
 
     for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
+      if (Object.hasOwn(obj, key)) {
         const newKey = prefix ? `${prefix}.${key}` : key;
 
         if (typeof obj[key] === 'object' && obj[key] !== null && !Array.isArray(obj[key])) {
@@ -110,7 +117,7 @@ export class ObjectUtils {
     const result: Record<string, any> = {};
 
     for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
+      if (Object.hasOwn(obj, key)) {
         const keys = key.split('.');
         let current = result;
 
@@ -175,11 +182,11 @@ export class ArrayUtils {
   }
 
   static difference<T>(arr1: T[], arr2: T[]): T[] {
-    return arr1.filter(x => !arr2.includes(x));
+    return arr1.filter((x) => !arr2.includes(x));
   }
 
   static intersection<T>(arr1: T[], arr2: T[]): T[] {
-    return arr1.filter(x => arr2.includes(x));
+    return arr1.filter((x) => arr2.includes(x));
   }
 
   static union<T>(arr1: T[], arr2: T[]): T[] {
@@ -188,7 +195,7 @@ export class ArrayUtils {
 
   static groupBy<T>(arr: T[], key: string | ((item: T) => string)): Record<string, T[]> {
     const result: Record<string, T[]> = {};
-    
+
     if (typeof key === 'string') {
       for (const item of arr) {
         const keyValue = (item as any)[key];
@@ -206,7 +213,7 @@ export class ArrayUtils {
         result[keyValue].push(item);
       }
     }
-    
+
     return result;
   }
 }
@@ -221,7 +228,7 @@ export class StringUtils {
       .replace(/[^a-zA-Z0-9]/g, ' ')
       .split(' ')
       .filter(Boolean)
-      .map((word, i) => i === 0 ? word.toLowerCase() : StringUtils.capitalize(word))
+      .map((word, i) => (i === 0 ? word.toLowerCase() : StringUtils.capitalize(word)))
       .join('');
   }
 

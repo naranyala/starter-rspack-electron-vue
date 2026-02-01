@@ -1,50 +1,48 @@
 // Export shared utilities
-export * from './shared';
 
 // Export backend and frontend utilities separately to avoid naming conflicts
 export * as BackendUtils from './backend';
-export * as FrontendUtils from './frontend';
-
 // Export specific utilities individually to avoid naming conflicts
 export {
-  // Backend specific
-  WindowManager,
+  AppLifecycle,
+  ArrayUtils,
+  CryptoUtils,
+  DataStore,
+  FileSystemUtils,
   IPCChannel,
   IPCRouter,
-  AppLifecycle,
-  SettingsManager,
-  DataStore,
-  MenuBuilder,
-  ProtocolHandler,
-  PowerMonitor,
-  TrayManager,
-  NotificationManager,
-  CryptoUtils,
-  ObjectUtils as BackendObjectUtils,
-  ArrayUtils,
-  StringUtils,
-  FileSystemUtils,
   JsonUtils as BackendJsonUtils,
   LogUtils as BackendLogUtils,
+  MenuBuilder,
+  NotificationManager,
+  ObjectUtils as BackendObjectUtils,
   PathUtils as BackendPathUtils,
+  PowerMonitor,
+  ProtocolHandler,
+  SettingsManager,
+  StringUtils,
+  TrayManager,
   TypeUtils as BackendTypeUtils,
   ValidationUtils as BackendValidationUtils,
+  // Backend specific
+  WindowManager,
 } from './backend';
-
+export * as FrontendUtils from './frontend';
 export {
-  // Frontend specific
-  HttpClient,
-  StorageUtils,
-  SessionStorageUtils,
-  ElectronAPI,
-  DOMUtils,
   AnimationUtils,
-  EventEmitter,
-  EventBus,
-  KeyboardUtils,
-  MathUtils,
   ColorUtils,
   DateUtils,
+  DOMUtils,
+  ElectronAPI,
+  EventBus,
+  EventEmitter,
+  // Frontend specific
+  HttpClient,
+  KeyboardUtils,
+  MathUtils,
   NumberUtils,
   ObjectUtils as FrontendObjectUtils,
+  SessionStorageUtils,
+  StorageUtils,
 } from './frontend';
+export * from './shared';
