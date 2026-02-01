@@ -1,53 +1,59 @@
 # Electron + Vue + Rspack Starter
 
-A production-ready starter template for building high-performance cross-platform desktop applications. Combines the power of Electron, the reactivity of Vue 3, and the speed of Rspack to deliver an optimal development experience.
+A production-ready starter template for building high-performance cross-platform desktop applications. This template combines Electron's native capabilities, Vue 3's reactive framework, and Rspack's rapid bundling to accelerate your development workflow from prototype to production.
 
 ## Why This Template?
 
-Building desktop applications should be straightforward. This starter eliminates configuration overhead and provides a battle-tested architecture that scales from prototypes to production applications.
+This starter eliminates configuration overhead and provides a proven architecture that scales with your application. Whether you are building internal tools or commercial software, this template provides the foundation for shipping quality desktop applications faster.
 
-### Performance First
+### Performance That Matters
 
-Rspack delivers build times up to 10x faster than traditional bundlers. Hot module replacement responds in milliseconds. Development feedback loops stay tight, keeping you focused on building features rather than waiting for builds.
+Rspack delivers build times significantly faster than traditional bundlers. Hot module replacement responds in milliseconds, keeping development cycles tight and productive. Spend less time waiting for builds and more time building features that matter.
 
-### Production Ready
+### Production-Ready Architecture
 
-Every architectural decision prioritizes maintainability and deployment. The modular structure separates concerns cleanly. Build scripts handle dependency management automatically. Packaging configurations work out of the box for Windows, macOS, and Linux.
+Every decision prioritizes maintainability and deployment readiness. The modular structure cleanly separates concerns. Automated build scripts handle dependency management. Packaging configurations work immediately for Windows, macOS, and Linux distributions.
 
 ## Key Features
 
-**Modern Development Stack**
-- Electron for native desktop capabilities
-- Vue 3 Composition API for reactive UI development
-- Rspack for rapid bundling and HMR
-- TypeScript support for type safety
+**Modern Technology Stack**
+
+- Electron for native desktop application capabilities
+- Vue 3 Composition API for reactive user interface development
+- Rspack for high-performance bundling and hot module replacement
+- TypeScript for comprehensive type safety across the codebase
 
 **Intelligent Build System**
-- Automatic dependency detection and installation
-- Smart port management with conflict resolution
-- Parallel process orchestration for dev server
-- Optimized production builds with tree shaking
 
-**Clean Architecture**
-- Use-case based module organization
+- Automatic dependency detection and installation
+- Smart port management with automatic conflict resolution
+- Parallel process orchestration for efficient development server operation
+- Optimized production builds with tree shaking and minification
+
+**Clean Architectural Design**
+
+- Use-case based module organization for maintainability
 - Clear separation between main and renderer processes
 - Component-based window management system
-- Shared utilities for common operations
+- Shared utilities for consistent operations across processes
 
 **Cross-Platform Deployment**
-- Single codebase targets all major platforms
-- Automated packaging for distribution
-- Platform-specific optimizations included
-- Code signing preparation ready
+
+- Single codebase targets Windows, macOS, and Linux
+- Automated packaging for immediate distribution
+- Platform-specific optimizations included by default
+- Code signing preparation for commercial distribution
 
 ## Quick Start
 
 ### Prerequisites
 
-- Node.js 18 or later
+- Node.js version 18 or later
 - npm, yarn, or Bun package manager
 
 ### Installation
+
+Clone the repository and install dependencies:
 
 ```bash
 git clone <repository-url>
@@ -57,27 +63,33 @@ npm install
 
 ### Development
 
+Start the development environment:
+
 ```bash
 npm run dev
 ```
 
-The development server starts automatically, launches Electron, and provides hot module replacement.
+The development server launches automatically, starts Electron, and provides hot module replacement for rapid iteration.
 
 ### Production Build
+
+Create an optimized production build:
 
 ```bash
 npm run build
 ```
 
-Creates an optimized production build ready for packaging.
+This generates optimized assets ready for packaging and distribution.
 
 ### Packaging
+
+Generate distributable application packages:
 
 ```bash
 npm run package
 ```
 
-Generates distributable application packages for your current platform.
+Creates platform-specific installers and executables for your target operating system.
 
 ## Project Structure
 
@@ -110,23 +122,25 @@ scripts/                       # Build automation
 
 ### Process Separation
 
-The application follows Electron's multi-process architecture:
+The application follows Electron's multi-process architecture for security and performance:
 
 **Main Process** (`src/main/`)
-- Manages application lifecycle
-- Handles native OS integration
+
+- Manages application lifecycle and startup
+- Handles native operating system integration
 - Controls window creation and management
-- Executes privileged operations
+- Executes privileged system operations
 
 **Renderer Process** (`src/renderer/`)
-- Vue.js application entry point
-- Component-based UI architecture
-- Communicates with main process via IPC
-- Sandboxed for security
+
+- Vue.js application entry point and routing
+- Component-based user interface architecture
+- Communicates with main process via IPC channels
+- Runs in sandboxed environment for security
 
 ### Window Management
 
-Each window type follows a modular pattern:
+Each window type follows a modular, maintainable pattern:
 
 ```
 use-cases/
@@ -134,43 +148,45 @@ use-cases/
 └── backend/                  # Main process window controllers
 ```
 
-This structure keeps window-specific logic encapsulated and maintainable.
+This structure encapsulates window-specific logic and keeps the codebase organized and scalable.
 
 ### Build System
 
-The build system handles complexity automatically:
+The build system automates complexity so you can focus on application development:
 
-1. **Dependency Management**: Detects missing packages and installs them
-2. **Port Allocation**: Automatically finds available ports
-3. **Process Coordination**: Manages dev server and Electron lifecycle
-4. **Error Recovery**: Provides clear diagnostics when issues occur
+1. **Dependency Management**: Automatically detects and installs missing packages
+2. **Port Allocation**: Finds and assigns available network ports automatically
+3. **Process Coordination**: Manages development server and Electron lifecycle
+4. **Error Recovery**: Provides clear diagnostic messages when issues occur
 
 ## Development Workflow
 
 ### Starting Development
 
-The dev script performs several operations automatically:
+The development script performs setup operations automatically:
 
-1. Validates all required dependencies
-2. Allocates an available port
-3. Starts the Rspack dev server
-4. Launches Electron with the dev server URL
-5. Sets up process cleanup on exit
+1. Validates all required dependencies are present
+2. Allocates an available network port for the dev server
+3. Starts the Rspack development server with hot module replacement
+4. Launches Electron pointing to the dev server URL
+5. Configures automatic process cleanup on application exit
 
 ```bash
 npm run dev
 ```
 
-### Code Quality
+### Code Quality Tools
+
+Maintain code quality with integrated tooling:
 
 ```bash
-# Type checking
+# Type checking across the codebase
 npm run type-check
 
-# Linting
+# Linting for code style consistency
 npm run lint
 
-# Code formatting
+# Code formatting with Prettier
 npm run format
 
 # Check for outdated dependencies
@@ -179,13 +195,13 @@ npm run deps:latest
 
 ### Building for Production
 
-The build process creates optimized assets:
+The production build creates fully optimized assets:
 
 ```bash
 npm run build
 ```
 
-Output goes to the `dist/` directory with minified and tree-shaken code.
+Output is written to the `dist/` directory with minified code, tree shaking applied, and assets optimized for distribution.
 
 ### Packaging Applications
 
@@ -195,48 +211,49 @@ Create distributable packages for end users:
 npm run package
 ```
 
-Supported formats:
-- Windows: MSI installer, portable executable
-- macOS: DMG disk image, ZIP archive
-- Linux: AppImage, DEB package, RPM package
+Supported output formats:
+
+- **Windows**: MSI installer, portable executable
+- **macOS**: DMG disk image, ZIP archive
+- **Linux**: AppImage, DEB package, RPM package
 
 ## Configuration
 
 ### Environment Variables
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `NODE_ENV` | Build environment | `development` |
-| `PORT` | Dev server port | Auto-assigned |
+| Variable | Description | Default Value |
+|----------|-------------|---------------|
+| `NODE_ENV` | Build environment mode | `development` |
+| `PORT` | Development server port | Auto-assigned |
 | `USE_BUN` | Prefer Bun over npm | `false` |
 
 ### Rspack Configuration
 
-Build configuration lives in `rspack.config.cjs`:
+Build configuration is defined in `rspack.config.cjs`:
 
 - Entry points for main and renderer processes
-- Module resolution and aliases
-- Development and production optimizations
-- Asset handling and processing
+- Module resolution rules and path aliases
+- Development and production optimization settings
+- Asset handling and processing pipelines
 
 ## Deployment
 
 ### Local Distribution
 
-For immediate distribution to users:
+For immediate distribution to users or testers:
 
 ```bash
 npm run package
 ```
 
-Outputs platform-specific packages to `dist/` directory.
+Outputs platform-specific packages to the `dist/` directory.
 
 ### CI/CD Integration
 
-The build scripts work seamlessly in CI environments:
+The build scripts integrate seamlessly with continuous integration environments:
 
 ```yaml
-# Example GitHub Actions
+# Example GitHub Actions workflow
 - name: Build Application
   run: |
     npm install
@@ -246,70 +263,75 @@ The build scripts work seamlessly in CI environments:
 
 ### Code Signing
 
-Prepare for distribution signing:
+Prepare applications for signed distribution:
 
 1. Configure signing certificates in `package.json`
-2. Set environment variables for certificate paths
-3. Run packaging with signing enabled
+2. Set environment variables pointing to certificate files
+3. Execute packaging with signing enabled
 
 ## Technical Specifications
 
 ### Supported Platforms
 
-- **Windows**: Windows 10 and later
-- **macOS**: macOS 10.14 (Mojave) and later
-- **Linux**: Most modern distributions
+- **Windows**: Windows 10 and later versions
+- **macOS**: macOS 10.14 (Mojave) and later versions
+- **Linux**: Most modern distributions with standard libraries
 
 ### System Requirements
 
-**Development**
-- 4GB RAM minimum (8GB recommended)
-- 2GB free disk space
-- Internet connection for dependency installation
+**Development Environment**
+
+- 4GB RAM minimum (8GB recommended for optimal performance)
+- 2GB free disk space for dependencies and builds
+- Internet connection for package installation
 
 **Production Applications**
-- 2GB RAM minimum
-- 500MB disk space
-- No runtime dependencies required
 
-### Browser Support
+- 2GB RAM minimum for smooth operation
+- 500MB disk space for application installation
+- No additional runtime dependencies required
+
+### Browser Engine Support
 
 The bundled Chromium version in Electron provides:
-- Full ES2022 support
-- Modern CSS features
-- WebGL and hardware acceleration
+
+- Full ES2022 JavaScript support
+- Modern CSS features and specifications
+- WebGL and hardware-accelerated graphics
 - Native module support via Node.js integration
 
 ## Customization
 
 ### Adding New Windows
 
-1. Create a window component in `src/renderer/services/`
-2. Implement the main process controller
-3. Register the window in the factory
+Extend the application with additional windows:
+
+1. Create window components in `src/renderer/services/`
+2. Implement corresponding main process controllers
+3. Register the window in the window factory
 
 ### Modifying Build Behavior
 
-Build scripts use a modular utility system:
+Build scripts use a modular utility system for extensibility:
 
-- `scripts/utils/logger.ts`: Structured logging
-- `scripts/utils/index.ts`: Common operations
+- `scripts/utils/logger.ts`: Structured logging with configurable output
+- `scripts/utils/index.ts`: Common build operations and helpers
 
-Extend these utilities to add custom build steps.
+Extend these utilities to add custom build steps or modify existing behavior.
 
-### Theming
+### Theming and Styling
 
-The application includes a comprehensive dark theme. Modify CSS variables in the component styles to customize the appearance.
+The application includes a comprehensive default theme. Customize the appearance by modifying CSS variables in component styles or adding global theme overrides.
 
 ## Troubleshooting
 
 ### Port Conflicts
 
-If the default port is unavailable, the dev server automatically finds an alternative. Check the console output for the assigned port.
+If the default development port is unavailable, the server automatically locates an alternative. Check the console output to identify the assigned port number.
 
-### Dependency Issues
+### Dependency Resolution
 
-The setup script automatically installs missing dependencies. Run:
+The setup script automatically installs missing dependencies. If you encounter issues, run:
 
 ```bash
 npm run setup
@@ -317,7 +339,7 @@ npm run setup
 
 ### Build Failures
 
-Clear build artifacts and retry:
+Clear build artifacts and rebuild from a clean state:
 
 ```bash
 npm run clean
@@ -326,31 +348,32 @@ npm run build
 
 ## Contributing
 
-Contributions improve the template for everyone:
+Contributions improve this template for the entire community:
 
-1. Fork the repository
+1. Fork the repository to your account
 2. Create a feature branch: `git checkout -b feature/description`
-3. Commit your changes: `git commit -am 'Add feature'`
-4. Push to the branch: `git push origin feature/description`
-5. Submit a pull request
+3. Commit your changes with descriptive messages
+4. Push to your branch: `git push origin feature/description`
+5. Open a pull request for review
 
-Please ensure:
-- Code passes type checking
-- Linting rules are satisfied
-- Commit messages are descriptive
+Please ensure all contributions:
+- Pass type checking without errors
+- Satisfy linting rules
+- Include descriptive commit messages
+- Maintain backward compatibility where possible
 
 ## License
 
-MIT License - See [LICENSE](LICENSE) for complete details.
+MIT License - See [LICENSE](LICENSE) for complete terms and conditions.
 
-## Support
+## Support and Community
 
-For issues, questions, or contributions:
+For technical issues, feature requests, or general questions:
 
-- Open an issue in the repository
-- Review existing discussions for solutions
-- Submit pull requests for improvements
+- Open an issue in the GitHub repository
+- Review existing discussions for known solutions
+- Submit pull requests with improvements or fixes
 
 ---
 
-Built with precision for developers who value performance, maintainability, and clean architecture.
+Built for developers who prioritize performance, maintainability, and clean architecture in their desktop applications.
