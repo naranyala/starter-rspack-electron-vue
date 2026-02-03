@@ -13,6 +13,7 @@ interface WindowOptions {
   height?: string;
   x?: string | number;
   y?: string | number;
+  onclose?: () => boolean | void;
   [key: string]: unknown;
 }
 
@@ -22,6 +23,7 @@ interface WinBoxWindow {
   minimize: () => void;
   maximize: () => void;
   restore: () => void;
+  focus?: () => void;
   setBackground: (color: string) => void;
 }
 
