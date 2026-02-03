@@ -25,7 +25,7 @@ async function setup() {
   // Validate project structure
   log.info('Validating project structure...');
   const requiredFiles = ['package.json', 'main.cjs'];
-  const requiredDirs = ['src', 'src/main', 'src/renderer'];
+  const requiredDirs = ['src', 'src/backend', 'src/frontend'];
 
   for (const file of requiredFiles) {
     if (!fs.existsSync(file)) {

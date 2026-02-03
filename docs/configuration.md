@@ -40,17 +40,17 @@ The `package.json` file contains build and distribution configurations:
 ## Rspack Configuration (`rspack.config.cjs`)
 
 ### Entry Points
-- `./src/renderer/main.ts` - Main renderer entry point
+- `./src/frontend/main.ts` - Frontend renderer entry point
 - Output directory: `./dist/`
 - Filename pattern: `[name].[contenthash].js`
 
 ### Path Aliases
 - `@`: `src/`
-- `@/renderer`: `src/renderer/`
-- `@/main`: `src/main/`
+- `@/frontend`: `src/frontend/`
+- `@/backend`: `src/backend/`
 - `@/assets`: `src/assets/`
-- `@/renderer-lib`: `src/renderer/lib/`
-- `@/main-lib`: `src/main/lib/`
+- `@/frontend-lib`: `src/frontend/lib/`
+- `@/backend-lib`: `src/backend/lib/`
 
 ### Module Resolution
 - Supports `.ts`, `.tsx`, `.js`, `.jsx`, `.vue`, `.json` extensions
@@ -113,7 +113,7 @@ The `package.json` file contains build and distribution configurations:
 
 ## Window Configuration
 
-### Main Process Configuration (`src/main/lib/config.js`)
+### Backend Process Configuration (`src/backend/config/app-config.ts`)
 - Window dimensions and positioning
 - BrowserWindow options
 - Menu configurations
@@ -148,3 +148,30 @@ alias: {
 - Modify `rspack.config.cjs` for bundling changes
 - Update `tsconfig.json` for TypeScript settings
 - Adjust `biome.json` for code style preferences
+
+### Utility Library Configuration
+The enhanced utility libraries provide comprehensive functionality out-of-the-box:
+
+#### Backend Utilities
+Located in `src/backend/lib/utils-enhanced/`, these utilities include:
+- File system operations with search and backup capabilities
+- Cryptographic functions with encryption and hashing
+- Environment variable management with pattern matching
+- Logging with performance tracking and custom levels
+- Path manipulation with normalization and validation
+
+#### Frontend Utilities
+Located in `src/frontend/lib/utils-enhanced/`, these utilities include:
+- Mathematical operations with geometry and number theory functions
+- Color manipulation with conversion and blending
+- Date/time operations with calendar calculations
+- Number formatting with currency and locale support
+- Storage management with quota tracking
+
+#### Shared Utilities
+Located in `src/shared/utils/`, these utilities include:
+- Object manipulation with deep cloning and merging
+- String processing with formatting and validation
+- Array operations with grouping and manipulation
+- Caching with TTL and automatic cleanup
+- Async operations with debounce, throttle, and retry

@@ -112,7 +112,7 @@ import {
   ElectronPerformanceWindow,
   ElectronSecurityWindow,
   ElectronVersionsWindow,
-} from '../services';
+} from '../use-cases';
 
 export default {
   name: 'App',

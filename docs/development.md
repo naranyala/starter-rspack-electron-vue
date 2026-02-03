@@ -55,10 +55,38 @@ During development:
 ## Adding New Features
 
 ### Creating New Windows
-1. Create window components in `src/renderer/services/`
-2. Implement corresponding main process controllers in `src/main/use-cases/`
+1. Create window components in `src/frontend/services/`
+2. Implement corresponding backend process controllers in `src/backend/use-cases/`
 3. Register the window in the window factory system
 4. Define IPC handlers for communication
+
+### Leveraging Enhanced Utilities
+The project includes comprehensive utility libraries for both backend and frontend:
+
+#### Backend Utilities (`src/backend/lib/utils-enhanced/`)
+- **CryptoUtils**: Encryption, hashing, and secure operations
+- **FileSystemUtils**: File operations with error handling and search capabilities
+- **JsonUtils**: JSON parsing and manipulation with validation
+- **LogUtils**: Colored logging with performance tracking
+- **PathUtils**: Path manipulation and normalization
+- **EnvUtils**: Environment variable management with pattern matching
+- **Shared Utilities**: Object manipulation, string processing, validation, and arrays
+
+#### Frontend Utilities (`src/frontend/lib/utils-enhanced/`)
+- **MathUtils**: Mathematical operations, geometry calculations, and number theory
+- **ColorUtils**: Color conversions, blending, and manipulation
+- **DateUtils**: Date formatting, time calculations, and calendar operations
+- **NumberUtils**: Number formatting, currency conversion, and byte operations
+- **StorageUtils**: Enhanced local/session storage with quota management
+- **Shared Utilities**: Object manipulation, string processing, validation, and arrays
+
+#### Shared Utilities (`src/shared/utils/`)
+- **ObjectUtils**: Deep cloning, merging, and property manipulation
+- **StringUtils**: String manipulation, formatting, and validation
+- **ValidationUtils**: Comprehensive validation for emails, URLs, IPs, and more
+- **ArrayUtils**: Advanced array operations, grouping, and manipulation
+- **CacheUtils**: Memory-based caching with TTL and cleanup
+- **AsyncUtils**: Enhanced async operations with debounce, throttle, retry, and circuit breaker
 
 ### Extending Functionality
 - Add new utilities to appropriate `lib/` directories

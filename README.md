@@ -90,6 +90,12 @@ npm run package
 - **Type safety**: Comprehensive TypeScript coverage
 - **Code quality**: Integrated linting and formatting
 
+### Enhanced Utility Libraries
+- **Backend Utilities**: Comprehensive file system, crypto, logging, and environment management
+- **Frontend Utilities**: Advanced math, color, date, number, and storage operations
+- **Shared Utilities**: Object manipulation, string processing, validation, caching, and async operations
+- **10x Development Speed**: Pre-built functions for common operations
+
 ### Security Focused
 - **Context isolation**: Secure renderer processes
 - **Restricted IPC**: Limited, validated communication channels
@@ -106,24 +112,46 @@ npm run package
 
 ```
 src/
-├── main/              # Electron main process
-│   ├── lib/           # Main utilities (config, utils, database)
-│   ├── main.js        # Main entry point
-│   └── preload.js     # IPC bridge
-├── renderer/          # Vue renderer process
-│   ├── lib/           # Renderer utilities (api, dom, events)
-│   ├── components/    # Vue components
-│   ├── styles/        # CSS modules
-│   ├── App.vue        # Root component
-│   └── main.js        # Renderer entry point
-├── shared/            # Shared between processes
-└── assets/            # Static assets
+├── backend/              # Electron main process (Backend)
+│   ├── lib/              # Backend utilities and helpers
+│   │   ├── utils/        # Backend utility functions
+│   │   └── index.ts      # Backend utility exports
+│   ├── use-cases/        # Backend business logic and IPC handlers
+│   │   ├── base-use-case.ts # Base use case class
+│   │   └── *.ts          # Specific use cases
+│   ├── config/           # Application configuration
+│   ├── services/         # Backend services (database, window management, etc.)
+│   ├── main.ts           # Main process entry point
+│   └── preload.ts        # Preload script (IPC bridge)
+├── frontend/             # Vue renderer process (Frontend)
+│   ├── lib/              # Frontend utilities
+│   │   ├── api.ts        # API utilities
+│   │   ├── dom.ts        # DOM manipulation utilities
+│   │   ├── events.ts     # Event utilities
+│   │   ├── utils.ts      # General utilities
+│   │   └── index.ts      # Frontend utility exports
+│   ├── use-cases/        # Frontend business logic (UI components, window services)
+│   │   └── index.ts      # Frontend use case exports
+│   ├── components/       # Vue components
+│   ├── composables/      # Vue composables
+│   ├── services/         # Frontend services (window services, etc.)
+│   ├── stores/           # State management (Pinia/Vuex)
+│   ├── views/            # View components
+│   └── main.ts           # Frontend entry point
+├── shared/               # Shared between backend and frontend
+│   ├── constants.ts      # Shared constants
+│   ├── types.ts          # Shared types/interfaces
+│   └── utils/            # Shared utility functions
+├── assets/               # Static assets
+├── index.html            # HTML template
+├── index.css             # Global styles
+└── reset.css             # CSS reset
 
-scripts/               # Build automation
-├── dev.ts             # Development server
-├── build.ts           # Production builds
-├── package.ts         # Packaging scripts
-└── utils/             # Shared utilities
+scripts/                  # Build automation
+├── dev.ts                # Development server
+├── build.ts              # Production builds
+├── package.ts            # Packaging scripts
+└── utils/                # Shared utilities
 ```
 
 ## Advanced Usage

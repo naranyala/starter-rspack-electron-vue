@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
-  entry: './src/renderer/main.ts',
+  entry: './src/frontend/main.ts',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].[contenthash].js',
@@ -12,11 +12,11 @@ module.exports = {
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
-      '@/renderer': path.resolve(__dirname, 'src/renderer'),
-      '@/main': path.resolve(__dirname, 'src/main'),
+      '@/frontend': path.resolve(__dirname, 'src/frontend'),
+      '@/backend': path.resolve(__dirname, 'src/backend'),
       '@/assets': path.resolve(__dirname, 'src/assets'),
-      '@/renderer-lib': path.resolve(__dirname, 'src/renderer/lib'),
-      '@/main-lib': path.resolve(__dirname, 'src/main/lib'),
+      '@/frontend-lib': path.resolve(__dirname, 'src/frontend/lib'),
+      '@/backend-lib': path.resolve(__dirname, 'src/backend/lib'),
       vue$: 'vue/dist/vue.esm-bundler.js',
     },
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.vue', '.json'],

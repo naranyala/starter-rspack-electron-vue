@@ -21,7 +21,8 @@ Welcome to the comprehensive documentation for the Electron + Vue + Rspack Start
 - [Main Repository](../README.md) - Project overview and getting started
 - [Package.json Reference](../package.json) - Build scripts and dependencies
 - [Rspack Configuration](../rspack.config.cjs) - Bundling configuration
-- [Project Structure](../STRUCTURE.md) - Detailed file organization
+- [Project Structure](../docs/overview.md) - Detailed file organization
+- [Testing Setup](../docs/testing.md) - Testing framework and utilities
 
 ## For AI Agents
 

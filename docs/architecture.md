@@ -4,17 +4,17 @@
 
 The application follows Electron's recommended multi-process architecture for security and performance:
 
-### Main Process (`src/main/`)
+### Backend Process (`src/backend/`)
 - Manages application lifecycle and startup
 - Handles native operating system integration
 - Controls window creation and management
 - Executes privileged system operations
 - Contains utility libraries for configuration, file system operations, and IPC
 
-### Renderer Process (`src/renderer/`)
+### Frontend Process (`src/frontend/`)
 - Vue.js application entry point and routing
 - Component-based user interface architecture
-- Communicates with main process via secure IPC channels
+- Communicates with backend process via secure IPC channels
 - Runs in sandboxed environment for security
 - Contains utility libraries for API calls, DOM manipulation, and event handling
 
@@ -32,19 +32,35 @@ Services and Data Stores
 
 ## Library Organization
 
-### Main Process Components (`src/main/`)
+### Backend Process Components (`src/backend/`)
+- `lib/`: Backend utility functions and helpers
+  - `utils-enhanced/`: Comprehensive backend utilities with enhanced functionality
+    - Object manipulation, string processing, validation, file system operations
+    - Cryptography, logging, path handling, environment management
+    - Caching, async operations, and performance utilities
+- `use-cases/`: Business logic implementations and IPC handlers for backend
 - `config/`: Application configuration and settings
 - `services/`: Core services like window management and database
-- `use-cases/`: Business logic implementations for main process
 
-### Renderer Process Components (`src/renderer/`)
+### Frontend Process Components (`src/frontend/`)
+- `lib/`: Frontend utility functions and helpers
+  - `utils-enhanced/`: Comprehensive frontend utilities with enhanced functionality
+    - Math, color, date, number utilities
+    - DOM manipulation, animation, event handling
+    - Storage management, API communication
+    - Caching, async operations, and performance utilities
+  - `async.ts`: Enhanced asynchronous utilities with debounce, throttle, retry, etc.
+- `use-cases/`: Frontend business logic and UI components
 - `services/`: Window component services and generators
-- `main.ts`: Renderer process entry point
+- `main.ts`: Frontend process entry point
 
-### Shared Libraries (`src/lib/`)
-- `backend/`: Backend utility functions and helpers
-- `frontend/`: Frontend utility functions and helpers
-- `shared/`: Utilities shared between processes
+### Shared Components (`src/shared/`)
+- `constants.ts`: Shared constants
+- `types.ts`: Shared types and interfaces
+- `utils/`: Utilities shared between processes
+  - Object manipulation, string processing, validation, array operations
+  - Caching utilities, async utilities, type utilities
+  - Type definitions and interfaces for consistent data handling
 
 ## Security Model
 
@@ -67,8 +83,8 @@ The build system uses Rspack with the following features:
 
 Each window type follows a modular pattern:
 ```
-src/main/use-cases/     # Main process window controllers
-src/renderer/services/  # Renderer-side window components
+src/backend/use-cases/  # Backend process window controllers and IPC handlers
+src/frontend/services/  # Frontend-side window components and UI logic
 ```
 
 This structure encapsulates window-specific logic and keeps the codebase organized and scalable.
