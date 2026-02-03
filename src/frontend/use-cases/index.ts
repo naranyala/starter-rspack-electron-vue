@@ -11,10 +11,10 @@ export {
   once,
   retry,
   SessionStorageUtils,
+  StorageUtils,
   sleep,
   throttle,
 } from '../lib';
-export { StorageUtils } from '../lib/utils-enhanced';
 export { ElectronArchitectureWindow } from '../services/electron-architecture-window';
 export { ElectronDevelopmentWindow } from '../services/electron-development-window';
 export { ElectronIntroWindow } from '../services/electron-intro-window';

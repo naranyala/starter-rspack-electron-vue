@@ -101,6 +101,8 @@ npm run package
 - **Restricted IPC**: Limited, validated communication channels
 - **Node integration disabled**: Safer by default
 - **Input sanitization**: Built-in protection patterns
+- **Automated Security Testing**: Comprehensive security test suite.
+- **Security-focused Build Pipeline**: Integrates security checks into the build process.
 
 ### Production Ready
 - **Auto-updates**: Built-in update mechanism
@@ -210,6 +212,7 @@ PORT=4000 npm run dev
 | `npm run lint` | Lint and format code |
 | `npm run format` | Format code with Biome |
 | `npm run deps:latest` | Check for outdated dependencies |
+| `npm run test:security` | Run security test suite |
 
 ## Use Cases
 

@@ -3,8 +3,11 @@
  * Comprehensive utilities for frontend/Vue renderer process
  */
 
+import { ArrayUtils } from '../../../shared/utils/array';
 // Import shared utilities
-import { ObjectUtils, StringUtils, ValidationUtils, ArrayUtils } from '../../../shared/utils';
+import { ObjectUtils } from '../../../shared/utils/object';
+import { StringUtils } from '../../../shared/utils/string';
+import { ValidationUtils } from '../../../shared/utils/validation';
 
 // Re-export shared utilities for convenience
 export { ObjectUtils, StringUtils, ValidationUtils, ArrayUtils };
@@ -74,7 +77,7 @@ export class MathUtils {
    * Calculate distance between two points
    */
   static distance(x1: number, y1: number, x2: number, y2: number): number {
-    return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
   }
 
   /**
@@ -121,7 +124,7 @@ export class MathUtils {
     if (n <= 1) return false;
     if (n <= 3) return true;
     if (n % 2 === 0 || n % 3 === 0) return false;
-    
+
     for (let i = 5; i * i <= n; i += 6) {
       if (n % i === 0 || n % (i + 2) === 0) return false;
     }
@@ -159,7 +162,9 @@ export class ColorUtils {
       return p;
     };
 
-    let r, g, b;
+    let r = 0,
+      g = 0,
+      b = 0;
 
     if (s === 0) {
       r = g = b = l;
@@ -237,7 +242,12 @@ export class ColorUtils {
    * Generate random color
    */
   static random(): string {
-    return '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+    return (
+      '#' +
+      Math.floor(Math.random() * 16777215)
+        .toString(16)
+        .padStart(6, '0')
+    );
   }
 
   /**
@@ -246,13 +256,13 @@ export class ColorUtils {
   static blend(color1: string, color2: string, factor: number): string {
     const rgb1 = ColorUtils.hexToRgb(color1);
     const rgb2 = ColorUtils.hexToRgb(color2);
-    
+
     if (!rgb1 || !rgb2) return color1;
-    
+
     const r = Math.round(rgb1.r + factor * (rgb2.r - rgb1.r));
     const g = Math.round(rgb1.g + factor * (rgb2.g - rgb1.g));
     const b = Math.round(rgb1.b + factor * (rgb2.b - rgb1.b));
-    
+
     return ColorUtils.rgbToHex(r, g, b);
   }
 
@@ -262,11 +272,11 @@ export class ColorUtils {
   static complement(color: string): string {
     const rgb = ColorUtils.hexToRgb(color);
     if (!rgb) return color;
-    
+
     const r = 255 - rgb.r;
     const g = 255 - rgb.g;
     const b = 255 - rgb.b;
-    
+
     return ColorUtils.rgbToHex(r, g, b);
   }
 
@@ -399,7 +409,7 @@ export class DateUtils {
    * Check if year is leap year
    */
   static isLeapYear(year: number): boolean {
-    return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+    return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
   }
 
   /**
@@ -453,7 +463,11 @@ export class NumberUtils {
   /**
    * Format currency
    */
-  static formatCurrency(amount: number, currency: string = 'USD', locale: string = 'en-US'): string {
+  static formatCurrency(
+    amount: number,
+    currency: string = 'USD',
+    locale: string = 'en-US'
+  ): string {
     return new Intl.NumberFormat(locale, {
       style: 'currency',
       currency: currency,
@@ -486,7 +500,7 @@ export class NumberUtils {
    */
   static nextPowerOfTwo(num: number): number {
     if (num <= 0) return 1;
-    return Math.pow(2, Math.ceil(Math.log2(num)));
+    return 2 ** Math.ceil(Math.log2(num));
   }
 
   /**
@@ -496,168 +510,7 @@ export class NumberUtils {
     const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
     if (bytes === 0) return '0 Bytes';
     const i = Math.floor(Math.log(bytes) / Math.log(1024));
-    return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i];
-  }
-}
-
-export class StorageUtils {
-  private static prefix: string = '';
-
-  static setPrefix(prefix: string): void {
-    StorageUtils.prefix = prefix;
-  }
-
-  private static getKey(key: string): string {
-    return `${StorageUtils.prefix}${key}`;
-  }
-
-  static get<T = unknown>(key: string, defaultValue: T | null = null): T | null {
-    try {
-      const item = localStorage.getItem(StorageUtils.getKey(key));
-      if (item === null) return defaultValue;
-      try {
-        return JSON.parse(item);
-      } catch {
-        return item as unknown as T;
-      }
-    } catch (error) {
-      console.error('Error reading from localStorage:', error);
-      return defaultValue;
-    }
-  }
-
-  static set<T>(key: string, value: T): boolean {
-    try {
-      const stringValue = typeof value === 'string' ? value : JSON.stringify(value);
-      localStorage.setItem(StorageUtils.getKey(key), stringValue);
-      return true;
-    } catch (error) {
-      console.error('Error writing to localStorage:', error);
-      return false;
-    }
-  }
-
-  static remove(key: string): boolean {
-    try {
-      localStorage.removeItem(StorageUtils.getKey(key));
-      return true;
-    } catch (error) {
-      console.error('Error removing from localStorage:', error);
-      return false;
-    }
-  }
-
-  static has(key: string): boolean {
-    return localStorage.getItem(StorageUtils.getKey(key)) !== null;
-  }
-
-  static clear(): boolean {
-    try {
-      const keysToRemove: string[] = [];
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key?.startsWith(StorageUtils.prefix)) {
-          keysToRemove.push(key);
-        }
-      }
-      for (const key of keysToRemove) {
-        localStorage.removeItem(key);
-      }
-      return true;
-    } catch (error) {
-      console.error('Error clearing localStorage:', error);
-      return false;
-    }
-  }
-
-  static keys(): string[] {
-    const keys: string[] = [];
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key?.startsWith(StorageUtils.prefix)) {
-        keys.push(key.replace(StorageUtils.prefix, ''));
-      }
-    }
-    return keys;
-  }
-
-  static size(): number {
-    let total = 0;
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key) {
-        total += (localStorage.getItem(key)?.length || 0) * 2;
-      }
-    }
-    return total;
-  }
-
-  static maxSize(): number {
-    return 5 * 1024 * 1024; // 5MB
-  }
-
-  static getJson<T>(key: string): T | null {
-    return StorageUtils.get<T>(key);
-  }
-
-  static setJson<T>(key: string, value: T): boolean {
-    return StorageUtils.set(key, value);
-  }
-
-  /**
-   * Get session storage value
-   */
-  static getSession<T = unknown>(key: string, defaultValue: T | null = null): T | null {
-    try {
-      const item = sessionStorage.getItem(StorageUtils.getKey(key));
-      if (item === null) return defaultValue;
-      try {
-        return JSON.parse(item);
-      } catch {
-        return item as unknown as T;
-      }
-    } catch {
-      return defaultValue;
-    }
-  }
-
-  /**
-   * Set session storage value
-   */
-  static setSession<T>(key: string, value: T): boolean {
-    try {
-      const stringValue = typeof value === 'string' ? value : JSON.stringify(value);
-      sessionStorage.setItem(StorageUtils.getKey(key), stringValue);
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
-  /**
-   * Remove session storage value
-   */
-  static removeSession(key: string): void {
-    sessionStorage.removeItem(StorageUtils.getKey(key));
-  }
-
-  /**
-   * Clear session storage
-   */
-  static clearSession(): void {
-    sessionStorage.clear();
-  }
-
-  /**
-   * Get storage quota information
-   */
-  static getQuotaInfo(): { used: number; remaining: number; percentage: number } {
-    const used = StorageUtils.size();
-    const max = StorageUtils.maxSize();
-    const remaining = max - used;
-    const percentage = (used / max) * 100;
-    
-    return { used, remaining, percentage };
+    return Math.round((bytes / 1024 ** i) * 100) / 100 + ' ' + sizes[i];
   }
 }
 
@@ -667,7 +520,6 @@ export const FrontendUtils = {
   Color: ColorUtils,
   Date: DateUtils,
   Number: NumberUtils,
-  Storage: StorageUtils,
   Objects: ObjectUtils,
   Strings: StringUtils,
   Validation: ValidationUtils,

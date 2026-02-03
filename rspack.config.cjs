@@ -3,7 +3,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
-  entry: './src/frontend/main.ts',
+  entry: {
+    main: './src/frontend/main.ts',
+    preload: './src/backend/preload.ts',
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].[contenthash].js',
@@ -35,16 +38,17 @@ module.exports = {
             jsc: {
               parser: {
                 syntax: 'typescript',
-                tsx: false, // Disable TSX for Vue
+                tsx: false,
               },
               transform: {
                 react: {
-                  runtime: 'classic', // Use classic runtime or remove react transform entirely for Vue
+                  runtime: 'classic',
                 },
               },
             },
           },
         },
+        exclude: /node_modules/,
       },
       {
         test: /\.jsx?$/,
@@ -55,11 +59,11 @@ module.exports = {
             jsc: {
               parser: {
                 syntax: 'ecmascript',
-                jsx: false, // Disable JSX for Vue
+                jsx: false,
               },
               transform: {
                 react: {
-                  runtime: 'classic', // Use classic runtime or remove react transform entirely for Vue
+                  runtime: 'classic',
                 },
               },
             },
@@ -84,6 +88,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './src/index.html',
       inject: 'body',
+      chunks: ['main'],
     }),
     {
       apply(compiler) {
@@ -94,11 +99,18 @@ module.exports = {
       },
     },
   ],
-
+  builtins: {
+    define: {
+      'process.env': {},
+    },
+  },
   devServer: {
     port: 3000,
     hot: true,
     historyApiFallback: true,
+  },
+  node: {
+    global: true,
   },
   target: 'electron-renderer',
 };

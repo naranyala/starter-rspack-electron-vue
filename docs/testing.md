@@ -1,105 +1,69 @@
-# Testing Setup
+# Testing
 
-This project includes a comprehensive testing setup using [Vitest](https://vitest.dev/), a fast and lightweight testing framework for Vite and beyond.
+This project uses [Bun Test](https://bun.sh/docs/test/writing) for its fast and simple testing capabilities.
 
 ## Test Scripts
 
-The following test scripts are available:
-
-- `npm run test` - Run tests in watch mode
-- `npm run test:run` - Run all tests once
-- `npm run test:ui` - Run tests with UI interface
-- `npm run test:coverage` - Run tests with coverage report
-- `npm run test:watch` - Run tests in watch mode
+| Command | Description |
+|---|---|
+| `npm run test` | Run all tests in watch mode. |
+| `npm run test:run` | Run all tests once. |
+| `npm run test:ui` | Run tests with the Bun Test UI. |
+| `npm run test:coverage` | Generate a test coverage report. |
+| `npm run test:security` | Run the security-focused test suite. |
 
 ## Test Structure
 
-Tests are organized in the `test/` directory:
+Tests are organized into two main categories within the `test/` directory:
 
 ```
 test/
-└── unit/
-    ├── shared-utils.test.ts    # Tests for shared utilities
-    ├── backend-utils.test.ts   # Tests for backend utilities
-    └── frontend-utils.test.ts  # Tests for frontend utilities
+├── unit/
+│   ├── shared-utils.test.ts
+│   ├── backend-utils.test.ts
+│   └── frontend-utils.test.ts
+└── security/
+    ├── dependency-health.test.ts
+    ├── dependency-security.test.ts
+    ├── electron-security.test.ts
+    ├── general-security.test.ts
+    └── vue-security.test.ts
 ```
 
-## Writing Tests
+- **Unit Tests**: Focus on testing individual functions and components in isolation.
+- **Security Tests**: A suite of tests designed to identify potential security vulnerabilities.
 
-### Unit Tests
-Unit tests are written using Vitest's testing API. Each test file should:
+## Unit Testing
 
-1. Import necessary functions from the source code
-2. Use `describe()` to group related tests
-3. Use `it()` or `test()` for individual test cases
-4. Use `expect()` for assertions
+Unit tests are located in the `test/unit/` directory and cover the shared, backend, and frontend utilities. They ensure that the core logic of the application is working as expected.
 
-Example:
-```typescript
-import { describe, it, expect } from 'vitest';
-import { StringUtils } from '../src/shared/utils';
-
-describe('StringUtils', () => {
-  it('should capitalize a string', () => {
-    expect(StringUtils.capitalize('hello')).toBe('Hello');
-  });
-});
-```
-
-### Mocking
-For mocking dependencies, use Vitest's built-in mocking capabilities:
-
-```typescript
-import { vi, describe, it, expect } from 'vitest';
-
-// Mock a function
-const mockFn = vi.fn();
-mockFn.mockReturnValue('mocked value');
-```
-
-## Coverage
-Code coverage is collected using the built-in coverage provider. Reports are generated in:
-- Console output
-- JSON format
-- HTML format (in `coverage/` directory)
-
-## Configuration
-
-The test configuration is located in `vitest.config.ts` and includes:
-- Node.js environment for backend tests
-- Global test utilities
-- Coverage reporting
-- Type checking
-- File inclusion/exclusion patterns
-
-## Running Tests
-
-### Single Run
+To run only the unit tests:
 ```bash
-npm run test:run
+bun test test/unit/
 ```
 
-### Watch Mode
+## Security Testing
+
+The project includes a comprehensive security testing suite that checks for common vulnerabilities and misconfigurations. These tests are located in the `test/security/` directory.
+
+### Running Security Tests
+
+To run the security test suite, use the following command:
+
 ```bash
-npm run test
+npm run test:security
 ```
 
-### With Coverage
-```bash
-npm run test:coverage
-```
+This will execute all tests in the `test/security/` directory.
 
-### With UI
-```bash
-npm run test:ui
-```
+### Security Test Categories
 
-## Test Categories
+The security test suite covers the following areas:
 
-The project includes tests for:
+- **Dependency Health**: Checks for outdated dependencies and dependencies with known vulnerabilities (`dependency-health.test.ts`).
+- **Dependency Security**: Analyzes `package.json` for insecure configurations, such as `git` dependencies (`dependency-security.test.ts`).
+- **Electron Security**: Scans the Electron main process configuration for common security misconfigurations (`electron-security.test.ts`).
+- **General Security**: Checks for general security issues, such as the presence of a `.gitignore` file and the absence of hardcoded secrets (`general-security.test.ts`).
+- **Vue Security**: Includes tests for Vue-specific security best practices (`vue-security.test.ts`).
 
-1. **Shared Utilities** - Object manipulation, string processing, validation, arrays, caching, and async operations
-2. **Backend Utilities** - File system operations, cryptography, logging, path handling, environment management
-3. **Frontend Utilities** - Math operations, color manipulation, date handling, number formatting, storage management
-
-Each category has comprehensive test coverage for the most critical functions and edge cases.
+In addition to the tests, the security-focused build pipeline (`scripts/security-build.ts`) integrates these checks and more into the build process, providing an extra layer of security.

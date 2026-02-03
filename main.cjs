@@ -3,8 +3,16 @@ const electron = require('electron');
 const { app, BrowserWindow } = electron;
 const path = require('node:path');
 const url = require('node:url');
+const fs = require('node:fs');
 const args = process.argv.slice(1);
 const serve = args.some((val) => val === '--start-dev');
+
+function findPreloadPath() {
+  const distDir = path.join(__dirname, 'dist');
+  const files = fs.readdirSync(distDir);
+  const preloadFile = files.find((f) => f.startsWith('preload.') && f.endsWith('.js'));
+  return preloadFile ? path.join(distDir, preloadFile) : path.join(distDir, 'preload.js');
+}
 
 // Let electron reloads by itself when rsbuild watches changes in ./app/
 // if (serve) {
@@ -53,9 +61,11 @@ function createWindow() {
     width: 800,
     height: 600,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-      webSecurity: false,
+      nodeIntegration: false,
+      contextIsolation: true,
+      webSecurity: true,
+      sandbox: true,
+      preload: findPreloadPath(),
     },
   });
 
