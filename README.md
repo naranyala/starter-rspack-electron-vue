@@ -7,31 +7,31 @@
 [![Electron Version](https://img.shields.io/badge/Electron-40.x-blue.svg)](https://www.electronjs.org/)
 [![Rspack](https://img.shields.io/badge/Rspack-1.x-orange.svg)](https://www.rspack.dev/)
 
-**🚀 Production-Ready Desktop Application Template**
+**Production-Ready Desktop Application Template**
 *The fastest way to build cross-platform desktop apps with modern web technologies*
 
 </div>
 
-## ✨ Why Choose This Template?
+## Why Choose This Template?
 
 This starter template eliminates the complexity of configuring Electron, Vue, and bundling tools from scratch. Built for developers who value **performance**, **maintainability**, and **developer experience**, it provides a battle-tested foundation for shipping high-quality desktop applications faster.
 
-### 🏃‍♂️ Lightning-Fast Development
+### Lightning-Fast Development
 - **Rspack-powered builds**: 10x faster than traditional bundlers
 - **Hot Module Replacement**: Changes reflect instantly during development
 - **Optimized TypeScript**: Full type safety with minimal configuration
 
-### 🏗️ Enterprise-Grade Architecture
+### Enterprise-Grade Architecture
 - **Clean separation**: Main and renderer processes properly isolated
 - **Modular design**: Component-based architecture with reusable utilities
 - **Secure IPC**: Safe communication between processes with validation
 
-### 🌐 True Cross-Platform
+### True Cross-Platform
 - **Single codebase**: Deploy to Windows, macOS, and Linux
 - **Native feel**: Access to OS-specific features and integrations
 - **Consistent UX**: Same experience across all platforms
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Node.js v18 or later
@@ -67,7 +67,7 @@ npm run build
 npm run package
 ```
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 | Technology | Purpose | Benefits |
 |------------|---------|----------|
@@ -77,32 +77,32 @@ npm run package
 | [TypeScript](https://www.typescriptlang.org/) | Type-safe development | Catch errors early, better IDE support |
 | [Biome](https://biomejs.dev/) | Fast formatter/linter | Consistent code style, lightning fast |
 
-## 📦 Features
+## Features
 
-### ⚡ Performance Optimized
+### Performance Optimized
 - **Blazing fast builds**: Rspack delivers sub-second rebuilds
 - **Efficient bundling**: Tree-shaking removes dead code
 - **Smart caching**: Incremental builds for rapid iteration
 
-### 🎨 Developer Experience
+### Developer Experience
 - **Hot Module Replacement**: Instant updates without refresh
 - **Rich debugging**: Full Chrome DevTools and Vue DevTools support
 - **Type safety**: Comprehensive TypeScript coverage
 - **Code quality**: Integrated linting and formatting
 
-### 🔒 Security Focused
+### Security Focused
 - **Context isolation**: Secure renderer processes
 - **Restricted IPC**: Limited, validated communication channels
 - **Node integration disabled**: Safer by default
 - **Input sanitization**: Built-in protection patterns
 
-### 📱 Production Ready
+### Production Ready
 - **Auto-updates**: Built-in update mechanism
 - **Packaging**: One-command distribution builds
 - **Code signing**: Ready for app store submission
 - **Analytics ready**: Easy integration with monitoring tools
 
-## 🏗️ Project Structure
+## Project Structure
 
 ```
 src/
@@ -126,7 +126,7 @@ scripts/               # Build automation
 └── utils/             # Shared utilities
 ```
 
-## 🚀 Advanced Usage
+## Advanced Usage
 
 ### Custom Window Management
 ```typescript
@@ -170,7 +170,7 @@ NODE_ENV=production npm run build
 PORT=4000 npm run dev
 ```
 
-## 📋 Scripts Reference
+## Scripts Reference
 
 | Command | Description |
 |---------|-------------|
@@ -183,7 +183,7 @@ PORT=4000 npm run dev
 | `npm run format` | Format code with Biome |
 | `npm run deps:latest` | Check for outdated dependencies |
 
-## 🎯 Use Cases
+## Use Cases
 
 Perfect for building:
 - **Productivity tools** (task managers, note-taking apps)
@@ -193,7 +193,7 @@ Perfect for building:
 - **Educational tools** (learning platforms, tutorials)
 - **Entertainment apps** (games, streaming clients)
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Please see our [contributing guide](CONTRIBUTING.md) for details.
 
@@ -205,27 +205,27 @@ We welcome contributions! Please see our [contributing guide](CONTRIBUTING.md) f
 6. Push to the branch: `git push origin feature/amazing-feature`
 7. Open a Pull Request
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🆘 Support
+## Support
 
-- 📖 **Documentation**: Check out our comprehensive [docs](./docs/)
-- 🐛 **Issues**: Report bugs and suggest features on [GitHub Issues](https://github.com/your-repo/issues)
-- 💬 **Discussions**: Join our community discussions
-- 📧 **Email**: Contact the maintainer at [your-email@example.com]
+- **Documentation**: Check out our comprehensive [docs](./docs/)
+- **Issues**: Report bugs and suggest features on [GitHub Issues](https://github.com/your-repo/issues)
+- **Discussions**: Join our community discussions
+- **Email**: Contact the maintainer at [your-email@example.com]
 
 ---
 
 <div align="center">
 
-**Ready to build the next great desktop application?** 
+**Ready to build the next great desktop application?**
 
-⭐ Star this repository if it helped you!
+Star this repository if it helped you!
 
 </div>
 
-## 🏷️ Keywords
+## Keywords
 
 electron, vue, vuejs, rspack, desktop-app, cross-platform, typescript, template, starter, boilerplate, webpack-alternative, fast-builds, hmr, hot-module-replacement
