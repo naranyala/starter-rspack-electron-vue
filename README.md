@@ -1,379 +1,231 @@
 # Electron + Vue + Rspack Starter
 
-A production-ready starter template for building high-performance cross-platform desktop applications. This template combines Electron's native capabilities, Vue 3's reactive framework, and Rspack's rapid bundling to accelerate your development workflow from prototype to production.
+<div align="center">
 
-## Why This Template?
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Vue Version](https://img.shields.io/badge/Vue-3.x-brightgreen.svg)](https://vuejs.org/)
+[![Electron Version](https://img.shields.io/badge/Electron-40.x-blue.svg)](https://www.electronjs.org/)
+[![Rspack](https://img.shields.io/badge/Rspack-1.x-orange.svg)](https://www.rspack.dev/)
 
-This starter eliminates configuration overhead and provides a proven architecture that scales with your application. Whether you are building internal tools or commercial software, this template provides the foundation for shipping quality desktop applications faster.
+**🚀 Production-Ready Desktop Application Template**
+*The fastest way to build cross-platform desktop apps with modern web technologies*
 
-### Performance That Matters
+</div>
 
-Rspack delivers build times significantly faster than traditional bundlers. Hot module replacement responds in milliseconds, keeping development cycles tight and productive. Spend less time waiting for builds and more time building features that matter.
+## ✨ Why Choose This Template?
 
-### Production-Ready Architecture
+This starter template eliminates the complexity of configuring Electron, Vue, and bundling tools from scratch. Built for developers who value **performance**, **maintainability**, and **developer experience**, it provides a battle-tested foundation for shipping high-quality desktop applications faster.
 
-Every decision prioritizes maintainability and deployment readiness. The modular structure cleanly separates concerns. Automated build scripts handle dependency management. Packaging configurations work immediately for Windows, macOS, and Linux distributions.
+### 🏃‍♂️ Lightning-Fast Development
+- **Rspack-powered builds**: 10x faster than traditional bundlers
+- **Hot Module Replacement**: Changes reflect instantly during development
+- **Optimized TypeScript**: Full type safety with minimal configuration
 
-## Key Features
+### 🏗️ Enterprise-Grade Architecture
+- **Clean separation**: Main and renderer processes properly isolated
+- **Modular design**: Component-based architecture with reusable utilities
+- **Secure IPC**: Safe communication between processes with validation
 
-**Modern Technology Stack**
+### 🌐 True Cross-Platform
+- **Single codebase**: Deploy to Windows, macOS, and Linux
+- **Native feel**: Access to OS-specific features and integrations
+- **Consistent UX**: Same experience across all platforms
 
-- Electron for native desktop application capabilities
-- Vue 3 Composition API for reactive user interface development
-- Rspack for high-performance bundling and hot module replacement
-- TypeScript for comprehensive type safety across the codebase
-
-**Intelligent Build System**
-
-- Automatic dependency detection and installation
-- Smart port management with automatic conflict resolution
-- Parallel process orchestration for efficient development server operation
-- Optimized production builds with tree shaking and minification
-
-**Clean Architectural Design**
-
-- Use-case based module organization for maintainability
-- Clear separation between main and renderer processes
-- Component-based window management system
-- Shared utilities for consistent operations across processes
-
-**Cross-Platform Deployment**
-
-- Single codebase targets Windows, macOS, and Linux
-- Automated packaging for immediate distribution
-- Platform-specific optimizations included by default
-- Code signing preparation for commercial distribution
-
-## Quick Start
+## 🚀 Quick Start
 
 ### Prerequisites
-
-- Node.js version 18 or later
+- Node.js v18 or later
 - npm, yarn, or Bun package manager
 
 ### Installation
-
-Clone the repository and install dependencies:
-
 ```bash
+# Clone the repository
 git clone <repository-url>
 cd starter-rspack-electron-vue
+
+# Install dependencies
 npm install
-```
+# or
+bun install
 
-### Development
-
-Start the development environment:
-
-```bash
-npm run dev
-```
-
-The development server launches automatically, starts Electron, and provides hot module replacement for rapid iteration.
-
-### Production Build
-
-Create an optimized production build:
-
-```bash
-npm run build
-```
-
-This generates optimized assets ready for packaging and distribution.
-
-### Packaging
-
-Generate distributable application packages:
-
-```bash
-npm run package
-```
-
-Creates platform-specific installers and executables for your target operating system.
-
-## Project Structure
-
-```
-src/
-├── main/                      # Electron main process
-│   ├── services/             # Main process services
-│   └── lib/                  # Shared utilities
-├── renderer/                  # Vue renderer process
-│   ├── components/           # Vue components
-│   ├── services/             # Renderer services
-│   ├── styles/               # Application styles
-│   └── lib/                  # Renderer utilities
-├── shared/                    # Shared between processes
-│   └── constants.ts          # Shared constants
-└── assets/                    # Static assets
-
-scripts/                       # Build automation
-├── dev.ts                    # Development server
-├── build.ts                  # Production build
-├── setup.ts                  # Project setup
-├── icons.ts                  # Asset management
-├── clean.ts                  # Build cleanup
-└── utils/                    # Shared build utilities
-    ├── logger.ts            # Structured logging
-    └── index.ts             # Common utilities
-```
-
-## Architecture
-
-### Process Separation
-
-The application follows Electron's multi-process architecture for security and performance:
-
-**Main Process** (`src/main/`)
-
-- Manages application lifecycle and startup
-- Handles native operating system integration
-- Controls window creation and management
-- Executes privileged system operations
-
-**Renderer Process** (`src/renderer/`)
-
-- Vue.js application entry point and routing
-- Component-based user interface architecture
-- Communicates with main process via IPC channels
-- Runs in sandboxed environment for security
-
-### Window Management
-
-Each window type follows a modular, maintainable pattern:
-
-```
-use-cases/
-├── frontend/                 # Renderer-side window components
-└── backend/                  # Main process window controllers
-```
-
-This structure encapsulates window-specific logic and keeps the codebase organized and scalable.
-
-### Build System
-
-The build system automates complexity so you can focus on application development:
-
-1. **Dependency Management**: Automatically detects and installs missing packages
-2. **Port Allocation**: Finds and assigns available network ports automatically
-3. **Process Coordination**: Manages development server and Electron lifecycle
-4. **Error Recovery**: Provides clear diagnostic messages when issues occur
-
-## Development Workflow
-
-### Starting Development
-
-The development script performs setup operations automatically:
-
-1. Validates all required dependencies are present
-2. Allocates an available network port for the dev server
-3. Starts the Rspack development server with hot module replacement
-4. Launches Electron pointing to the dev server URL
-5. Configures automatic process cleanup on application exit
-
-```bash
-npm run dev
-```
-
-### Code Quality Tools
-
-Maintain code quality with integrated tooling:
-
-```bash
-# Type checking across the codebase
-npm run type-check
-
-# Linting for code style consistency
-npm run lint
-
-# Code formatting with Prettier
-npm run format
-
-# Check for outdated dependencies
-npm run deps:latest
-```
-
-### Building for Production
-
-The production build creates fully optimized assets:
-
-```bash
-npm run build
-```
-
-Output is written to the `dist/` directory with minified code, tree shaking applied, and assets optimized for distribution.
-
-### Packaging Applications
-
-Create distributable packages for end users:
-
-```bash
-npm run package
-```
-
-Supported output formats:
-
-- **Windows**: MSI installer, portable executable
-- **macOS**: DMG disk image, ZIP archive
-- **Linux**: AppImage, DEB package, RPM package
-
-## Configuration
-
-### Environment Variables
-
-| Variable | Description | Default Value |
-|----------|-------------|---------------|
-| `NODE_ENV` | Build environment mode | `development` |
-| `PORT` | Development server port | Auto-assigned |
-| `USE_BUN` | Prefer Bun over npm | `false` |
-
-### Rspack Configuration
-
-Build configuration is defined in `rspack.config.cjs`:
-
-- Entry points for main and renderer processes
-- Module resolution rules and path aliases
-- Development and production optimization settings
-- Asset handling and processing pipelines
-
-## Deployment
-
-### Local Distribution
-
-For immediate distribution to users or testers:
-
-```bash
-npm run package
-```
-
-Outputs platform-specific packages to the `dist/` directory.
-
-### CI/CD Integration
-
-The build scripts integrate seamlessly with continuous integration environments:
-
-```yaml
-# Example GitHub Actions workflow
-- name: Build Application
-  run: |
-    npm install
-    npm run build
-    npm run package
-```
-
-### Code Signing
-
-Prepare applications for signed distribution:
-
-1. Configure signing certificates in `package.json`
-2. Set environment variables pointing to certificate files
-3. Execute packaging with signing enabled
-
-## Technical Specifications
-
-### Supported Platforms
-
-- **Windows**: Windows 10 and later versions
-- **macOS**: macOS 10.14 (Mojave) and later versions
-- **Linux**: Most modern distributions with standard libraries
-
-### System Requirements
-
-**Development Environment**
-
-- 4GB RAM minimum (8GB recommended for optimal performance)
-- 2GB free disk space for dependencies and builds
-- Internet connection for package installation
-
-**Production Applications**
-
-- 2GB RAM minimum for smooth operation
-- 500MB disk space for application installation
-- No additional runtime dependencies required
-
-### Browser Engine Support
-
-The bundled Chromium version in Electron provides:
-
-- Full ES2022 JavaScript support
-- Modern CSS features and specifications
-- WebGL and hardware-accelerated graphics
-- Native module support via Node.js integration
-
-## Customization
-
-### Adding New Windows
-
-Extend the application with additional windows:
-
-1. Create window components in `src/renderer/services/`
-2. Implement corresponding main process controllers
-3. Register the window in the window factory
-
-### Modifying Build Behavior
-
-Build scripts use a modular utility system for extensibility:
-
-- `scripts/utils/logger.ts`: Structured logging with configurable output
-- `scripts/utils/index.ts`: Common build operations and helpers
-
-Extend these utilities to add custom build steps or modify existing behavior.
-
-### Theming and Styling
-
-The application includes a comprehensive default theme. Customize the appearance by modifying CSS variables in component styles or adding global theme overrides.
-
-## Troubleshooting
-
-### Port Conflicts
-
-If the default development port is unavailable, the server automatically locates an alternative. Check the console output to identify the assigned port number.
-
-### Dependency Resolution
-
-The setup script automatically installs missing dependencies. If you encounter issues, run:
-
-```bash
+# Initialize the project
 npm run setup
 ```
 
-### Build Failures
-
-Clear build artifacts and rebuild from a clean state:
-
+### Development
 ```bash
-npm run clean
-npm run build
+# Start development server with HMR
+npm run dev
 ```
 
-## Contributing
+### Production
+```bash
+# Build for production
+npm run build
 
-Contributions improve this template for the entire community:
+# Package for distribution
+npm run package
+```
 
-1. Fork the repository to your account
-2. Create a feature branch: `git checkout -b feature/description`
-3. Commit your changes with descriptive messages
-4. Push to your branch: `git push origin feature/description`
-5. Open a pull request for review
+## 🛠️ Technology Stack
 
-Please ensure all contributions:
-- Pass type checking without errors
-- Satisfy linting rules
-- Include descriptive commit messages
-- Maintain backward compatibility where possible
+| Technology | Purpose | Benefits |
+|------------|---------|----------|
+| [Electron](https://www.electronjs.org/) | Cross-platform desktop framework | Native app capabilities, extensive API |
+| [Vue 3](https://vuejs.org/) | Reactive UI framework | Component-based, Composition API |
+| [Rspack](https://www.rspack.dev/) | High-performance bundler | 10x faster builds than Webpack |
+| [TypeScript](https://www.typescriptlang.org/) | Type-safe development | Catch errors early, better IDE support |
+| [Biome](https://biomejs.dev/) | Fast formatter/linter | Consistent code style, lightning fast |
 
-## License
+## 📦 Features
 
-MIT License - See [LICENSE](LICENSE) for complete terms and conditions.
+### ⚡ Performance Optimized
+- **Blazing fast builds**: Rspack delivers sub-second rebuilds
+- **Efficient bundling**: Tree-shaking removes dead code
+- **Smart caching**: Incremental builds for rapid iteration
 
-## Support and Community
+### 🎨 Developer Experience
+- **Hot Module Replacement**: Instant updates without refresh
+- **Rich debugging**: Full Chrome DevTools and Vue DevTools support
+- **Type safety**: Comprehensive TypeScript coverage
+- **Code quality**: Integrated linting and formatting
 
-For technical issues, feature requests, or general questions:
+### 🔒 Security Focused
+- **Context isolation**: Secure renderer processes
+- **Restricted IPC**: Limited, validated communication channels
+- **Node integration disabled**: Safer by default
+- **Input sanitization**: Built-in protection patterns
 
-- Open an issue in the GitHub repository
-- Review existing discussions for known solutions
-- Submit pull requests with improvements or fixes
+### 📱 Production Ready
+- **Auto-updates**: Built-in update mechanism
+- **Packaging**: One-command distribution builds
+- **Code signing**: Ready for app store submission
+- **Analytics ready**: Easy integration with monitoring tools
+
+## 🏗️ Project Structure
+
+```
+src/
+├── main/              # Electron main process
+│   ├── lib/           # Main utilities (config, utils, database)
+│   ├── main.js        # Main entry point
+│   └── preload.js     # IPC bridge
+├── renderer/          # Vue renderer process
+│   ├── lib/           # Renderer utilities (api, dom, events)
+│   ├── components/    # Vue components
+│   ├── styles/        # CSS modules
+│   ├── App.vue        # Root component
+│   └── main.js        # Renderer entry point
+├── shared/            # Shared between processes
+└── assets/            # Static assets
+
+scripts/               # Build automation
+├── dev.ts             # Development server
+├── build.ts           # Production builds
+├── package.ts         # Packaging scripts
+└── utils/             # Shared utilities
+```
+
+## 🚀 Advanced Usage
+
+### Custom Window Management
+```typescript
+// Create custom windows with specific configurations
+import { WindowManager } from '@/main/lib/utils';
+
+const customWindow = WindowManager.createWindow({
+  name: 'custom-window',
+  url: '/custom-page',
+  options: {
+    width: 1200,
+    height: 800,
+    webPreferences: {
+      // custom preferences
+    }
+  }
+});
+```
+
+### IPC Communication
+```javascript
+// Secure communication between processes
+// Renderer process
+const version = await window.electronAPI.invoke('app:getVersion');
+
+// Main process handler
+ipcMain.handle('app:getVersion', () => {
+  return app.getVersion();
+});
+```
+
+### Environment Configuration
+```bash
+# Development
+NODE_ENV=development npm run dev
+
+# Production build
+NODE_ENV=production npm run build
+
+# Custom port
+PORT=4000 npm run dev
+```
+
+## 📋 Scripts Reference
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server with HMR |
+| `npm run build` | Create optimized production build |
+| `npm run package` | Package for distribution |
+| `npm run setup` | Initialize project dependencies |
+| `npm run type-check` | Run TypeScript type checking |
+| `npm run lint` | Lint and format code |
+| `npm run format` | Format code with Biome |
+| `npm run deps:latest` | Check for outdated dependencies |
+
+## 🎯 Use Cases
+
+Perfect for building:
+- **Productivity tools** (task managers, note-taking apps)
+- **Developer utilities** (code editors, API clients)
+- **Creative applications** (design tools, media players)
+- **Business software** (CRM, dashboards, admin panels)
+- **Educational tools** (learning platforms, tutorials)
+- **Entertainment apps** (games, streaming clients)
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [contributing guide](CONTRIBUTING.md) for details.
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Make your changes
+4. Run tests: `npm run type-check && npm run lint`
+5. Commit your changes: `git commit -m 'feat: add amazing feature'`
+6. Push to the branch: `git push origin feature/amazing-feature`
+7. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 Support
+
+- 📖 **Documentation**: Check out our comprehensive [docs](./docs/)
+- 🐛 **Issues**: Report bugs and suggest features on [GitHub Issues](https://github.com/your-repo/issues)
+- 💬 **Discussions**: Join our community discussions
+- 📧 **Email**: Contact the maintainer at [your-email@example.com]
 
 ---
 
-Built for developers who prioritize performance, maintainability, and clean architecture in their desktop applications.
+<div align="center">
+
+**Ready to build the next great desktop application?** 
+
+⭐ Star this repository if it helped you!
+
+</div>
+
+## 🏷️ Keywords
+
+electron, vue, vuejs, rspack, desktop-app, cross-platform, typescript, template, starter, boilerplate, webpack-alternative, fast-builds, hmr, hot-module-replacement

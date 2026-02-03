@@ -18,7 +18,7 @@
     "electron-dist": "bunx electron-builder",
     "electron-postinstall": "bunx electron-builder install-app-deps",
     "dist": "tsx scripts/dev.ts package",
-    "setup": "tsx scripts/setup-project.ts",
+    "setup": "tsx scripts/setup.ts",
     "type-check": "tsc --noEmit --project tsconfig.check.json",
     "lint": "bunx @biomejs/biome check --write .",
     "lint-check": "bunx @biomejs/biome check .",
