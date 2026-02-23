@@ -16,13 +16,28 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "typeRoots": ["./node_modules/@types", "./types"],
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@/lib/*": ["lib/*"]
+      "@/frontend/*": ["src/frontend/*"],
+      "@/backend/*": ["src/backend/*"],
+      "@/shared/*": ["src/shared/*"],
+      "@/assets/*": ["src/assets/*"],
+      "@/config/*": ["src/shared/config/*"],
+      "@/constants/*": ["src/shared/constants/*"],
+      "@/frontend-lib/*": ["src/frontend/lib/*"],
+      "@/backend-lib/*": ["src/backend/lib/*"]
     }
   },
-  "include": ["src/**/*", "lib/**/*", "rspack.config.cjs", "main.cjs", "types/**/*"],
-  "exclude": ["node_modules", "dist", "build", "scripts"]
+  "include": [
+    "src/**/*",
+    "rspack.config.ts",
+    "main.cjs",
+    "types/**/*",
+    "scripts/**/*.ts"
+  ],
+  "exclude": ["node_modules", "dist", "build"]
 }

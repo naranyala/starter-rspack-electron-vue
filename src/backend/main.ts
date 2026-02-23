@@ -1,30 +1,39 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { app, BrowserWindow, type IpcMainInvokeEvent, ipcMain } from 'electron';
+import { app, BrowserWindow } from 'electron';
 import { appConfig } from './config/index.js';
-import { AppLifecycleUtils, IPCUtils, SettingsManager, WindowManager } from './services/index.js';
+import { AppLifecycleUtils } from './services/index.js';
 import {
-  ElectronArchitectureUseCase,
-  ElectronDevelopmentUseCase,
-  ElectronIntroUseCase,
-  ElectronNativeAPIsUseCase,
-  ElectronPackagingUseCase,
-  ElectronPerformanceUseCase,
-  ElectronSecurityUseCase,
-  ElectronVersionsUseCase,
-} from './use-cases/index.js';
+  initializeBackendContainer,
+  registerAllIpcHandlers,
+  inject,
+  WINDOW_MANAGER_TOKEN,
+} from './di/index.js';
+import { initializeBackendEventBus, getBackendEventBus } from './events/backend-event-bus.js';
+import { createLogger } from '../shared/logger/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-let windowManager: WindowManager;
-let settingsManager: SettingsManager;
+const logger = createLogger('Main');
+
+/**
+ * Application entry point
+ *
+ * Architecture:
+ * 1. Initialize DI container with all services and handlers
+ * 2. Initialize event bus for cross-process communication
+ * 3. Create main window using WindowManager from DI
+ * 4. Register all IPC handlers through the registry
+ */
+
+let mainWindow: BrowserWindow | null = null;
 
 const createWindow = (): BrowserWindow => {
-  windowManager = new WindowManager();
-  settingsManager = new SettingsManager();
+  // Resolve services from DI container
+  const windowManager = inject(WINDOW_MANAGER_TOKEN);
 
-  const mainWindow = windowManager.createWindow({
+  const mainWindowInstance = windowManager.createWindow({
     ...appConfig.mainWindow,
     width: 1200,
     height: 800,
@@ -38,106 +47,46 @@ const createWindow = (): BrowserWindow => {
   });
 
   if (process.env.NODE_ENV === 'development') {
-    mainWindow.loadURL('http://localhost:1234');
+    mainWindowInstance.loadURL('http://localhost:1234');
   } else {
-    mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
+    mainWindowInstance.loadFile(path.join(__dirname, '../frontend/index.html'));
   }
 
-  mainWindow.once('ready-to-show', () => {
-    mainWindow.show();
+  mainWindowInstance.once('ready-to-show', () => {
+    mainWindowInstance.show();
   });
 
-  mainWindow.on('closed', () => {
-    windowManager = null as unknown as WindowManager;
+  mainWindowInstance.on('closed', () => {
+    mainWindow = null;
   });
 
-  registerIPCHandlers(mainWindow);
-
-  return mainWindow;
+  mainWindow = mainWindowInstance;
+  return mainWindowInstance;
 };
 
-const registerIPCHandlers = (_mainWindow: BrowserWindow) => {
-  IPCUtils.registerHandler('app:getVersion', () => {
-    return app.getVersion();
-  });
+// Initialize the application
+const bootstrap = () => {
+  // Step 1: Initialize DI container with all services, handlers, and use cases
+  initializeBackendContainer();
 
-  IPCUtils.registerHandler('app:getName', () => {
-    return app.getName();
-  });
+  // Step 2: Initialize event bus for cross-process communication
+  initializeBackendEventBus();
+  const eventBus = getBackendEventBus();
 
-  IPCUtils.registerHandler('settings:get', (_event: IpcMainInvokeEvent, key: string) => {
-    return settingsManager.get(key);
-  });
+  // Step 3: Register all IPC handlers
+  registerAllIpcHandlers();
 
-  IPCUtils.registerHandler(
-    'settings:set',
-    (_event: IpcMainInvokeEvent, key: string, value: unknown) => {
-      settingsManager.set(key, value);
-      return true;
-    }
-  );
+  // Step 4: Create the main window
+  createWindow();
 
-  IPCUtils.registerHandler('settings:getAll', () => {
-    return settingsManager.getAll();
-  });
+  // Step 5: Emit app initialized event
+  eventBus.emit('app:initialized', { version: app.getVersion() });
 
-  IPCUtils.registerHandler(
-    'dialog:showMessageBox',
-    async (_event: IpcMainInvokeEvent, options: Electron.MessageBoxOptions) => {
-      return await windowManager.showDialog(options);
-    }
-  );
-
-  IPCUtils.registerHandler('window:minimize', (event: IpcMainInvokeEvent) => {
-    const window = BrowserWindow.fromWebContents(event.sender);
-    if (window) {
-      window.minimize();
-    }
-    return true;
-  });
-
-  IPCUtils.registerHandler('window:maximize', (event: IpcMainInvokeEvent) => {
-    const window = BrowserWindow.fromWebContents(event.sender);
-    if (window) {
-      if (window.isMaximized()) {
-        window.unmaximize();
-      } else {
-        window.maximize();
-      }
-    }
-    return true;
-  });
-
-  IPCUtils.registerHandler('window:close', (event: IpcMainInvokeEvent) => {
-    const window = BrowserWindow.fromWebContents(event.sender);
-    if (window) {
-      window.close();
-    }
-    return true;
-  });
-
-  registerUseCaseHandlers();
-};
-
-const registerUseCaseHandlers = () => {
-  const useCases = [
-    new ElectronIntroUseCase(ipcMain),
-    new ElectronArchitectureUseCase(ipcMain),
-    new ElectronSecurityUseCase(ipcMain),
-    new ElectronPackagingUseCase(ipcMain),
-    new ElectronNativeAPIsUseCase(ipcMain),
-    new ElectronPerformanceUseCase(ipcMain),
-    new ElectronDevelopmentUseCase(ipcMain),
-    new ElectronVersionsUseCase(ipcMain),
-  ];
-
-  useCases.forEach((useCase) => {
-    useCase.registerHandlers();
-  });
+  logger.info('Application bootstrap completed');
 };
 
 AppLifecycleUtils.onReady(() => {
-  createWindow();
+  bootstrap();
 });
 
 AppLifecycleUtils.onWindowAllClosed(() => {
@@ -151,3 +100,6 @@ AppLifecycleUtils.onActivate(() => {
     createWindow();
   }
 });
+
+// Export for testing
+export { createWindow, bootstrap };

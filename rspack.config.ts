@@ -1,7 +1,13 @@
-const path = require('node:path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+import path from 'node:path';
+import { defineConfig } from '@rspack/core';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import { VueLoaderPlugin } from 'vue-loader';
+import { getBuildConfig } from './src/shared/config';
 
-module.exports = {
+const isDev = process.env.NODE_ENV !== 'production';
+const buildConfig = getBuildConfig();
+
+export default defineConfig({
   mode: process.env.NODE_ENV || 'development',
   entry: {
     main: './src/frontend/main.ts',
@@ -9,7 +15,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].[contenthash].js',
+    filename: isDev ? '[name].js' : '[name].[contenthash].js',
     clean: true,
   },
   resolve: {
@@ -17,9 +23,12 @@ module.exports = {
       '@': path.resolve(__dirname, 'src'),
       '@/frontend': path.resolve(__dirname, 'src/frontend'),
       '@/backend': path.resolve(__dirname, 'src/backend'),
+      '@/shared': path.resolve(__dirname, 'src/shared'),
       '@/assets': path.resolve(__dirname, 'src/assets'),
       '@/frontend-lib': path.resolve(__dirname, 'src/frontend/lib'),
       '@/backend-lib': path.resolve(__dirname, 'src/backend/lib'),
+      '@/config': path.resolve(__dirname, 'src/shared/config'),
+      '@/constants': path.resolve(__dirname, 'src/shared/constants'),
       vue$: 'vue/dist/vue.esm-bundler.js',
     },
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.vue', '.json'],
@@ -90,27 +99,25 @@ module.exports = {
       inject: 'body',
       chunks: ['main'],
     }),
-    {
-      apply(compiler) {
-        compiler.hooks.afterResolvers.tap('VueLoaderPlugin', (compiler) => {
-          const { VueLoaderPlugin } = require('vue-loader');
-          new VueLoaderPlugin().apply(compiler);
-        });
-      },
-    },
+    new VueLoaderPlugin(),
   ],
   builtins: {
     define: {
-      'process.env': {},
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+      'process.env.PORT': JSON.stringify(process.env.PORT || '1234'),
     },
   },
   devServer: {
-    port: 3000,
+    port: parseInt(process.env.PORT || '1234', 10),
     hot: true,
     historyApiFallback: true,
+    static: {
+      directory: path.join(__dirname, 'src/assets'),
+    },
   },
   node: {
     global: true,
   },
   target: 'electron-renderer',
-};
+  devtool: isDev ? 'inline-source-map' : false,
+});

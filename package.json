@@ -2,18 +2,16 @@
   "name": "starter-rspack-electron-vue",
   "version": "0.1.2",
   "description": "A starter template for building Electron applications with Vue.js and Rspack.",
+  "type": "module",
   "scripts": {
     "deps:latest": "bunx npm-check-updates -u -p bun",
     "dev": "tsx scripts/dev.ts dev",
-    "dev:legacy": "bunx rspack serve",
-    "rspack-dev": "bunx rspack serve",
-    "electron-dev": "bunx electron main.cjs --start-dev",
-    "start": "bunx electron main.cjs",
+    "dev:rspack": "bunx rspack serve",
+    "electron-dev": "bunx electron dist/main.js --start-dev",
+    "start": "bunx electron dist/main.js",
     "build": "tsx scripts/dev.ts build",
-    "build:legacy": "bunx rspack build",
-    "rspack-build": "bunx rspack build",
+    "build:rspack": "bunx rspack build",
     "package": "tsx scripts/dev.ts package",
-    "package:legacy": "bun run electron-dist",
     "electron-pack": "bunx electron-builder --dir",
     "electron-dist": "bunx electron-builder",
     "electron-postinstall": "bunx electron-builder install-app-deps",
@@ -69,7 +67,7 @@
       "icon": "dist/icon.ico"
     },
     "files": [
-      "main.cjs",
+      "dist/main.js",
       "dist/**/*"
     ]
   },
@@ -80,9 +78,12 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "dotenv": "^16.4.5",
     "get-port": "^7.1.0",
+    "pinia": "^3.0.1",
     "vue": "^3.5.27",
-    "winbox": "^0.2.82"
+    "winbox": "^0.2.82",
+    "zod": "^3.24.4"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.3.13",

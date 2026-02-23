@@ -149,3 +149,16 @@ export const filterCategories = [
   { id: 'system', label: 'System Integration' },
   { id: 'multimedia', label: 'Multimedia' },
 ];
+
+// Event bus IPC channels (must match backend/frontend event bus)
+export const EVENT_CHANNELS = {
+  SUBSCRIBE: 'event:subscribe',
+  UNSUBSCRIBE: 'event:unsubscribe',
+  EMIT: 'event:emit',
+  RECEIVE: 'event:receive',
+};
+
+// Channels that renderer can listen to
+export const RENDERER_LISTENABLE_EVENTS = [
+  EVENT_CHANNELS.RECEIVE,
+];
