@@ -1,4 +1,4 @@
-import { ipcMain, type IpcMainInvokeEvent } from 'electron';
+import { type IpcMainInvokeEvent, ipcMain } from 'electron';
 
 /**
  * Base interface for all IPC handlers
@@ -15,11 +15,13 @@ export interface IpcHandler {
   unregisterHandlers(): void;
 }
 
+export type IpcHandlerFn = (event: IpcMainInvokeEvent, ...args: unknown[]) => unknown;
+
 /**
  * Base class for IPC handlers with common functionality
  */
 export abstract class BaseIpcHandler implements IpcHandler {
-  protected readonly handlers: Map<string, (event: IpcMainInvokeEvent, ...args: unknown[]) => unknown> = new Map();
+  protected readonly handlers: Map<string, IpcHandlerFn> = new Map();
 
   /**
    * Get the channel prefix for this handler
@@ -30,10 +32,7 @@ export abstract class BaseIpcHandler implements IpcHandler {
   /**
    * Register a handler for a specific channel
    */
-  protected registerHandler(
-    channel: string,
-    handler: (event: IpcMainInvokeEvent, ...args: unknown[]) => unknown
-  ): void {
+  protected registerHandler(channel: string, handler: IpcHandlerFn): void {
     const fullChannel = `${this.channelPrefix}:${channel}`;
     this.handlers.set(fullChannel, handler);
   }

@@ -1,21 +1,23 @@
 import { ipcMain } from 'electron';
 import { Container, createToken, InjectionScope, isToken, type Token } from '../../shared/di';
-import { WindowManager, SettingsManager } from '../services';
 import {
   AppHandlers,
-  SettingsHandlers,
-  WindowHandlers,
   DialogHandlers,
   getGlobalIpcRegistry,
+  SettingsHandlers,
+  WindowHandlers,
+  DevToolsHandlers,
+  getDevToolsHandlers,
 } from '../ipc';
+import { SettingsManager, WindowManager } from '../services';
 import {
-  ElectronIntroUseCase,
   ElectronArchitectureUseCase,
-  ElectronSecurityUseCase,
-  ElectronPackagingUseCase,
-  ElectronNativeAPIsUseCase,
-  ElectronPerformanceUseCase,
   ElectronDevelopmentUseCase,
+  ElectronIntroUseCase,
+  ElectronNativeAPIsUseCase,
+  ElectronPackagingUseCase,
+  ElectronPerformanceUseCase,
+  ElectronSecurityUseCase,
   ElectronVersionsUseCase,
 } from '../use-cases';
 
@@ -43,6 +45,7 @@ export const IPC_HANDLER_TOKENS = {
   SETTINGS: createToken('SettingsHandlers'),
   WINDOW: createToken('WindowHandlers'),
   DIALOG: createToken('DialogHandlers'),
+  DEVTOOLS: createToken('DevToolsHandlers'),
 };
 
 export const backendContainer = new Container();
@@ -57,11 +60,7 @@ export function initializeBackendContainer(): void {
   backendContainer.register(SETTINGS_MANAGER_TOKEN, SettingsManager, InjectionScope.Singleton);
 
   // Register IPC handlers
-  backendContainer.registerFactory(
-    IPC_HANDLER_TOKENS.APP,
-    () => getAppHandlers(),
-    []
-  );
+  backendContainer.registerFactory(IPC_HANDLER_TOKENS.APP, () => getAppHandlers(), []);
 
   backendContainer.registerFactory(
     IPC_HANDLER_TOKENS.SETTINGS,
@@ -69,11 +68,7 @@ export function initializeBackendContainer(): void {
     [SETTINGS_MANAGER_TOKEN]
   );
 
-  backendContainer.registerFactory(
-    IPC_HANDLER_TOKENS.WINDOW,
-    () => getWindowHandlers(),
-    []
-  );
+  backendContainer.registerFactory(IPC_HANDLER_TOKENS.WINDOW, () => getWindowHandlers(), []);
 
   backendContainer.registerFactory(
     IPC_HANDLER_TOKENS.DIALOG,
@@ -109,6 +104,10 @@ export function registerAllIpcHandlers(): void {
   registry.register(getWindowHandlers());
   registry.register(createSettingsHandlers(backendContainer.resolve(SETTINGS_MANAGER_TOKEN)));
   registry.register(createDialogHandlers(backendContainer.resolve(WINDOW_MANAGER_TOKEN)));
+  
+  // Register DevTools handlers
+  const windowManager = backendContainer.resolve(WINDOW_MANAGER_TOKEN);
+  registry.register(getDevToolsHandlers(windowManager));
 
   // Register use case handlers
   const useCases = [

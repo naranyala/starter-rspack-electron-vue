@@ -1,11 +1,11 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import {
   APP_CHANNELS,
+  DIALOG_CHANNELS,
+  EVENT_CHANNELS,
+  RENDERER_LISTENABLE_EVENTS,
   SETTINGS_CHANNELS,
   WINDOW_CHANNELS,
-  DIALOG_CHANNELS,
-  RENDERER_LISTENABLE_EVENTS,
-  EVENT_CHANNELS,
 } from '../shared/constants';
 
 // Define the shape of the API exposed to the renderer process
@@ -47,7 +47,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
   // Settings methods
   getSetting: (key: string) => ipcRenderer.invoke(SETTINGS_CHANNELS.GET, key),
-  setSetting: (key: string, value: unknown) => ipcRenderer.invoke(SETTINGS_CHANNELS.SET, key, value),
+  setSetting: (key: string, value: unknown) =>
+    ipcRenderer.invoke(SETTINGS_CHANNELS.SET, key, value),
   getAllSettings: () => ipcRenderer.invoke(SETTINGS_CHANNELS.GET_ALL),
 
   // Dialog methods
@@ -60,8 +61,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   closeWindow: () => ipcRenderer.invoke(WINDOW_CHANNELS.CLOSE),
 
   // Event bus methods
-  eventSubscribe: (eventType: string) =>
-    ipcRenderer.invoke(EVENT_CHANNELS.SUBSCRIBE, eventType),
+  eventSubscribe: (eventType: string) => ipcRenderer.invoke(EVENT_CHANNELS.SUBSCRIBE, eventType),
   eventUnsubscribe: (eventType: string) =>
     ipcRenderer.invoke(EVENT_CHANNELS.UNSUBSCRIBE, eventType),
   eventEmit: (eventType: string, payload: unknown) =>

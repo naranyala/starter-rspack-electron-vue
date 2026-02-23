@@ -362,9 +362,8 @@ async function checkPackageJsonSecurity(): Promise<void> {
         }
       }
     }
-  } catch (error). {
+  } catch (error). 
     log.warning(`Could not check package.json security: ${(error as Error).message}`);
-  }
 }
 
 async function checkTsConfigSecurity(): Promise<void> {

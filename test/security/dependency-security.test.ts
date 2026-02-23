@@ -1,6 +1,6 @@
-import { describe, it, expect, beforeAll, beforeEach, afterEach } from 'bun:test';
-import { promises as fs } from 'node:fs';
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'bun:test';
 import { execSync } from 'node:child_process';
+import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
 describe('Dependency Security Tests', () => {
@@ -15,15 +15,27 @@ describe('Dependency Security Tests', () => {
 
   describe('Lock File Validation', () => {
     it('should have package-lock.json or bun.lock for dependency integrity', async () => {
-      const hasNpmLock = await fs.access(path.join(process.cwd(), 'package-lock.json')).then(() => true).catch(() => false);
-      const hasBunLock = await fs.access(path.join(process.cwd(), 'bun.lock')).then(() => true).catch(() => false);
+      const hasNpmLock = await fs
+        .access(path.join(process.cwd(), 'package-lock.json'))
+        .then(() => true)
+        .catch(() => false);
+      const hasBunLock = await fs
+        .access(path.join(process.cwd(), 'bun.lock'))
+        .then(() => true)
+        .catch(() => false);
       expect(hasNpmLock || hasBunLock).toBe(true);
     });
 
     it('should not have both lock files that are out of sync', async () => {
-      const hasNpmLock = await fs.access(path.join(process.cwd(), 'package-lock.json')).then(() => true).catch(() => false);
-      const hasBunLock = await fs.access(path.join(process.cwd(), 'bun.lock')).then(() => true).catch(() => false);
-      
+      const hasNpmLock = await fs
+        .access(path.join(process.cwd(), 'package-lock.json'))
+        .then(() => true)
+        .catch(() => false);
+      const hasBunLock = await fs
+        .access(path.join(process.cwd(), 'bun.lock'))
+        .then(() => true)
+        .catch(() => false);
+
       if (hasNpmLock && hasBunLock) {
         const npmContent = await fs.readFile(path.join(process.cwd(), 'package-lock.json'), 'utf8');
         const bunContent = await fs.readFile(path.join(process.cwd(), 'bun.lock'), 'utf8');
@@ -61,7 +73,11 @@ describe('Dependency Security Tests', () => {
 
     it('should use proper semver versioning', () => {
       for (const [name, version] of Object.entries(dependencies)) {
-        if (typeof version === 'string' && !version.startsWith('file:') && !version.startsWith('git:')) {
+        if (
+          typeof version === 'string' &&
+          !version.startsWith('file:') &&
+          !version.startsWith('git:')
+        ) {
           expect(version).toMatch(/^[~^]?[\d.x]+(?:-[\w.-]+)?$/);
         }
       }
@@ -86,14 +102,14 @@ describe('Dependency Security Tests', () => {
           const major = parseInt(version.split('.')[0]) || 0;
           const minor = parseInt(version.split('.')[1]) || 0;
           const patch = parseInt(version.split('.')[2]) || 0;
-          
+
           const [minMajor, minMinor, minPatch] = minVersion.split('.').map(Number);
-          
-          const isSafe = 
-            major > minMajor || 
-            (major === minMajor && minor > minMinor) || 
+
+          const isSafe =
+            major > minMajor ||
+            (major === minMajor && minor > minMinor) ||
             (major === minMajor && minor === minMinor && patch >= minPatch);
-          
+
           expect(isSafe).toBe(true);
         }
       });
@@ -156,7 +172,9 @@ describe('Dependency Security Tests', () => {
   describe('Deprecated Packages', () => {
     it('should not use deprecated packages', async () => {
       const deprecatedPackages = ['moment', 'request', 'node-fetch', 'axios'];
-      const foundDeprecated = Object.keys(dependencies).filter(pkg => deprecatedPackages.includes(pkg));
+      const foundDeprecated = Object.keys(dependencies).filter((pkg) =>
+        deprecatedPackages.includes(pkg)
+      );
       expect(foundDeprecated).toEqual([]);
     });
   });

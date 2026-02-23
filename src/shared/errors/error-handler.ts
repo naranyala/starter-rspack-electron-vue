@@ -5,7 +5,10 @@ import type { AppError } from './app-error';
  */
 export interface ErrorHandler {
   handle(error: unknown): void;
-  onError<T extends AppError>(errorType: new (...args: never[]) => T, handler: (error: T) => void): void;
+  onError<T extends AppError>(
+    errorType: new (...args: never[]) => T,
+    handler: (error: T) => void
+  ): void;
 }
 
 /**
@@ -29,8 +32,16 @@ export class GlobalErrorHandler implements ErrorHandler {
   /**
    * Register a handler for a specific error type
    */
-  onError<T extends AppError>(errorType: new (...args: never[]) => T, handler: (error: T) => void): void {
-    this.handlers.set(errorType as new (...args: never[]) => AppError, handler as (error: AppError) => void);
+  onError<T extends AppError>(
+    errorType: new (...args: never[]) => T,
+    handler: (error: T) => void
+  ): void {
+    this.handlers.set(
+      errorType as new (
+        ...args: never[]
+      ) => AppError,
+      handler as (error: AppError) => void
+    );
   }
 
   /**
@@ -83,7 +94,7 @@ export function createSafeHandler<T extends (...args: never[]) => Promise<unknow
 ): T {
   return (async (...args: Parameters<T>): Promise<Awaited<ReturnType<T>>> => {
     try {
-      return await fn(...args) as Awaited<ReturnType<T>>;
+      return (await fn(...args)) as Awaited<ReturnType<T>>;
     } catch (error) {
       if (errorHandler) {
         errorHandler(error);

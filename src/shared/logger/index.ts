@@ -1,7 +1,7 @@
 export {
+  appLogger,
   ConsoleLogger,
   createLogger,
-  appLogger,
   type Logger,
   type LoggerOptions,
   type LogLevel,

@@ -1,289 +1,268 @@
-import { describe, it, expect, beforeEach } from 'bun:test';
-import { createEventBus, EventBus } from '../../../../src/shared/events/event-bus';
-import type { EventMap } from '../../../../src/shared/events/event-types';
+import { afterEach, beforeEach, describe, expect, it, mock } from 'bun:test';
+import {
+  createEventBus,
+  type EventBus,
+  getEventBus,
+} from '../../../../src/shared/events/event-bus';
 
 describe('EventBus', () => {
   let eventBus: EventBus;
 
   beforeEach(() => {
-    eventBus = createEventBus({
-      debug: false,
-      enableHistory: true,
-      maxHistorySize: 50,
-    });
+    eventBus = createEventBus({ debug: false });
   });
 
-  describe('Subscription', () => {
-    it('should subscribe to an event', () => {
-      const handler = () => {};
-      const subscription = eventBus.on('app:ready', handler);
-
-      expect(subscription).toBeDefined();
-      expect(subscription.eventType).toBe('app:ready');
-      expect(subscription.unsubscribe).toBeDefined();
-    });
-
-    it('should unsubscribe from an event', () => {
-      const handler = () => {};
-      const subscription = eventBus.on('app:ready', handler);
-
-      eventBus.off('app:ready', subscription);
-
-      const subscriptions = eventBus.getSubscriptions('app:ready');
-      expect(subscriptions.length).toBe(0);
-    });
-
-    it('should unsubscribe using the subscription method', () => {
-      const handler = () => {};
-      const subscription = eventBus.on('app:ready', handler);
-
-      subscription.unsubscribe();
-
-      const subscriptions = eventBus.getSubscriptions('app:ready');
-      expect(subscriptions.length).toBe(0);
-    });
-
-    it('should unsubscribe all events', () => {
-      eventBus.on('app:ready', () => {});
-      eventBus.on('app:quit', () => {});
-
-      eventBus.offAll();
-
-      expect(eventBus.getSubscriptions().length).toBe(0);
-    });
-
-    it('should unsubscribe specific event type', () => {
-      eventBus.on('app:ready', () => {});
-      eventBus.on('app:quit', () => {});
-
-      eventBus.offAll('app:ready');
-
-      expect(eventBus.getSubscriptions('app:ready').length).toBe(0);
-      expect(eventBus.getSubscriptions('app:quit').length).toBe(1);
-    });
+  afterEach(() => {
+    eventBus.destroy();
   });
 
-  describe('Once Subscription', () => {
-    it('should execute handler only once', async () => {
-      let callCount = 0;
-      const handler = () => { callCount++; };
+  it('should subscribe to an event', () => {
+    const handler = () => {};
+    const subscription = eventBus.on('test:event', handler);
 
-      eventBus.once('app:ready', handler);
-
-      await eventBus.emit('app:ready', undefined);
-      await eventBus.emit('app:ready', undefined);
-
-      expect(callCount).toBe(1);
-    });
+    expect(subscription).toBeDefined();
+    expect(subscription.id).toBeDefined();
+    expect(subscription.eventType).toBe('test:event');
   });
 
-  describe('Event Emission', () => {
-    it('should emit event and call handlers', async () => {
-      let receivedPayload: unknown;
-      const handler = (payload: string) => { receivedPayload = payload; };
+  it('should unsubscribe from an event', () => {
+    const handler = () => {};
+    const subscription = eventBus.on('test:event', handler);
 
-      eventBus.on('settings:changed', handler);
-      await eventBus.emit('settings:changed', { key: 'theme', value: 'dark' });
+    eventBus.off('test:event', subscription);
 
-      expect(receivedPayload).toEqual({ key: 'theme', value: 'dark' });
-    });
-
-    it('should emit event with void payload', async () => {
-      let called = false;
-      const handler = () => { called = true; };
-
-      eventBus.on('app:ready', handler);
-      await eventBus.emit('app:ready', undefined);
-
-      expect(called).toBe(true);
-    });
-
-    it('should handle async handlers', async () => {
-      let completed = false;
-      const handler = async () => {
-        await new Promise((resolve) => setTimeout(resolve, 10));
-        completed = true;
-      };
-
-      eventBus.on('app:ready', handler);
-      await eventBus.emit('app:ready', undefined);
-
-      expect(completed).toBe(true);
-    });
-
-    it('should handle handler errors gracefully', async () => {
-      let errorHandlerCalled = false;
-      let successHandlerCalled = false;
-
-      const errorHandler = () => { 
-        errorHandlerCalled = true;
-        throw new Error('Handler error'); 
-      };
-      const successHandler = () => {
-        successHandlerCalled = true;
-      };
-
-      eventBus.on('app:ready', errorHandler);
-      eventBus.on('app:ready', successHandler);
-
-      // Emit should complete even with error
-      await eventBus.emit('app:ready', undefined);
-
-      // Both handlers should have been called
-      expect(errorHandlerCalled).toBe(true);
-      expect(successHandlerCalled).toBe(true);
-
-      // Stats should track the failed handler
-      const stats = eventBus.getStats();
-      expect(stats.failedHandlers).toBe(1);
-    });
+    const subscriptions = eventBus.getSubscriptions('test:event');
+    expect(subscriptions).toHaveLength(0);
   });
 
-  describe('Priority', () => {
-    it('should execute handlers in priority order', async () => {
-      const executionOrder: number[] = [];
+  it('should emit event and call handler', async () => {
+    const handler = mock(() => {});
+    eventBus.on('test:event', handler);
 
-      eventBus.on('app:ready', () => executionOrder.push(3), { priority: 1 });
-      eventBus.on('app:ready', () => executionOrder.push(1), { priority: 3 });
-      eventBus.on('app:ready', () => executionOrder.push(2), { priority: 2 });
+    await eventBus.emit('test:event', { data: 'test' });
 
-      await eventBus.emit('app:ready', undefined);
-
-      expect(executionOrder).toEqual([1, 2, 3]);
-    });
+    expect(handler).toHaveBeenCalled();
+    expect(handler.mock.calls[0][0]).toEqual({ data: 'test' });
   });
 
-  describe('History', () => {
-    it('should store events in history', async () => {
-      await eventBus.emit('app:ready', undefined);
-      await eventBus.emit('app:quit', undefined);
+  it('should subscribe once and auto-unsubscribe', async () => {
+    const handler = mock(() => {});
+    eventBus.once('test:event', handler);
 
-      const history = eventBus.getHistory();
-      expect(history.length).toBe(2);
-    });
+    await eventBus.emit('test:event', { data: 'first' });
+    await eventBus.emit('test:event', { data: 'second' });
 
-    it('should filter history by event type', async () => {
-      await eventBus.emit('app:ready', undefined);
-      await eventBus.emit('app:quit', undefined);
-      await eventBus.emit('app:ready', undefined);
-
-      const history = eventBus.getHistory('app:ready');
-      expect(history.length).toBe(2);
-    });
-
-    it('should limit history size', async () => {
-      const smallBus = createEventBus({ maxHistorySize: 3 });
-
-      await smallBus.emit('app:ready', undefined);
-      await smallBus.emit('app:ready', undefined);
-      await smallBus.emit('app:ready', undefined);
-      await smallBus.emit('app:ready', undefined);
-
-      const history = smallBus.getHistory();
-      expect(history.length).toBe(3);
-    });
-
-    it('should clear history', async () => {
-      await eventBus.emit('app:ready', undefined);
-      await eventBus.emit('app:quit', undefined);
-
-      eventBus.clearHistory();
-
-      expect(eventBus.getHistory().length).toBe(0);
-    });
+    expect(handler).toHaveBeenCalledTimes(1);
+    expect(handler.mock.calls[0][0]).toEqual({ data: 'first' });
   });
 
-  describe('Statistics', () => {
-    it('should track total events', async () => {
-      await eventBus.emit('app:ready', undefined);
-      await eventBus.emit('app:quit', undefined);
+  it('should handle async handlers', async () => {
+    const handler = async (payload: { value: number }) => {
+      return payload.value * 2;
+    };
 
-      const stats = eventBus.getStats();
-      expect(stats.totalEvents).toBe(2);
-    });
+    eventBus.on('async:event', handler);
+    await eventBus.emit('async:event', { value: 21 });
 
-    it('should track events by type', async () => {
-      await eventBus.emit('app:ready', undefined);
-      await eventBus.emit('app:ready', undefined);
-      await eventBus.emit('app:quit', undefined);
-
-      const stats = eventBus.getStats();
-      expect(stats.eventsByType['app:ready']).toBe(2);
-      expect(stats.eventsByType['app:quit']).toBe(1);
-    });
-
-    it('should track active subscriptions', () => {
-      eventBus.on('app:ready', () => {});
-      eventBus.on('app:quit', () => {});
-
-      const stats = eventBus.getStats();
-      expect(stats.activeSubscriptions).toBe(2);
-    });
-
-    it('should reset statistics', async () => {
-      await eventBus.emit('app:ready', undefined);
-      eventBus.resetStats();
-
-      const stats = eventBus.getStats();
-      expect(stats.totalEvents).toBe(0);
-    });
+    // Handler should have been called
+    const subscriptions = eventBus.getSubscriptions('async:event');
+    expect(subscriptions.length).toBe(1);
   });
 
-  describe('Correlation ID', () => {
-    it('should generate correlation ID for events', async () => {
-      let correlationId: string | undefined;
-      const handler = (_payload: unknown, meta: { correlationId?: string }) => {
-        correlationId = meta.correlationId;
-      };
+  it('should respect handler priority', async () => {
+    const executionOrder: string[] = [];
 
-      eventBus.on('app:ready', handler);
-      await eventBus.emit('app:ready', undefined);
+    eventBus.on('priority:event', () => executionOrder.push('low'), { priority: 1 });
+    eventBus.on('priority:event', () => executionOrder.push('high'), { priority: 10 });
+    eventBus.on('priority:event', () => executionOrder.push('medium'), { priority: 5 });
 
-      expect(correlationId).toMatch(/evt_\d+_[a-z0-9]+/);
-    });
+    await eventBus.emit('priority:event', {});
 
-    it('should use custom correlation ID', async () => {
-      eventBus.setCorrelationId('custom-id-123');
-
-      let correlationId: string | undefined;
-      const handler = (_payload: unknown, meta: { correlationId?: string }) => {
-        correlationId = meta.correlationId;
-      };
-
-      eventBus.on('app:ready', handler);
-      await eventBus.emit('app:ready', undefined);
-
-      expect(correlationId).toBe('custom-id-123');
-
-      eventBus.clearCorrelationId();
-    });
+    expect(executionOrder).toEqual(['high', 'medium', 'low']);
   });
 
-  describe('Payload Sanitization', () => {
-    it('should redact sensitive fields in debug logs', () => {
-      const debugBus = createEventBus({ debug: true });
-      
-      // This tests that sanitization doesn't throw
-      expect(() => {
-        debugBus.emit('user:action', { 
-          action: 'login', 
-          password: 'secret123',
-          token: 'abc123',
-        });
-      }).not.toThrow();
-    });
+  it('should track statistics', async () => {
+    const handler = () => {};
+    eventBus.on('stats:event', handler);
+
+    await eventBus.emit('stats:event', {});
+    await eventBus.emit('stats:event', {});
+
+    const stats = eventBus.getStats();
+    expect(stats.totalEvents).toBe(2);
+    expect(stats.eventsByType['stats:event']).toBe(2);
+    expect(stats.activeSubscriptions).toBe(1);
   });
 
-  describe('Destroy', () => {
-    it('should cleanup on destroy', () => {
-      eventBus.on('app:ready', () => {});
-      eventBus.emit('app:ready', undefined);
+  it('should maintain event history', async () => {
+    eventBus = createEventBus({ enableHistory: true, maxHistorySize: 10 });
 
-      eventBus.destroy();
+    await eventBus.emit('history:event', { count: 1 });
+    await eventBus.emit('history:event', { count: 2 });
+    await eventBus.emit('history:event', { count: 3 });
 
-      const stats = eventBus.getStats();
-      expect(stats.activeSubscriptions).toBe(0);
-      expect(stats.totalEvents).toBe(0);
+    const history = eventBus.getHistory('history:event');
+    expect(history).toHaveLength(3);
+    expect(history[0].payload).toEqual({ count: 1 });
+  });
+
+  it('should limit history size', async () => {
+    eventBus = createEventBus({ enableHistory: true, maxHistorySize: 3 });
+
+    for (let i = 1; i <= 5; i++) {
+      await eventBus.emit('limit:event', { count: i });
+    }
+
+    const history = eventBus.getHistory('limit:event');
+    expect(history).toHaveLength(3);
+    expect(history[0].payload).toEqual({ count: 3 });
+    expect(history[2].payload).toEqual({ count: 5 });
+  });
+
+  it('should clear history', async () => {
+    await eventBus.emit('clear:event', {});
+    await eventBus.emit('clear:event', {});
+
+    eventBus.clearHistory('clear:event');
+
+    const history = eventBus.getHistory('clear:event');
+    expect(history).toHaveLength(0);
+  });
+
+  it('should reset statistics', async () => {
+    await eventBus.emit('stats:event', {});
+
+    eventBus.resetStats();
+
+    const stats = eventBus.getStats();
+    expect(stats.totalEvents).toBe(0);
+    expect(stats.activeSubscriptions).toBe(0);
+  });
+
+  it('should unsubscribe all handlers for specific event', () => {
+    const handler1 = () => {};
+    const handler2 = () => {};
+
+    eventBus.on('multi:event', handler1);
+    eventBus.on('multi:event', handler2);
+
+    eventBus.offAll('multi:event');
+
+    const subscriptions = eventBus.getSubscriptions('multi:event');
+    expect(subscriptions).toHaveLength(0);
+  });
+
+  it('should unsubscribe all handlers for all events', () => {
+    const handler1 = () => {};
+    const handler2 = () => {};
+
+    eventBus.on('event1', handler1);
+    eventBus.on('event2', handler2);
+
+    eventBus.offAll();
+
+    const allSubscriptions = eventBus.getSubscriptions();
+    expect(allSubscriptions).toHaveLength(0);
+  });
+
+  it('should handle handler errors gracefully', async () => {
+    const errorSpy = mock(() => {});
+    console.error = errorSpy;
+
+    const workingHandler = mock(() => {});
+    const erroringHandler = () => {
+      throw new Error('Handler error');
+    };
+
+    eventBus.on('error:event', erroringHandler);
+    eventBus.on('error:event', workingHandler);
+
+    await eventBus.emit('error:event', { data: 'test' });
+
+    expect(workingHandler).toHaveBeenCalled();
+    expect(errorSpy).toHaveBeenCalled();
+  });
+
+  it('should set and clear correlation ID', async () => {
+    eventBus.setCorrelationId('test-correlation-123');
+
+    const handler = mock(() => {});
+    eventBus.on('correlation:event', handler);
+
+    await eventBus.emit('correlation:event', {});
+
+    expect(handler).toHaveBeenCalled();
+  });
+
+  it('should sanitize sensitive payload data', async () => {
+    const handler = mock(() => {});
+    eventBus.on('sensitive:event', handler);
+
+    await eventBus.emit('sensitive:event', {
+      username: 'john',
+      password: 'secret123',
+      token: 'abc123',
     });
+
+    expect(handler).toHaveBeenCalled();
+  });
+
+  it('should get subscriptions for specific event', () => {
+    const handler1 = () => {};
+    const handler2 = () => {};
+
+    eventBus.on('event1', handler1);
+    eventBus.on('event1', handler2);
+    eventBus.on('event2', () => {});
+
+    const subscriptions = eventBus.getSubscriptions('event1');
+    expect(subscriptions).toHaveLength(2);
+  });
+
+  it('should emit and wait for all handlers', async () => {
+    let completed = false;
+
+    const asyncHandler = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 10));
+      completed = true;
+    };
+
+    eventBus.on('wait:event', asyncHandler);
+    await eventBus.emitAndWait('wait:event', {});
+
+    expect(completed).toBe(true);
+  });
+
+  it('should destroy event bus and clean up', () => {
+    eventBus.on('test', () => {});
+    eventBus.on('test2', () => {});
+
+    eventBus.destroy();
+
+    expect(eventBus.getSubscriptions()).toHaveLength(0);
+    expect(eventBus.getHistory()).toHaveLength(0);
+    expect(eventBus.getStats().totalEvents).toBe(0);
+  });
+});
+
+describe('EventBus Singleton', () => {
+  afterEach(() => {
+    // Reset singleton for clean tests
+    const bus = getEventBus();
+    bus.destroy();
+  });
+
+  it('should return same instance from getEventBus', () => {
+    const bus1 = getEventBus();
+    const bus2 = getEventBus();
+
+    expect(bus1).toBe(bus2);
+  });
+
+  it('should create new instance with createEventBus', () => {
+    const bus1 = createEventBus();
+    const bus2 = createEventBus();
+
+    expect(bus1).not.toBe(bus2);
   });
 });

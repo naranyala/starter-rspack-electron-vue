@@ -33,12 +33,6 @@
       "@/backend-lib/*": ["src/backend/lib/*"]
     }
   },
-  "include": [
-    "src/**/*",
-    "rspack.config.ts",
-    "main.cjs",
-    "types/**/*",
-    "scripts/**/*.ts"
-  ],
+  "include": ["src/**/*", "rspack.config.ts", "main.cjs", "types/**/*", "scripts/**/*.ts"],
   "exclude": ["node_modules", "dist", "build"]
 }

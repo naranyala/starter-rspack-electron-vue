@@ -235,9 +235,9 @@ export class ArrayUtils {
    */
   static isSorted<T>(arr: T[], compareFn?: (a: T, b: T) => number): boolean {
     if (arr.length <= 1) return true;
-    
+
     const compare = compareFn || ((a: T, b: T) => (a > b ? 1 : a < b ? -1 : 0));
-    
+
     for (let i = 1; i < arr.length; i++) {
       if (compare(arr[i - 1], arr[i]) > 0) {
         return false;
@@ -250,13 +250,13 @@ export class ArrayUtils {
    * Zip multiple arrays together
    */
   static zip<T>(...arrays: T[][]): T[][] {
-    const minLength = Math.min(...arrays.map(arr => arr.length));
+    const minLength = Math.min(...arrays.map((arr) => arr.length));
     const result: T[][] = [];
-    
+
     for (let i = 0; i < minLength; i++) {
-      result.push(arrays.map(arr => arr[i]));
+      result.push(arrays.map((arr) => arr[i]));
     }
-    
+
     return result;
   }
 
@@ -264,8 +264,10 @@ export class ArrayUtils {
    * Flatten nested array
    */
   static flatten<T>(arr: (T | T[])[]): T[] {
-    return arr.reduce((acc: T[], val: T | T[]) =>
-      Array.isArray(val) ? acc.concat(ArrayUtils.flatten(val as T[])) : acc.concat([val as T]), [] as T[]
+    return arr.reduce(
+      (acc: T[], val: T | T[]) =>
+        Array.isArray(val) ? acc.concat(ArrayUtils.flatten(val as T[])) : acc.concat([val as T]),
+      [] as T[]
     );
   }
 
@@ -273,8 +275,10 @@ export class ArrayUtils {
    * Deep flatten nested array
    */
   static deepFlatten<T>(arr: any[]): T[] {
-    return arr.reduce((acc: T[], val: any) =>
-      Array.isArray(val) ? acc.concat(ArrayUtils.deepFlatten(val)) : acc.concat([val]), [] as T[]
+    return arr.reduce(
+      (acc: T[], val: any) =>
+        Array.isArray(val) ? acc.concat(ArrayUtils.deepFlatten(val)) : acc.concat([val]),
+      [] as T[]
     );
   }
 }

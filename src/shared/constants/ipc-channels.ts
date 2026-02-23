@@ -34,31 +34,31 @@ export const ELECTRON_CHANNELS = {
   // Intro
   INTRO_GET_STARTED: 'electron:intro.getStarted',
   INTRO_SHOW_TOC: 'electron:intro.showToc',
-  
+
   // Architecture
   ARCH_GET_OVERVIEW: 'electron:architecture.getOverview',
   ARCH_GET_PROCESS_INFO: 'electron:architecture.getProcessInfo',
-  
+
   // Security
   SECURITY_GET_BEST_PRACTICES: 'electron:security.getBestPractices',
   SECURITY_CHECK_STATUS: 'electron:security.checkStatus',
-  
+
   // Packaging
   PACKAGING_GET_GUIDE: 'electron:packaging.getGuide',
   PACKAGING_GET_PLATFORM_INFO: 'electron:packaging.getPlatformInfo',
-  
+
   // Native APIs
   NATIVE_GET_APIS: 'electron:native.getApis',
   NATIVE_GET_EXAMPLE: 'electron:native.getExample',
-  
+
   // Performance
   PERFORMANCE_GET_TIPS: 'electron:performance.getTips',
   PERFORMANCE_GET_METRICS: 'electron:performance.getMetrics',
-  
+
   // Development
   DEV_GET_WORKFLOW: 'electron:development.getWorkflow',
   DEV_GET_DEBUGGING_TIPS: 'electron:development.getDebuggingTips',
-  
+
   // Versions
   VERSIONS_GET_INFO: 'electron:versions.getInfo',
   VERSIONS_CHECK_UPDATE: 'electron:versions.checkUpdate',
@@ -74,4 +74,4 @@ export const IPC_CHANNELS = {
 } as const;
 
 // Type for all channel names
-export type IPCChannel = typeof IPC_CHANNELS[keyof typeof IPC_CHANNELS];
+export type IPCChannel = (typeof IPC_CHANNELS)[keyof typeof IPC_CHANNELS];

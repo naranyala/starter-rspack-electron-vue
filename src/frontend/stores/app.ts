@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
+import { computed, ref } from 'vue';
 
 export interface WindowInfo {
   id: string;
@@ -28,8 +28,8 @@ export const useAppStore = defineStore('app', () => {
 
   // Getters
   const hasOpenWindows = computed(() => openWindows.value.length > 0);
-  
-  const currentCardTitle = computed(() => 
+
+  const currentCardTitle = computed(() =>
     currentCard.value ? currentCard.value.title : 'Select a card'
   );
 

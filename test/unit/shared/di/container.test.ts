@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'bun:test';
+import { describe, expect, it } from 'bun:test';
 import { Container } from '../../../../src/shared/di/container';
 import { createToken, InjectionScope } from '../../../../src/shared/di/decorators';
 

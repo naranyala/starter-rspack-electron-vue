@@ -1,8 +1,8 @@
 export {
-  z,
+  createValidatedHandler,
+  type InferType,
+  schemas,
   validate,
   validateSafe,
-  createValidatedHandler,
-  schemas,
-  type InferType,
+  z,
 } from './zod';

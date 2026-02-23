@@ -1,12 +1,12 @@
 /**
  * Vue Composables for Event Bus
- * 
+ *
  * Provides reactive event handling in Vue components
  */
 
-import { ref, onMounted, onUnmounted, type Ref } from 'vue';
-import { getFrontendEventBus } from '../events/frontend-event-bus';
+import { onMounted, onUnmounted, type Ref, ref } from 'vue';
 import type { EventKey, EventPayload, Subscription } from '../../shared/events/event-types';
+import { getFrontendEventBus } from '../events/frontend-event-bus';
 
 /**
  * Composable for subscribing to events with automatic cleanup
@@ -52,10 +52,7 @@ export function useEventBus() {
   /**
    * Emit an event
    */
-  async function emit<K extends EventKey>(
-    eventType: K,
-    payload: EventPayload<K>
-  ): Promise<void> {
+  async function emit<K extends EventKey>(eventType: K, payload: EventPayload<K>): Promise<void> {
     return eventBus.emit(eventType, payload);
   }
 
@@ -87,10 +84,7 @@ export function useEventBus() {
 /**
  * Composable for reactive event state
  */
-export function useEvent<K extends EventKey>(
-  eventType: K,
-  initialValue?: EventPayload<K>
-) {
+export function useEvent<K extends EventKey>(eventType: K, initialValue?: EventPayload<K>) {
   const eventBus = getFrontendEventBus();
   const data = ref<EventPayload<K> | undefined>(initialValue);
   const count = ref(0);
@@ -137,7 +131,7 @@ export function useEventHistory<K extends EventKey>(eventType: K, limit = 10) {
 
   onMounted(() => {
     eventBus.on(eventType, handler as never);
-    
+
     // Load existing history
     const existingHistory = eventBus.getHistory(eventType, limit);
     history.value = existingHistory.map((e) => ({

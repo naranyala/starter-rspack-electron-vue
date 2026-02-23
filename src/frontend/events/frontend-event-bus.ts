@@ -1,6 +1,6 @@
 /**
  * Frontend Event Bus with Vue Integration
- * 
+ *
  * Extends the core event bus with:
  * - IPC communication with backend
  * - Vue composable for reactive event handling
@@ -8,8 +8,8 @@
  */
 
 import { EventBus, getEventBus } from '../../shared/events/event-bus';
-import { createLogger } from '../../shared/logger';
 import type { EventKey, EventPayload } from '../../shared/events/event-types';
+import { createLogger } from '../../shared/logger';
 
 const logger = createLogger('FrontendEventBus');
 

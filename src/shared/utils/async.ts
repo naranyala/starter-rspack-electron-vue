@@ -3,26 +3,23 @@
  * Provides comprehensive asynchronous utility functions for both backend and frontend
  */
 
-import { DebouncedFunction, ThrottledFunction, RetryOptions } from './types';
+import type { DebouncedFunction, RetryOptions, ThrottledFunction } from './types';
 
 export class AsyncUtils {
   /**
    * Debounce a function call
    */
-  static debounce<T extends (...args: any[]) => any>(
-    func: T,
-    wait: number
-  ): DebouncedFunction<T> {
+  static debounce<T extends (...args: any[]) => any>(func: T, wait: number): DebouncedFunction<T> {
     let timeout: any;
     const debouncedFunc = function (this: any, ...args: Parameters<T>): ReturnType<T> | undefined {
       const later = () => {
         timeout = null;
-        // @ts-ignore
+        // @ts-expect-error
         return func.apply(this, args);
       };
       clearTimeout(timeout);
       timeout = setTimeout(later, wait);
-      // @ts-ignore
+      // @ts-expect-error
       return timeout ? undefined : func.apply(this, args);
     } as DebouncedFunction<T>;
 
@@ -31,10 +28,10 @@ export class AsyncUtils {
       timeout = null;
     };
 
-    debouncedFunc.flush = function(this: any, ...args: Parameters<T>) {
+    debouncedFunc.flush = function (this: any, ...args: Parameters<T>) {
       clearTimeout(timeout);
       timeout = null;
-      // @ts-ignore
+      // @ts-expect-error
       return func.apply(this, args);
     };
 
@@ -44,16 +41,13 @@ export class AsyncUtils {
   /**
    * Throttle a function call
    */
-  static throttle<T extends (...args: any[]) => any>(
-    func: T,
-    limit: number
-  ): ThrottledFunction<T> {
+  static throttle<T extends (...args: any[]) => any>(func: T, limit: number): ThrottledFunction<T> {
     let inThrottle: boolean;
     let lastResult: any;
 
     const throttledFunc = function (this: any, ...args: Parameters<T>): ReturnType<T> {
       if (!inThrottle) {
-        // @ts-ignore
+        // @ts-expect-error
         lastResult = func.apply(this, args);
         inThrottle = true;
         setTimeout(() => {
@@ -81,7 +75,7 @@ export class AsyncUtils {
     return function (this: any, ...args: Parameters<T>): ReturnType<T> | undefined {
       if (called) return result;
       called = true;
-      // @ts-ignore
+      // @ts-expect-error
       result = func.apply(this, args);
       return result;
     };
@@ -117,28 +111,25 @@ export class AsyncUtils {
   /**
    * Retry a function with exponential backoff
    */
-  static async retry<T>(
-    fn: () => Promise<T>,
-    options: Partial<RetryOptions> = {}
-  ): Promise<T> {
+  static async retry<T>(fn: () => Promise<T>, options: Partial<RetryOptions> = {}): Promise<T> {
     const { retries = 3, delay = 1000, backoff = 2 } = options;
-    
+
     let lastError: Error;
-    
+
     for (let i = 0; i <= retries; i++) {
       try {
         return await fn();
       } catch (error) {
         lastError = error as Error;
-        
+
         if (i === retries) {
           throw lastError;
         }
-        
-        await AsyncUtils.sleep(delay * Math.pow(backoff, i));
+
+        await AsyncUtils.sleep(delay * backoff ** i);
       }
     }
-    
+
     throw lastError!;
   }
 
@@ -148,18 +139,16 @@ export class AsyncUtils {
   static timeout<T>(promise: Promise<T>, ms: number): Promise<T> {
     return Promise.race([
       promise,
-      new Promise<T>((_, reject) => 
+      new Promise<T>((_, reject) =>
         setTimeout(() => reject(new Error(`Timeout after ${ms}ms`)), ms)
-      )
+      ),
     ]);
   }
 
   /**
    * Execute promises in series
    */
-  static async series<T>(
-    tasks: (() => Promise<T>)[]
-  ): Promise<T[]> {
+  static async series<T>(tasks: (() => Promise<T>)[]): Promise<T[]> {
     const results: T[] = [];
     for (const task of tasks) {
       results.push(await task());
@@ -175,13 +164,13 @@ export class AsyncUtils {
     concurrency: number = Infinity
   ): Promise<T[]> {
     if (concurrency >= tasks.length) {
-      return Promise.all(tasks.map(task => task()));
+      return Promise.all(tasks.map((task) => task()));
     }
 
     const results: T[] = [];
     for (let i = 0; i < tasks.length; i += concurrency) {
       const batch = tasks.slice(i, i + concurrency);
-      const batchResults = await Promise.all(batch.map(task => task()));
+      const batchResults = await Promise.all(batch.map((task) => task()));
       results.push(...batchResults);
     }
     return results;
@@ -190,20 +179,15 @@ export class AsyncUtils {
   /**
    * Execute promises with race condition
    */
-  static async race<T>(
-    tasks: (() => Promise<T>)[]
-  ): Promise<T> {
-    const promises = tasks.map(task => task());
+  static async race<T>(tasks: (() => Promise<T>)[]): Promise<T> {
+    const promises = tasks.map((task) => task());
     return Promise.race(promises);
   }
 
   /**
    * Execute promise with fallback
    */
-  static async withFallback<T>(
-    primary: () => Promise<T>,
-    fallback: () => Promise<T>
-  ): Promise<T> {
+  static async withFallback<T>(primary: () => Promise<T>, fallback: () => Promise<T>): Promise<T> {
     try {
       return await primary();
     } catch {
@@ -226,7 +210,7 @@ export class AsyncUtils {
     let lastFailureTime: number | null = null;
     let isOpen = false;
 
-    return async function(): Promise<T> {
+    return async (): Promise<T> => {
       if (isOpen) {
         if (Date.now() - (lastFailureTime || 0) > options.resetTimeout) {
           // Half-open state - allow one trial call
@@ -272,10 +256,7 @@ export class AsyncUtils {
     retryOptions: Partial<RetryOptions> = {},
     timeoutMs: number = 30000
   ): Promise<T> {
-    return AsyncUtils.timeout(
-      AsyncUtils.retry(fn, retryOptions),
-      timeoutMs
-    );
+    return AsyncUtils.timeout(AsyncUtils.retry(fn, retryOptions), timeoutMs);
   }
 
   /**
@@ -286,14 +267,16 @@ export class AsyncUtils {
 
     const wrappedPromise = new Promise<T>((resolve, reject) => {
       promise.then(
-        value => isCancelled ? reject(new Error('Promise cancelled')) : resolve(value),
-        error => isCancelled ? reject(new Error('Promise cancelled')) : reject(error)
+        (value) => (isCancelled ? reject(new Error('Promise cancelled')) : resolve(value)),
+        (error) => (isCancelled ? reject(new Error('Promise cancelled')) : reject(error))
       );
     });
 
     return {
       promise: wrappedPromise,
-      cancel: () => { isCancelled = true; }
+      cancel: () => {
+        isCancelled = true;
+      },
     };
   }
 

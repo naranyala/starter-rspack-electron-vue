@@ -3,9 +3,9 @@
  * Loads and validates environment variables from .env files
  */
 
-import { config as loadDotenv } from 'dotenv';
-import path from 'node:path';
 import fs from 'node:fs';
+import path from 'node:path';
+import { config as loadDotenv } from 'dotenv';
 
 /**
  * Environment variable schema
@@ -47,12 +47,7 @@ export function loadEnvConfig(): EnvConfig {
   const nodeEnv = process.env.NODE_ENV || 'development';
 
   // List of env files to load in priority order (lowest to highest)
-  const envFiles = [
-    '.env',
-    '.env.local',
-    `.env.${nodeEnv}`,
-    `.env.${nodeEnv}.local`,
-  ];
+  const envFiles = ['.env', '.env.local', `.env.${nodeEnv}`, `.env.${nodeEnv}.local`];
 
   // Load each env file if it exists
   envFiles.forEach((file) => {

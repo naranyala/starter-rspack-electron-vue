@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll } from 'bun:test';
+import { beforeAll, describe, expect, it } from 'bun:test';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
@@ -30,7 +30,7 @@ describe('Electron Security Tests', () => {
     it('should not have nodeIntegration in any BrowserWindow', () => {
       const browserWindowPattern = /new\s+BrowserWindow\s*\([^)]*\)/g;
       const matches = mainContent.match(browserWindowPattern);
-      
+
       if (matches) {
         const webPrefsPattern = /webPreferences:\s*\{[^}]*\}/;
         for (const match of matches) {

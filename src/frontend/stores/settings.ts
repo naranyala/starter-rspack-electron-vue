@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
+import { computed, ref } from 'vue';
 
 export interface AppSettings {
   theme: 'light' | 'dark' | 'system';
@@ -56,10 +56,7 @@ export const useSettingsStore = defineStore('settings', () => {
     }
   }
 
-  async function updateSetting<K extends keyof AppSettings>(
-    key: K,
-    value: AppSettings[K]
-  ) {
+  async function updateSetting<K extends keyof AppSettings>(key: K, value: AppSettings[K]) {
     error.value = null;
 
     try {

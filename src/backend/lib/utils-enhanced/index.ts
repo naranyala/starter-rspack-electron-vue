@@ -9,7 +9,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 // Import shared utilities
-import { ObjectUtils, StringUtils, ValidationUtils, ArrayUtils } from '../../../shared/utils';
+import { ArrayUtils, ObjectUtils, StringUtils, ValidationUtils } from '../../../shared/utils';
 
 // Re-export shared utilities for convenience
 export { ObjectUtils, StringUtils, ValidationUtils, ArrayUtils };
@@ -165,13 +165,13 @@ export class FileSystemUtils {
    */
   static async findFiles(dir: string, pattern: RegExp): Promise<string[]> {
     const results: string[] = [];
-    
+
     try {
       const items = await fs.readdir(dir, { withFileTypes: true });
-      
+
       for (const item of items) {
         const fullPath = path.join(dir, item.name);
-        
+
         if (item.isDirectory()) {
           const subResults = await FileSystemUtils.findFiles(fullPath, pattern);
           results.push(...subResults);
@@ -182,7 +182,7 @@ export class FileSystemUtils {
     } catch (error) {
       console.error('Error searching files:', error);
     }
-    
+
     return results;
   }
 

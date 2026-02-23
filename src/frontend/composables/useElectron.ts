@@ -1,4 +1,5 @@
-import { ref, onMounted, onUnmounted, type Ref } from 'vue';
+import { onMounted, onUnmounted, type Ref, ref } from 'vue';
+import { isOk } from '../../shared/errors';
 import { getElectronApiService } from '../services/electron-api';
 
 /**
@@ -15,10 +16,7 @@ export function useElectronApp() {
     try {
       isLoading.value = true;
       error.value = null;
-      const [versionResult, nameResult] = await Promise.all([
-        api.getVersion(),
-        api.getName(),
-      ]);
+      const [versionResult, nameResult] = await Promise.all([api.getVersion(), api.getName()]);
       version.value = versionResult;
       name.value = nameResult;
     } catch (err) {
@@ -55,7 +53,12 @@ export function useElectronSettings() {
     try {
       isLoading.value = true;
       error.value = null;
-      settings.value = await api.getAllSettings();
+      const result = await api.getAllSettings();
+      if (isOk(result)) {
+        settings.value = result.value;
+      } else {
+        error.value = result.err?.message || 'Failed to load settings';
+      }
     } catch (err) {
       error.value = err instanceof Error ? err.message : 'Failed to load settings';
       console.error('Failed to load settings:', err);
@@ -67,8 +70,14 @@ export function useElectronSettings() {
   async function setSetting(key: string, value: unknown) {
     try {
       error.value = null;
-      await api.setSetting(key, value);
-      settings.value[key] = value;
+      const result = await api.setSetting(key, value);
+      if (isOk(result)) {
+        settings.value[key] = value;
+      } else {
+        const errMsg = result.err?.message || 'Failed to update setting';
+        error.value = errMsg;
+        throw new Error(errMsg);
+      }
     } catch (err) {
       error.value = err instanceof Error ? err.message : 'Failed to update setting';
       console.error('Failed to update setting:', err);
@@ -134,7 +143,7 @@ export function useElectronEvents() {
 
   function on(channel: string, callback: (...args: unknown[]) => void) {
     api.on(channel, callback);
-    
+
     if (!listeners.has(channel)) {
       listeners.set(channel, []);
     }
@@ -143,7 +152,7 @@ export function useElectronEvents() {
 
   function off(channel: string, callback: (...args: unknown[]) => void) {
     api.removeListener(channel, callback);
-    
+
     const channelListeners = listeners.get(channel);
     if (channelListeners) {
       const index = channelListeners.indexOf(callback);

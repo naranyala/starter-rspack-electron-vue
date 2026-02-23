@@ -1,0 +1,41 @@
+[test]
+# Bun test configuration
+# https://bun.sh/docs/api/test#configuration
+
+# Test root directory
+root = "./test"
+
+# Test file patterns
+include = ["**/*.test.ts"]
+exclude = ["**/node_modules/**", "**/dist/**", "**/build/**"]
+
+# Environment
+# Use jsdom for frontend tests, node for backend
+environment = "node"
+
+# Timeout in milliseconds
+timeout = 10000
+
+# Run tests in parallel
+parallel = true
+
+# Retry failed tests
+retry = 0
+
+# Stop on first failure
+bail = false
+
+# Verbose output
+verbose = true
+
+# Coverage
+coverage = false
+# coverageReporter = ["text", "html"]
+# coverageDir = "./coverage"
+
+# Setup files
+setupFiles = ["./test/setup.ts"]
+
+# Root directory for module resolution
+# This helps with path aliases
+rootDir = "."

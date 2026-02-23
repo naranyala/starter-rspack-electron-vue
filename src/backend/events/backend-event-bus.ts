@@ -1,16 +1,16 @@
 /**
  * Backend Event Bus with IPC Bridge
- * 
+ *
  * Extends the core event bus with:
  * - IPC handler registration for cross-process events
  * - Electron app lifecycle integration
  * - Cross-process event forwarding
  */
 
-import { ipcMain, app, BrowserWindow } from 'electron';
-import { EventBus, getEventBus } from './event-bus';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import { createLogger } from '../logger';
-import type { EventKey, EventPayload, CrossProcessEvents } from './event-types';
+import { EventBus, getEventBus } from './event-bus';
+import type { CrossProcessEvents, EventKey, EventPayload } from './event-types';
 
 const logger = createLogger('BackendEventBus');
 
@@ -56,43 +56,34 @@ export class BackendEventBus extends EventBus {
    */
   private registerIpcHandlers(): void {
     // Handle event subscription from renderer
-    ipcMain.handle(
-      EVENT_CHANNELS.SUBSCRIBE,
-      async (_event, eventType: EventKey) => {
-        const windowId = this.getWindowId(_event);
-        this.subscribeWindow(windowId, eventType);
-        logger.debug(`Window ${windowId} subscribed to "${eventType}"`);
-        return { success: true };
-      }
-    );
+    ipcMain.handle(EVENT_CHANNELS.SUBSCRIBE, async (_event, eventType: EventKey) => {
+      const windowId = this.getWindowId(_event);
+      this.subscribeWindow(windowId, eventType);
+      logger.debug(`Window ${windowId} subscribed to "${eventType}"`);
+      return { success: true };
+    });
 
     // Handle event unsubscription from renderer
-    ipcMain.handle(
-      EVENT_CHANNELS.UNSUBSCRIBE,
-      async (_event, eventType: EventKey) => {
-        const windowId = this.getWindowId(_event);
-        this.unsubscribeWindow(windowId, eventType);
-        logger.debug(`Window ${windowId} unsubscribed from "${eventType}"`);
-        return { success: true };
-      }
-    );
+    ipcMain.handle(EVENT_CHANNELS.UNSUBSCRIBE, async (_event, eventType: EventKey) => {
+      const windowId = this.getWindowId(_event);
+      this.unsubscribeWindow(windowId, eventType);
+      logger.debug(`Window ${windowId} unsubscribed from "${eventType}"`);
+      return { success: true };
+    });
 
     // Handle events emitted from renderer
-    ipcMain.handle(
-      EVENT_CHANNELS.EMIT,
-      async (_event, eventType: EventKey, payload: unknown) => {
-        const windowId = this.getWindowId(_event);
-        logger.debug(`Event "${eventType}" received from window ${windowId}`);
-        
-        // Emit in backend
-        await this.emit(eventType, payload as EventPayload<EventKey>, 'cross-process');
-        
-        // Broadcast to other windows (except sender)
-        this.broadcastToWindows(eventType, payload, windowId);
-        
-        return { success: true };
-      }
-    );
+    ipcMain.handle(EVENT_CHANNELS.EMIT, async (_event, eventType: EventKey, payload: unknown) => {
+      const windowId = this.getWindowId(_event);
+      logger.debug(`Event "${eventType}" received from window ${windowId}`);
+
+      // Emit in backend
+      await this.emit(eventType, payload as EventPayload<EventKey>, 'cross-process');
+
+      // Broadcast to other windows (except sender)
+      this.broadcastToWindows(eventType, payload, windowId);
+
+      return { success: true };
+    });
   }
 
   /**

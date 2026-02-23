@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll } from 'bun:test';
+import { beforeAll, describe, expect, it } from 'bun:test';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
@@ -55,8 +55,10 @@ describe('Vue Component Security Tests', () => {
   it('should validate no hardcoded secrets in Vue components', async () => {
     for (const file of vueFiles) {
       const content = await fs.readFile(file, 'utf8');
-      const secretPattern = /(?:secret|token|password|api_key|auth_token)\s*[:=]\s*(?!.*randomUUID)[^'"]{10,}(?!\s*\+\s*)/i;
-      const templatePattern = /(?:secret|token|password|api_key|auth_token)\s*[:=]\s*`(?!.*randomUUID)[^`]{10,}`/i;
+      const secretPattern =
+        /(?:secret|token|password|api_key|auth_token)\s*[:=]\s*(?!.*randomUUID)[^'"]{10,}(?!\s*\+\s*)/i;
+      const templatePattern =
+        /(?:secret|token|password|api_key|auth_token)\s*[:=]\s*`(?!.*randomUUID)[^`]{10,}`/i;
       expect(content).not.toMatch(secretPattern);
       expect(content).not.toMatch(templatePattern);
     }

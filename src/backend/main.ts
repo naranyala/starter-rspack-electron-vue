@@ -1,16 +1,16 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { app, BrowserWindow } from 'electron';
+import { createLogger } from '../shared/logger/index.js';
 import { appConfig } from './config/index.js';
-import { AppLifecycleUtils } from './services/index.js';
 import {
   initializeBackendContainer,
-  registerAllIpcHandlers,
   inject,
+  registerAllIpcHandlers,
   WINDOW_MANAGER_TOKEN,
 } from './di/index.js';
-import { initializeBackendEventBus, getBackendEventBus } from './events/backend-event-bus.js';
-import { createLogger } from '../shared/logger/index.js';
+import { getBackendEventBus, initializeBackendEventBus } from './events/backend-event-bus.js';
+import { AppLifecycleUtils } from './services/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

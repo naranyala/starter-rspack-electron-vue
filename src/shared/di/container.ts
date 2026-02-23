@@ -1,5 +1,5 @@
-import { InjectionScope, isToken, type Token } from './decorators';
 import { createLogger } from '../logger';
+import { InjectionScope, isToken, type Token } from './decorators';
 
 const logger = createLogger('DI');
 
@@ -84,7 +84,9 @@ export class Container {
   resolve<T>(token: Token<T> | symbol): T {
     const tokenObj = isToken(token) ? token : null;
     const key = tokenObj ? tokenObj.token : (token as symbol);
-    const name = tokenObj ? (tokenObj.name || tokenObj.token.description || 'unknown') : String(token);
+    const name = tokenObj
+      ? tokenObj.name || tokenObj.token.description || 'unknown'
+      : String(token);
 
     // Check for circular dependencies
     if (this.resolving.has(key)) {
@@ -159,11 +161,11 @@ export class Container {
    */
   async dispose(): Promise<void> {
     logger.info('Disposing container');
-    
+
     for (const [key, provider] of this.providers.entries()) {
       if (provider.scope === InjectionScope.Singleton && this.singletons.has(key)) {
         const instance = this.singletons.get(key);
-        
+
         if (provider.onDestroy && instance) {
           try {
             const result = provider.onDestroy(instance);
@@ -174,11 +176,11 @@ export class Container {
             logger.error('Error in onDestroy hook', { error });
           }
         }
-        
+
         this.singletons.delete(key);
       }
     }
-    
+
     this.initialized.clear();
     this.resolving.clear();
   }

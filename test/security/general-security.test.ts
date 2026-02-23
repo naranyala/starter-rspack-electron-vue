@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll } from 'bun:test';
+import { beforeAll, describe, expect, it } from 'bun:test';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
@@ -6,7 +6,9 @@ describe('General Security Tests', () => {
   let gitignoreContent: string;
 
   beforeAll(async () => {
-    gitignoreContent = await fs.readFile(path.join(process.cwd(), '.gitignore'), 'utf8').catch(() => '');
+    gitignoreContent = await fs
+      .readFile(path.join(process.cwd(), '.gitignore'), 'utf8')
+      .catch(() => '');
   });
 
   it('should validate .gitignore contains sensitive files', () => {
@@ -32,7 +34,8 @@ describe('General Security Tests', () => {
   it('should validate no secrets in source code', async () => {
     const files = await collectSourceFiles();
     for (const file of files) {
-      if (file.includes('test') || file.includes('spec') || file.includes('general-security')) continue;
+      if (file.includes('test') || file.includes('spec') || file.includes('general-security'))
+        continue;
       const content = await fs.readFile(file, 'utf8').catch(() => '');
       if (content) {
         expect(looksLikeSecret(content)).toBe(false);
@@ -44,7 +47,10 @@ describe('General Security Tests', () => {
     if (gitignoreContent) {
       const configFiles = ['.env', '.env.local', '.env.production', '.env.production.local'];
       for (const configFile of configFiles) {
-        const exists = await fs.access(path.join(process.cwd(), configFile)).then(() => true).catch(() => false);
+        const exists = await fs
+          .access(path.join(process.cwd(), configFile))
+          .then(() => true)
+          .catch(() => false);
         if (exists) {
           expect(gitignoreContent).toContain(configFile);
         }
@@ -69,7 +75,7 @@ describe('General Security Tests', () => {
     try {
       const packageJsonPath = path.join(process.cwd(), 'package.json');
       const stat = await fs.stat(packageJsonPath);
-      expect((stat.mode & 0o002)).toBe(0);
+      expect(stat.mode & 0o002).toBe(0);
     } catch {
       expect(true).toBe(true);
     }
@@ -94,7 +100,11 @@ describe('General Security Tests', () => {
 
     for (const module of dangerousModules) {
       if (mainContent.includes(`require('${module}')`)) {
-        expect(mainContent).not.toMatch(new RegExp(`require\\s*\\(\\s*['"]${module}['"]\\s*\\)\\s*\\.\\s*(exec|spawn|execSync|spawnSync)`));
+        expect(mainContent).not.toMatch(
+          new RegExp(
+            `require\\s*\\(\\s*['"]${module}['"]\\s*\\)\\s*\\.\\s*(exec|spawn|execSync|spawnSync)`
+          )
+        );
       }
     }
   });
@@ -126,7 +136,24 @@ describe('General Security Tests', () => {
 async function collectSourceFiles(): Promise<string[]> {
   const roots = ['src', 'scripts', 'test', 'main.cjs'];
   const extensions = ['.js', '.ts', '.jsx', '.tsx', '.vue', '.cjs', '.mjs', '.json'];
-  const excluded = new Set(['.git', '.github', '.idea', '.vscode', 'node_modules', 'dist', 'build', 'out', 'coverage', '.cache', '.turbo', '.next', '.nuxt', 'tmp', 'temp', 'logs']);
+  const excluded = new Set([
+    '.git',
+    '.github',
+    '.idea',
+    '.vscode',
+    'node_modules',
+    'dist',
+    'build',
+    'out',
+    'coverage',
+    '.cache',
+    '.turbo',
+    '.next',
+    '.nuxt',
+    'tmp',
+    'temp',
+    'logs',
+  ]);
   const files: string[] = [];
 
   for (const root of roots) {
@@ -141,15 +168,17 @@ async function collectSourceFiles(): Promise<string[]> {
         const dirFiles = await scanDirectory(absolute, extensions, excluded);
         files.push(...dirFiles);
       }
-    } catch {
-      continue;
-    }
+    } catch {}
   }
 
   return files;
 }
 
-async function scanDirectory(dirPath: string, extensions: string[], excluded: Set<string>): Promise<string[]> {
+async function scanDirectory(
+  dirPath: string,
+  extensions: string[],
+  excluded: Set<string>
+): Promise<string[]> {
   const files: string[] = [];
   try {
     const entries = await fs.readdir(dirPath, { withFileTypes: true });
@@ -172,7 +201,7 @@ async function scanDirectory(dirPath: string, extensions: string[], excluded: Se
 }
 
 function looksLikeSecret(content: string): boolean {
-  if (content.includes("import") && content.includes("key")) return false;
+  if (content.includes('import') && content.includes('key')) return false;
   const secretPatterns = [
     /(?:secret|token|password)\s*[:=]\s*(?!.*randomUUID)\s*(?!.*\d)\s*['"`](?!.*\d)[^'"]{10,}['"`]/i,
     /(?:SECRET_KEY|AUTH_TOKEN|API_SECRET)\s*[:=]\s*['"](?!.*\d)[^'"]{10,}['"]/i,

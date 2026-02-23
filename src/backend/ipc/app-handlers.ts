@@ -1,6 +1,6 @@
 import { app } from 'electron';
-import { BaseIpcHandler } from './base-ipc-handler';
 import { APP_CHANNELS } from '../../shared/constants';
+import { BaseIpcHandler } from './base-ipc-handler';
 
 /**
  * IPC handlers for application-level operations

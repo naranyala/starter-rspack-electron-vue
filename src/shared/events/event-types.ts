@@ -1,6 +1,6 @@
 /**
  * Event Bus System - Type Definitions
- * 
+ *
  * Provides type-safe event communication across the application
  */
 
@@ -139,19 +139,20 @@ export interface ErrorEvents {
 /**
  * Combined event map
  */
-export interface EventMap 
-  extends AppEvents
-  , WindowEvents
-  , SettingsEvents
-  , UserEvents
-  , CrossProcessEvents
-  , ErrorEvents {}
+export interface EventMap
+  extends AppEvents,
+    WindowEvents,
+    SettingsEvents,
+    UserEvents,
+    CrossProcessEvents,
+    ErrorEvents {}
 
 /**
  * Type helper to get event payload type
  */
-export type EventPayload<K extends keyof EventMap> = 
-  EventMap[K] extends void ? undefined : EventMap[K];
+export type EventPayload<K extends keyof EventMap> = EventMap[K] extends void
+  ? undefined
+  : EventMap[K];
 
 /**
  * Type helper to get all event keys

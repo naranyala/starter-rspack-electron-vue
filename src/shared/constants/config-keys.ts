@@ -47,7 +47,7 @@ export const CONFIG_KEYS = {
 } as const;
 
 // Type for all config keys
-export type ConfigKey = typeof CONFIG_KEYS[keyof typeof CONFIG_KEYS];
+export type ConfigKey = (typeof CONFIG_KEYS)[keyof typeof CONFIG_KEYS];
 
 // Default configuration values
 export const DEFAULT_CONFIG: Record<ConfigKey, unknown> = {

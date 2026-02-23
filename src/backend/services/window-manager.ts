@@ -8,6 +8,7 @@ import {
   ipcMain,
   type MessageBoxOptions,
 } from 'electron';
+import { err, FileSystemError, ok, type Result, tryCatch } from '../../shared/errors';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -103,48 +104,55 @@ export class FileSystemUtils {
   /**
    * Read file safely
    * @param filePath - Path to file
-   * @returns File content or null if error
+   * @returns Result with file content or error
    */
-  static async readFile(filePath: string): Promise<string | null> {
-    try {
+  static async readFile(filePath: string): Promise<Result<string, FileSystemError>> {
+    const result = await tryCatch(async () => {
       const fs = await import('node:fs/promises');
       return await fs.readFile(filePath, 'utf8');
-    } catch (error) {
-      console.error('Failed to read file:', error);
-      return null;
+    });
+    if (result.isOk()) {
+      return ok(result.value);
     }
+    return err(new FileSystemError(`Failed to read file: ${filePath}`, { cause: result.err }));
   }
 
   /**
    * Write file safely
    * @param filePath - Path to file
    * @param content - File content
-   * @returns True if successful
+   * @returns Result with success or error
    */
-  static async writeFile(filePath: string, content: string): Promise<boolean> {
-    try {
+  static async writeFile(
+    filePath: string,
+    content: string
+  ): Promise<Result<boolean, FileSystemError>> {
+    const result = await tryCatch(async () => {
       const fs = await import('node:fs/promises');
       await fs.writeFile(filePath, content, 'utf8');
       return true;
-    } catch (error) {
-      console.error('Failed to write file:', error);
-      return false;
+    });
+    if (result.isOk()) {
+      return ok(result.value);
     }
+    return err(new FileSystemError(`Failed to write file: ${filePath}`, { cause: result.err }));
   }
 
   /**
    * Check if file exists
    * @param filePath - Path to file
-   * @returns True if file exists
+   * @returns Result with existence check or error
    */
-  static async exists(filePath: string): Promise<boolean> {
-    try {
+  static async exists(filePath: string): Promise<Result<boolean, FileSystemError>> {
+    const result = await tryCatch(async () => {
       const fs = await import('node:fs/promises');
       await fs.access(filePath);
       return true;
-    } catch {
-      return false;
+    });
+    if (result.isOk()) {
+      return ok(result.value);
     }
+    return ok(false);
   }
 }
 

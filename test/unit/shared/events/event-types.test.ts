@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'bun:test';
+import { describe, expect, it } from 'bun:test';
 import {
   createEvent,
   type EventMap,
@@ -47,12 +47,7 @@ describe('Event Types', () => {
         'app:initialized' | 'app:ready' | 'app:before-quit' | 'app:quit'
       >;
 
-      const keys: AppEventKeys[] = [
-        'app:initialized',
-        'app:ready',
-        'app:before-quit',
-        'app:quit',
-      ];
+      const keys: AppEventKeys[] = ['app:initialized', 'app:ready', 'app:before-quit', 'app:quit'];
 
       expect(keys.length).toBe(4);
     });
@@ -88,11 +83,7 @@ describe('Event Types', () => {
         'settings:changed' | 'settings:loaded' | 'settings:reset'
       >;
 
-      const keys: SettingsEventKeys[] = [
-        'settings:changed',
-        'settings:loaded',
-        'settings:reset',
-      ];
+      const keys: SettingsEventKeys[] = ['settings:changed', 'settings:loaded', 'settings:reset'];
 
       expect(keys.length).toBe(3);
     });

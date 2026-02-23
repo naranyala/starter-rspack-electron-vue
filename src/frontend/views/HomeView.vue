@@ -58,9 +58,9 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useAppStore } from '../stores/app';
-import { filterCategories, menuData, type MenuItem } from '../../shared/constants';
+import { filterCategories, type MenuItem, menuData } from '../../shared/constants';
 import { WindowFactory } from '../services/window-factory';
+import { useAppStore } from '../stores/app';
 
 const appStore = useAppStore();
 

@@ -1,1 +1,1 @@
-export { useEventBus, useEvent, useEventHistory, useEventStats } from './useEventBus';
+export { useEvent, useEventBus, useEventHistory, useEventStats } from './useEventBus';

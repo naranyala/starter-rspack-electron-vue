@@ -3,7 +3,7 @@
  * Provides comprehensive caching functionality for both backend and frontend
  */
 
-import { CacheEntry } from './types';
+import type { CacheEntry } from './types';
 
 export class CacheUtils {
   private cache: Map<string, CacheEntry<unknown>>;
@@ -35,7 +35,8 @@ export class CacheUtils {
   /**
    * Set value in cache with TTL
    */
-  set<T>(key: string, value: T, ttl: number = 300000): boolean { // 5 minutes default
+  set<T>(key: string, value: T, ttl: number = 300000): boolean {
+    // 5 minutes default
     // Check if we need to evict items
     if (this.currentSize >= this.maxSize) {
       // Simple FIFO eviction
@@ -48,7 +49,7 @@ export class CacheUtils {
     this.cache.set(key, {
       value,
       timestamp: Date.now(),
-      ttl
+      ttl,
     });
     this.currentSize++;
     return true;
@@ -111,7 +112,7 @@ export class CacheUtils {
       hits: 0, // Would need to track this separately
       misses: 0, // Would need to track this separately
       size: this.currentSize,
-      maxSize: this.maxSize
+      maxSize: this.maxSize,
     };
   }
 
@@ -137,7 +138,7 @@ export class CacheUtils {
     return {
       value: entry.value,
       age: Date.now() - entry.timestamp,
-      ttl: entry.ttl
+      ttl: entry.ttl,
     };
   }
 }
@@ -150,7 +151,8 @@ export class MemoryCache {
   private cleanupInterval: number;
   private cleanupTimer: any;
 
-  constructor(cleanupInterval: number = 60000) { // 1 minute default
+  constructor(cleanupInterval: number = 60000) {
+    // 1 minute default
     this.cache = new Map();
     this.cleanupInterval = cleanupInterval;
     this.startCleanup();
@@ -183,10 +185,11 @@ export class MemoryCache {
     return entry.value as T;
   }
 
-  set<T>(key: string, value: T, ttl: number = 300000): void { // 5 minutes default
+  set<T>(key: string, value: T, ttl: number = 300000): void {
+    // 5 minutes default
     this.cache.set(key, {
       value,
-      expires: Date.now() + ttl
+      expires: Date.now() + ttl,
     });
   }
 

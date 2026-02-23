@@ -1,7 +1,7 @@
 /**
  * Validation utilities using Zod
  */
-import { z, type ZodSchema, type ZodError } from 'zod';
+import { type ZodError, type ZodSchema, z } from 'zod';
 
 export { z };
 
@@ -54,18 +54,18 @@ export const schemas = {
   boolean: z.boolean(),
   object: z.object({}),
   array: z.array(z.unknown()),
-  
+
   settings: z.object({
     key: z.string().min(1),
     value: z.unknown(),
   }),
-  
+
   windowOptions: z.object({
     width: z.number().optional(),
     height: z.number().optional(),
     title: z.string().optional(),
   }),
-  
+
   dialogOptions: z.object({
     type: z.enum(['none', 'info', 'error', 'question', 'warning']).optional(),
     title: z.string().optional(),

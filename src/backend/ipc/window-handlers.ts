@@ -1,6 +1,7 @@
 import { BrowserWindow, type IpcMainInvokeEvent } from 'electron';
-import { BaseIpcHandler } from './base-ipc-handler';
 import { WINDOW_CHANNELS } from '../../shared/constants';
+import { err, fromThrowable, ok, type Result, WindowError } from '../../shared/errors';
+import { BaseIpcHandler, type IpcHandlerFn } from './base-ipc-handler';
 
 /**
  * IPC handlers for window operations
@@ -11,33 +12,48 @@ export class WindowHandlers extends BaseIpcHandler {
   }
 
   registerHandlers(): void {
-    this.registerHandler('minimize', (event: IpcMainInvokeEvent) => {
-      const window = BrowserWindow.fromWebContents(event.sender);
-      if (window) {
-        window.minimize();
-      }
-      return true;
-    });
+    this.registerHandler('minimize', ((event: IpcMainInvokeEvent): Result<boolean, WindowError> => {
+      return fromThrowable(
+        () => {
+          const window = BrowserWindow.fromWebContents(event.sender);
+          if (window) {
+            window.minimize();
+          }
+          return true;
+        },
+        (e) => new WindowError('Failed to minimize window', { cause: e })
+      );
+    }) as IpcHandlerFn);
 
-    this.registerHandler('maximize', (event: IpcMainInvokeEvent) => {
-      const window = BrowserWindow.fromWebContents(event.sender);
-      if (window) {
-        if (window.isMaximized()) {
-          window.unmaximize();
-        } else {
-          window.maximize();
-        }
-      }
-      return true;
-    });
+    this.registerHandler('maximize', ((event: IpcMainInvokeEvent): Result<boolean, WindowError> => {
+      return fromThrowable(
+        () => {
+          const window = BrowserWindow.fromWebContents(event.sender);
+          if (window) {
+            if (window.isMaximized()) {
+              window.unmaximize();
+            } else {
+              window.maximize();
+            }
+          }
+          return true;
+        },
+        (e) => new WindowError('Failed to maximize window', { cause: e })
+      );
+    }) as IpcHandlerFn);
 
-    this.registerHandler('close', (event: IpcMainInvokeEvent) => {
-      const window = BrowserWindow.fromWebContents(event.sender);
-      if (window) {
-        window.close();
-      }
-      return true;
-    });
+    this.registerHandler('close', ((event: IpcMainInvokeEvent): Result<boolean, WindowError> => {
+      return fromThrowable(
+        () => {
+          const window = BrowserWindow.fromWebContents(event.sender);
+          if (window) {
+            window.close();
+          }
+          return true;
+        },
+        (e) => new WindowError('Failed to close window', { cause: e })
+      );
+    }) as IpcHandlerFn);
 
     super.registerHandlers();
   }

@@ -48,7 +48,10 @@ export async function collectSourceFiles(options: CollectOptions = {}): Promise<
 
   for (const root of roots) {
     const absolute = path.resolve(process.cwd(), root);
-    const exists = await fs.access(absolute).then(() => true).catch(() => false);
+    const exists = await fs
+      .access(absolute)
+      .then(() => true)
+      .catch(() => false);
     if (!exists) continue;
 
     const stat = await fs.stat(absolute);
@@ -68,7 +71,10 @@ export async function collectSourceFiles(options: CollectOptions = {}): Promise<
   return files;
 }
 
-export async function readTextIfSmall(filePath: string, maxBytes: number = 1024 * 1024): Promise<string | null> {
+export async function readTextIfSmall(
+  filePath: string,
+  maxBytes: number = 1024 * 1024
+): Promise<string | null> {
   try {
     const stat = await fs.stat(filePath);
     if (!stat.isFile() || stat.size > maxBytes) return null;
@@ -80,7 +86,7 @@ export async function readTextIfSmall(filePath: string, maxBytes: number = 1024 
 
 export function looksLikeSecret(content: string): boolean {
   const secretPatterns = [
-    /(?:secret|token|key|password|api_key|auth_token)\s*[:=]\s*['"][^'\"]{10,}['"]/i,
+    /(?:secret|token|key|password|api_key|auth_token)\s*[:=]\s*['"][^'"]{10,}['"]/i,
     /(?:secret|token|key|password|api_key|auth_token)\s*[:=]\s*`[^`]{10,}`/i,
     /(?:AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY|SECRET_KEY).*=/i,
   ];

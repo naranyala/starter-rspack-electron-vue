@@ -1,9 +1,9 @@
 #!/usr/bin/env bun
 
 import { execSync } from 'child_process';
-import { createLogger } from './scripts/utils/logger';
 import { promises as fs } from 'fs';
 import path from 'path';
+import { createLogger } from './scripts/utils/logger';
 
 const log = createLogger('dependency-scanner');
 
@@ -41,7 +41,7 @@ async function scanDependencies() {
     // Run additional security checks
     await checkOutdatedPackages();
     await checkDeprecatedPackages();
-    
+
     log.success('Dependency vulnerability scan completed');
   } catch (error) {
     log.fatal(`Dependency scan failed: ${(error as Error).message}`);
@@ -53,27 +53,27 @@ async function scanDependencies() {
  */
 async function runNpmAudit() {
   log.info('Running npm audit...');
-  
+
   try {
-    const auditResult = execSync('npm audit --audit-level=moderate --json', { 
+    const auditResult = execSync('npm audit --audit-level=moderate --json', {
       encoding: 'utf8',
-      stdio: ['pipe', 'pipe', 'ignore'] // Suppress stderr
+      stdio: ['pipe', 'pipe', 'ignore'], // Suppress stderr
     });
-    
+
     const auditJson = JSON.parse(auditResult);
     const vulnerabilities = auditJson.metadata.vulnerabilities;
-    
+
     log.info(`Vulnerability Report:`);
     log.info(`  - Critical: ${vulnerabilities.critical}`);
     log.info(`  - High: ${vulnerabilities.high}`);
     log.info(`  - Moderate: ${vulnerabilities.moderate}`);
     log.info(`  - Low: ${vulnerabilities.low}`);
     log.info(`  - Total: ${vulnerabilities.total}`);
-    
+
     // Show details for critical and high vulnerabilities
     if (auditJson.vulnerabilities && (vulnerabilities.critical > 0 || vulnerabilities.high > 0)) {
       log.info('\nCritical/High Vulnerability Details:');
-      
+
       for (const [name, vuln] of Object.entries(auditJson.vulnerabilities)) {
         const v = vuln as any;
         if (v.severity === 'critical' || v.severity === 'high') {
@@ -84,12 +84,14 @@ async function runNpmAudit() {
           log.info('');
         }
       }
-      
+
       if (vulnerabilities.critical > 0 || vulnerabilities.high > 0) {
-        log.fatal(`Critical or high severity vulnerabilities detected. Please address these before proceeding.`);
+        log.fatal(
+          `Critical or high severity vulnerabilities detected. Please address these before proceeding.`
+        );
       }
     }
-    
+
     log.success('npm audit completed successfully');
   } catch (error) {
     log.warning(`npm audit failed or not available: ${(error as Error).message}`);
@@ -109,24 +111,24 @@ async function runNpmAudit() {
  */
 async function checkOutdatedPackages() {
   log.info('Checking for outdated packages...');
-  
+
   try {
     // Try npm outdated first
-    const outdatedResult = execSync('npm outdated --json', { 
+    const outdatedResult = execSync('npm outdated --json', {
       encoding: 'utf8',
-      stdio: ['pipe', 'pipe', 'ignore'] // Suppress stderr
+      stdio: ['pipe', 'pipe', 'ignore'], // Suppress stderr
     });
-    
+
     const outdated = JSON.parse(outdatedResult);
     const outdatedCount = Object.keys(outdated).length;
-    
+
     if (outdatedCount > 0) {
       log.info(`Found ${outdatedCount} outdated packages:`);
       for (const [pkg, details] of Object.entries(outdated)) {
         const d = details as any;
         log.info(`  - ${pkg}: ${d.current} → ${d.latest} (${d.wanted})`);
       }
-      
+
       log.warning(`Consider updating outdated packages to get the latest security patches`);
     } else {
       log.success('All packages are up to date');
@@ -141,19 +143,19 @@ async function checkOutdatedPackages() {
  */
 async function checkDeprecatedPackages() {
   log.info('Checking for deprecated packages...');
-  
+
   try {
-    const listResult = execSync('npm list --json', { 
+    const listResult = execSync('npm list --json', {
       encoding: 'utf8',
-      stdio: ['pipe', 'pipe', 'ignore'] // Suppress stderr
+      stdio: ['pipe', 'pipe', 'ignore'], // Suppress stderr
     });
-    
+
     const list = JSON.parse(listResult);
-    
+
     // Check for deprecated packages in dependencies
     const checkForDeprecation = (deps: any, prefix: string = '') => {
       if (!deps) return [];
-      
+
       const deprecated = [];
       for (const [pkg, details] of Object.entries(deps)) {
         const d = details as any;
@@ -165,15 +167,15 @@ async function checkDeprecatedPackages() {
       }
       return deprecated;
     };
-    
+
     const deprecatedPkgs = checkForDeprecation(list.dependencies);
-    
+
     if (deprecatedPkgs.length > 0) {
       log.info(`Found ${deprecatedPkgs.length} deprecated packages:`);
       for (const pkg of deprecatedPkgs) {
         log.info(`  - ${pkg}`);
       }
-      
+
       log.warning(`Consider replacing deprecated packages`);
     } else {
       log.success('No deprecated packages found');
@@ -188,34 +190,38 @@ async function checkDeprecatedPackages() {
  */
 async function checkKnownVulnerablePackages() {
   log.info('Checking for known vulnerable packages...');
-  
+
   try {
     const packageJson = JSON.parse(await fs.readFile('package.json', 'utf8'));
     const allDeps = { ...packageJson.dependencies, ...packageJson.devDependencies };
-    
+
     // Common vulnerable packages and their safe versions
     const knownVulnerabilities = new Map([
       // Example entries - these would need to be updated regularly
       // ['lodash', '^4.17.21'], // Example: lodash before 4.17.21 had prototype pollution
       // ['axios', '^1.6.0'],   // Example: axios had vulnerabilities in older versions
     ]);
-    
+
     for (const [pkg, minVersion] of knownVulnerabilities) {
       if (allDeps[pkg]) {
         const installedVersion = allDeps[pkg];
         // Skip if it's a git URL or file path
-        if (typeof installedVersion === 'string' && 
-            (installedVersion.startsWith('git+') || installedVersion.startsWith('file:'))) {
+        if (
+          typeof installedVersion === 'string' &&
+          (installedVersion.startsWith('git+') || installedVersion.startsWith('file:'))
+        ) {
           continue;
         }
-        
+
         // Simple version comparison (would need more robust logic in practice)
         if (installedVersion && installedVersion !== minVersion) {
-          log.warning(`Package ${pkg}@${installedVersion} may be vulnerable. Recommended: ${minVersion}`);
+          log.warning(
+            `Package ${pkg}@${installedVersion} may be vulnerable. Recommended: ${minVersion}`
+          );
         }
       }
     }
-    
+
     log.success('Known vulnerability check completed');
   } catch (error) {
     log.warning(`Could not check for known vulnerable packages: ${(error as Error).message}`);

@@ -47,7 +47,7 @@ export const EVENTS = {
 } as const;
 
 // Type for all event names
-export type EventChannel = typeof EVENTS[keyof typeof EVENTS];
+export type EventChannel = (typeof EVENTS)[keyof typeof EVENTS];
 
 // Valid channels for renderer listeners (security whitelist)
 export const RENDERER_LISTENABLE_EVENTS: EventChannel[] = [

@@ -159,9 +159,7 @@ export const EVENT_CHANNELS = {
 };
 
 // Channels that renderer can listen to
-export const RENDERER_LISTENABLE_EVENTS = [
-  EVENT_CHANNELS.RECEIVE,
-];
+export const RENDERER_LISTENABLE_EVENTS = [EVENT_CHANNELS.RECEIVE];
 
 // IPC Channel constants for preload script
 export const APP_CHANNELS = {

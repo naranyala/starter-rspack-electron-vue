@@ -1,1 +1,6 @@
-export { useElectronApp, useElectronSettings, useElectronWindow, useElectronEvents } from './useElectron';
+export {
+  useElectronApp,
+  useElectronEvents,
+  useElectronSettings,
+  useElectronWindow,
+} from './useElectron';

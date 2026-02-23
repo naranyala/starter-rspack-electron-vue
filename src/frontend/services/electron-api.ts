@@ -1,8 +1,9 @@
+import type { Result } from '../../shared/errors';
 import type { ElectronAPI } from '../../types/electron-api';
 
 /**
  * Electron API Service
- * 
+ *
  * Provides a typed, testable abstraction over window.electronAPI
  * This makes it easier to mock in tests and provides better type safety
  */
@@ -45,20 +46,22 @@ export class ElectronApiService implements ElectronAPI {
   }
 
   // Settings methods
-  async getSetting(key: string): Promise<unknown> {
-    return this.api.getSetting(key);
+  async getSetting(key: string): Promise<Result<unknown, Error>> {
+    return this.api.getSetting(key) as Promise<Result<unknown, Error>>;
   }
 
-  async setSetting(key: string, value: unknown): Promise<void> {
-    return this.api.setSetting(key, value);
+  async setSetting(key: string, value: unknown): Promise<Result<boolean, Error>> {
+    return this.api.setSetting(key, value) as Promise<Result<boolean, Error>>;
   }
 
-  async getAllSettings(): Promise<Record<string, unknown>> {
-    return this.api.getAllSettings();
+  async getAllSettings(): Promise<Result<Record<string, unknown>, Error>> {
+    return this.api.getAllSettings() as Promise<Result<Record<string, unknown>, Error>>;
   }
 
   // Dialog methods
-  async showMessageBox(options: Electron.MessageBoxOptions): Promise<Electron.MessageBoxReturnValue> {
+  async showMessageBox(
+    options: Electron.MessageBoxOptions
+  ): Promise<Electron.MessageBoxReturnValue> {
     return this.api.showMessageBox(options);
   }
 

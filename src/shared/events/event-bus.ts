@@ -1,6 +1,6 @@
 /**
  * Core Event Bus Implementation
- * 
+ *
  * A type-safe, feature-rich event bus with support for:
  * - Typed events
  * - Priority-based execution
@@ -13,14 +13,14 @@
 import { createLogger } from '../logger';
 import type {
   BaseEvent,
+  EventBusConfig,
+  EventBusStats,
+  EventHandler,
   EventKey,
   EventMap,
-  EventHandler,
+  EventPayload,
   EventSubscriptionOptions,
   Subscription,
-  EventBusStats,
-  EventBusConfig,
-  EventPayload,
 } from './event-types';
 
 const logger = createLogger('EventBus');
@@ -84,10 +84,7 @@ export class EventBus {
   /**
    * Subscribe to an event once
    */
-  once<K extends EventKey>(
-    eventType: K,
-    handler: EventHandler<EventPayload<K>>
-  ): Subscription {
+  once<K extends EventKey>(eventType: K, handler: EventHandler<EventPayload<K>>): Subscription {
     return this.on(eventType, handler, { once: true });
   }
 
@@ -156,7 +153,7 @@ export class EventBus {
     }
 
     if (this.config.debug) {
-      logger.debug(`Event emitted: "${eventType}"`, { 
+      logger.debug(`Event emitted: "${eventType}"`, {
         payload: this.sanitizePayload(payload),
         correlationId: event.meta.correlationId,
       });
@@ -181,12 +178,12 @@ export class EventBus {
     for (const subscription of sortedHandlers) {
       try {
         const result = subscription.handler(payload as EventPayload<K>, event.meta);
-        
+
         if (result instanceof Promise) {
           promises.push(
             result.catch((error) => {
               this.stats.failedHandlers++;
-              logger.error(`Handler error for "${eventType}"`, { 
+              logger.error(`Handler error for "${eventType}"`, {
                 error,
                 subscriptionId: subscription.id,
               });
@@ -200,7 +197,7 @@ export class EventBus {
         }
       } catch (error) {
         this.stats.failedHandlers++;
-        logger.error(`Handler error for "${eventType}"`, { 
+        logger.error(`Handler error for "${eventType}"`, {
           error,
           subscriptionId: subscription.id,
         });
@@ -213,10 +210,7 @@ export class EventBus {
   /**
    * Emit an event and wait for all handlers to complete
    */
-  async emitAndWait<K extends EventKey>(
-    eventType: K,
-    payload: EventPayload<K>
-  ): Promise<void> {
+  async emitAndWait<K extends EventKey>(eventType: K, payload: EventPayload<K>): Promise<void> {
     return this.emit(eventType, payload);
   }
 
@@ -224,9 +218,7 @@ export class EventBus {
    * Get event history
    */
   getHistory(eventType?: EventKey, limit?: number): BaseEvent<unknown>[] {
-    let history = eventType 
-      ? this.history.filter((e) => e.type === eventType)
-      : this.history;
+    let history = eventType ? this.history.filter((e) => e.type === eventType) : this.history;
 
     if (limit) {
       history = history.slice(-limit);
@@ -325,9 +317,11 @@ export class EventBus {
     if (typeof payload === 'object' && payload !== null) {
       const sanitized: Record<string, unknown> = {};
       for (const [key, value] of Object.entries(payload)) {
-        if (key.toLowerCase().includes('password') || 
-            key.toLowerCase().includes('secret') ||
-            key.toLowerCase().includes('token')) {
+        if (
+          key.toLowerCase().includes('password') ||
+          key.toLowerCase().includes('secret') ||
+          key.toLowerCase().includes('token')
+        ) {
           sanitized[key] = '[REDACTED]';
         } else {
           sanitized[key] = value;
