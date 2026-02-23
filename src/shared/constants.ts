@@ -162,3 +162,25 @@ export const EVENT_CHANNELS = {
 export const RENDERER_LISTENABLE_EVENTS = [
   EVENT_CHANNELS.RECEIVE,
 ];
+
+// IPC Channel constants for preload script
+export const APP_CHANNELS = {
+  GET_VERSION: 'app:getVersion',
+  GET_NAME: 'app:getName',
+};
+
+export const SETTINGS_CHANNELS = {
+  GET: 'settings:get',
+  SET: 'settings:set',
+  GET_ALL: 'settings:getAll',
+};
+
+export const WINDOW_CHANNELS = {
+  MINIMIZE: 'window:minimize',
+  MAXIMIZE: 'window:maximize',
+  CLOSE: 'window:close',
+};
+
+export const DIALOG_CHANNELS = {
+  SHOW_MESSAGE_BOX: 'dialog:showMessageBox',
+};

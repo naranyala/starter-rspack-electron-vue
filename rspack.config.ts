@@ -1,13 +1,18 @@
 import path from 'node:path';
-import { defineConfig } from '@rspack/core';
+import { fileURLToPath } from 'node:url';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { VueLoaderPlugin } from 'vue-loader';
-import { getBuildConfig } from './src/shared/config';
+import { getBuildConfig } from './src/shared/config/index.ts';
+
+// ES module __dirname equivalent
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const isDev = process.env.NODE_ENV !== 'production';
 const buildConfig = getBuildConfig();
 
-export default defineConfig({
+// Rspack configuration
+export default {
   mode: process.env.NODE_ENV || 'development',
   entry: {
     main: './src/frontend/main.ts',
@@ -120,4 +125,4 @@ export default defineConfig({
   },
   target: 'electron-renderer',
   devtool: isDev ? 'inline-source-map' : false,
-});
+};

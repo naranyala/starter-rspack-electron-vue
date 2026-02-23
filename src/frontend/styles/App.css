@@ -452,115 +452,64 @@ body {
   background: var(--card-bg);
 }
 
-/* Winbox base overrides */
-.winbox {
-  font-family: var(--ui-font) !important;
-}
-
+/* WinBox title bar - minimal styling for proper layout */
 .winbox .wb-header {
   display: flex !important;
   align-items: center !important;
-  justify-content: space-between !important;
-  height: 48px !important;
-  padding: 0 16px !important;
+  height: 40px !important;
+  padding: 0 10px !important;
   cursor: move !important;
 }
 
 .winbox .wb-title {
   flex: 1 !important;
   text-align: left !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
   pointer-events: none !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
 }
 
 .winbox .wb-controls {
   display: flex !important;
   align-items: center !important;
-  gap: 6px !important;
-  margin-left: auto !important;
+  gap: 4px !important;
   pointer-events: auto !important;
 }
 
 .winbox .wb-control {
-  background: var(--bg-secondary) !important;
-  border: 2px solid var(--border-color) !important;
-  transition: all 0.15s ease !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  margin: 0 !important;
+  width: 28px !important;
+  height: 28px !important;
+  margin: 0 1px !important;
   cursor: pointer !important;
-  vertical-align: middle !important;
-  width: 40px !important;
-  height: 36px !important;
-  padding: 0 !important;
-  border-radius: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  transition: background 0.15s ease !important;
 }
 
 .winbox .wb-control:hover {
-  background: var(--accent-color) !important;
-  border-color: var(--accent-color) !important;
-}
-
-.winbox .wb-control svg {
-  width: 12px !important;
-  height: 12px !important;
-  stroke: var(--text-primary) !important;
-  stroke-width: 3 !important;
-  stroke-linecap: square !important;
-  pointer-events: none !important;
-  display: block !important;
-  fill: none !important;
-}
-
-.winbox .wb-close {
-  background: #ff3333 !important;
+  background: rgba(255, 255, 255, 0.1) !important;
 }
 
 .winbox .wb-close:hover {
-  background: var(--accent-color) !important;
-  border-color: var(--accent-color) !important;
+  background: #ff3333 !important;
 }
 
-.winbox .wb-max {
-  background: var(--bg-tertiary) !important;
-}
-
-.winbox .wb-max:hover {
-  background: var(--accent-color) !important;
-  border-color: var(--accent-color) !important;
-}
-
-.winbox .wb-min {
-  background: var(--bg-tertiary) !important;
-}
-
-.winbox .wb-min:hover {
-  background: var(--accent-color) !important;
-  border-color: var(--accent-color) !important;
-}
-
-.winbox .wb-full {
-  background: var(--bg-tertiary) !important;
-}
-
-.winbox .wb-full:hover {
-  background: var(--accent-color) !important;
-  border-color: var(--accent-color) !important;
+/* WinBox body content area */
+.winbox .wb-body {
+  background: var(--card-bg) !important;
+  position: relative !important;
 }
 
 .winbox .wb-drag {
   cursor: move !important;
   flex: 1 !important;
   height: 100% !important;
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 60px !important;
-  z-index: 1 !important;
-}
-
-.winbox .wb-body {
-  position: relative !important;
 }
 
 .winbox-content h3 {

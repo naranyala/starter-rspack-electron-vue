@@ -3,7 +3,7 @@
  * Configuration for build and packaging processes
  */
 
-import { getEnvConfig } from './env-config';
+import { getEnvConfig } from './env-config.ts';
 
 /**
  * Build configuration interface

@@ -1,6 +1,6 @@
 # Starter Electron Vue Rspack
 
-A modern starter template for building Electron desktop applications with Vue.js 3, Rspack bundler, and WinBox.js for window management.
+A modern, production-ready starter template for building Electron desktop applications with Vue.js 3, Rspack bundler, and WinBox.js for window management.
 
 ## Table of Contents
 
@@ -54,7 +54,10 @@ starter-electron-vue-rspack/
 ├── src/
 │   ├── backend/                    # Electron Main Process
 │   │   ├── config/                 # Application configuration
-│   │   │   └── index.ts            # Config exports and defaults
+│   │   │   ├── app-config.ts       # App configuration defaults
+│   │   │   ├── build-config.ts     # Build configuration
+│   │   │   ├── env-config.ts       # Environment config loader
+│   │   │   └── index.ts            # Config exports
 │   │   ├── di/                     # Dependency Injection
 │   │   │   ├── container.ts        # DI container implementation
 │   │   │   ├── decorators.ts       # DI tokens and decorators
@@ -122,6 +125,10 @@ starter-electron-vue-rspack/
 │   │
 │   ├── shared/                     # Shared code (backend + frontend)
 │   │   ├── config/                 # Shared configuration
+│   │   │   ├── app-config.ts       # App configuration
+│   │   │   ├── build-config.ts     # Build configuration
+│   │   │   ├── env-config.ts       # Environment config
+│   │   │   └── index.ts            # Config exports
 │   │   ├── constants/              # Shared constants
 │   │   │   └── constants.ts        # Application constants
 │   │   ├── di/                     # Shared DI base

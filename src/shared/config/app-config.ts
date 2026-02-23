@@ -3,7 +3,7 @@
  * Runtime configuration for the application
  */
 
-import { getEnvConfig, isDevelopment } from './env-config';
+import { getEnvConfig, isDevelopment } from './env-config.ts';
 
 /**
  * Main window configuration
